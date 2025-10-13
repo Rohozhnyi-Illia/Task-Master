@@ -1,9 +1,10 @@
 import React from 'react'
 import * as styles from './Input.module.scss'
 import { Link } from 'react-router-dom'
+import ErrorMessage from '../ErrorMessage/ErrorMessage'
 
 const Input = (props) => {
-  const { label, placeholder, onChange, value, name, img, authOptions = false } = props
+  const { label, placeholder, onChange, value, name, img, authOptions = false, err } = props
   return (
     <div className={styles.input}>
       <label htmlFor={name} className={styles.input__label}>
@@ -20,6 +21,9 @@ const Input = (props) => {
           className={styles.input__input}
         />
       </div>
+
+      {ErrorMessage && <ErrorMessage error={err} />}
+
       {authOptions && (
         <div className={styles.input__options}>
           <div className={styles.input__check}>
@@ -27,9 +31,9 @@ const Input = (props) => {
             <label htmlFor="keepLoged">Keep me logged in</label>
           </div>
 
-          <a href="#" className={styles.input__link}>
+          <Link className={styles.input__link} to={'/update-password'}>
             Forget your password?
-          </a>
+          </Link>
         </div>
       )}
     </div>

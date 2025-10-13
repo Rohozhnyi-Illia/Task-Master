@@ -1,3 +1,5 @@
+@use './fonts.scss' as v;
+
 *,
 *::before,
 *::after {
@@ -35,6 +37,7 @@ body {
   scroll-behavior: smooth;
   text-rendering: optimizeSpeed;
   line-height: 1.5;
+  font-family: 'Inter', sans-serif;
 }
 
 ul[class],

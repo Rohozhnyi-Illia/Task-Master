@@ -4,9 +4,11 @@ import * as styles from './Auth.module.scss'
 import fields from '../../utils/fields/loginFields'
 import { Input, AuthButton } from '../../components'
 import { bg } from '../../assets'
+import loginSchema from '../../utils/validation/sign-up-validation'
 
 const Login = () => {
   const [data, setData] = useState({ email: '', password: '', keepLogged: false })
+  const [errors, setErrors] = useState({})
 
   const onChangeHandler = (e) => {
     const { name, value, type, checked } = e.target
@@ -14,6 +16,23 @@ const Login = () => {
       ...prevData,
       [name]: type === 'checkbox' ? checked : value,
     }))
+  }
+
+  const onSubmitHandler = async (e) => {
+    e.preventDefault()
+
+    try {
+      await loginSchema.validate(data, { abortEarly: false })
+      setErrors({})
+    } catch (err) {
+      const newErrors = {}
+      err.inner.forEach((e) => {
+        newErrors[e.path] = e.message
+      })
+      setErrors(newErrors)
+    }
+
+    return
   }
 
   return (
@@ -27,7 +46,7 @@ const Login = () => {
             </p>
           </div>
 
-          <form className={styles.auth__form}>
+          <form className={styles.auth__form} onSubmit={onSubmitHandler}>
             {fields.map((field) => (
               <Input
                 key={field.name}
@@ -38,12 +57,13 @@ const Login = () => {
                 onChange={onChangeHandler}
                 img={field.img}
                 authOptions={field.authOptions}
+                err={errors[field.name]}
               />
             ))}
 
             <div className={styles.auth__footer}>
               <p className={styles.auth__signupLink}>
-                Don’t have an account? <a href="#">Sign up</a>
+                Don’t have an account? <Link to={'/sign-up'}>Sign up</Link>
               </p>
             </div>
 

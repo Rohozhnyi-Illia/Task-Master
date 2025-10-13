@@ -9,6 +9,7 @@
   &__label {
     @include m.text-style(v.$font-size-sm, v.$font-weight-semibold, v.$line-height-default);
     color: #fff;
+    letter-spacing: 0.1rem;
   }
 
   &__wrapper {

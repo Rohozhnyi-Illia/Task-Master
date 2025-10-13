@@ -20,7 +20,7 @@
     background: linear-gradient(
       to bottom,
       rgba(102, 102, 102, 0.8) 0%,
-      rgba(204, 204, 204, 0.1) 100%
+      rgba(204, 204, 204, 0.1) 80%
     );
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -29,7 +29,7 @@
 
     &_wrapper {
       width: 100%;
-      max-width: 45rem;
+      max-width: 50rem;
       display: flex;
       flex-direction: column;
       row-gap: 4rem;
@@ -46,12 +46,15 @@
   &__headerTitle {
     @include m.text-style(v.$font-size-xl, v.$font-weight-semibold, v.$line-height-loose);
     color: #fff;
+    letter-spacing: 0.1rem;
   }
 
   &__headerSubtitle {
+    margin-top: 1rem;
     @include m.text-style(v.$font-size-md, v.$font-weight-medium, v.$line-height-loose);
     color: #fff;
     text-align: center;
+    letter-spacing: 0.1rem;
   }
 
   &__form {
@@ -72,6 +75,7 @@
     @include m.text-style(v.$font-size-sm, v.$font-weight-medium, v.$line-height-default);
     color: #fff;
     text-align: center;
+    letter-spacing: 0.1rem;
 
     a {
       text-decoration: none;
@@ -86,5 +90,14 @@
     max-width: 100%;
     padding: 6rem 0.5rem;
     row-gap: 2rem;
+  }
+
+  .auth__headerTitle {
+    font-size: 3.9rem;
+  }
+}
+@media screen and (max-width: 320.1px) {
+  .auth__headerTitle {
+    font-size: 3.2rem;
   }
 }
