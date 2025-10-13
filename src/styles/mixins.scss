@@ -1,0 +1,17 @@
+@use './variables.scss' as v;
+
+@mixin hover-effect($shadow-color: rgba(0, 0, 0, 0.2)) {
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px $shadow-color;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 12px $shadow-color;
+  }
+}
+
+@mixin text-style($size, $weight, $line-height) {
+  font-size: $size;
+  font-weight: $weight;
+  line-height: $line-height;
+}

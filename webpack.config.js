@@ -13,7 +13,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'js/[name].[contenthash].js',
     publicPath,
-    clean: true, // дополнительно очищает dist при сборке
+    clean: true,
   },
   mode: isProduction ? 'production' : 'development',
   devtool: isProduction ? 'source-map' : 'eval-source-map',
@@ -39,12 +39,8 @@ module.exports = {
       {
         test: /\.s[ac]ss$/i,
         use: [
-          MiniCssExtractPlugin.loader,
+          isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
           'css-loader',
-          {
-            loader: 'postcss-loader',
-            options: { postcssOptions: { plugins: [['autoprefixer']] } },
-          },
           'sass-loader',
         ],
       },
@@ -65,16 +61,29 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './public/index.html',
     }),
-    new MiniCssExtractPlugin({
-      filename: 'css/styles.[contenthash].css',
-    }),
+
+    // 👇 В production добавляем MiniCssExtractPlugin, в dev — нет
+    ...(isProduction
+      ? [
+          new MiniCssExtractPlugin({
+            filename: 'css/styles.[contenthash].css',
+          }),
+        ]
+      : []),
+
     new CopyWebpackPlugin({
-      patterns: [{ from: 'public', to: '', globOptions: { ignore: ['**/index.html'] } }],
+      patterns: [
+        {
+          from: 'public',
+          to: '',
+          globOptions: { ignore: ['**/index.html'] },
+        },
+      ],
     }),
   ],
   devServer: {
     historyApiFallback: true,
-    static: path.join(__dirname, 'dist'),
+    static: path.resolve(__dirname, 'public'),
     port: 3000,
     open: true,
     hot: true,
