@@ -13,6 +13,8 @@ ol[class] {
 
 html {
   font-size: 10px;
+  height: auto;
+  min-height: 100vh;
 }
 
 body,
@@ -33,7 +35,10 @@ dd {
 }
 
 body {
-  min-height: 100vh;
+  max-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
   scroll-behavior: smooth;
   text-rendering: optimizeSpeed;
   line-height: 1.5;

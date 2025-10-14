@@ -3,14 +3,13 @@
 
 .auth {
   width: 100%;
-  min-height: 100vh;
   background-size: cover;
   background-position: center;
 
   &__container {
     width: 100%;
     max-width: 75rem;
-    min-height: 100vh;
+    min-height: 100dvh;
     padding: 8rem 2rem;
 
     display: flex;

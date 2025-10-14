@@ -5,10 +5,17 @@ import fields from '../../utils/fields/signUpFields'
 import { Input, AuthButton } from '../../components'
 import { bg } from '../../assets'
 import signUpSchema from '../../utils/validation/sign-up-validation'
+import ErrorModal from '../../components/ErrorModal/ErrorModal'
 
 const SignUp = () => {
   const [data, setData] = useState({ name: '', email: '', password: '' })
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
   const [errors, setErrors] = useState({})
+  const [authError, setAuthError] = useState('User already exist')
+
+  const openModalHandler = () => {
+    setIsErrorModalOpen(!isErrorModalOpen)
+  }
 
   const onChangeHandler = (e) => {
     const { name, value } = e.target
@@ -20,7 +27,7 @@ const SignUp = () => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault()
-
+    openModalHandler()
     try {
       await signUpSchema.validate(data, { abortEarly: false })
       setErrors({})
@@ -69,6 +76,8 @@ const SignUp = () => {
           </form>
         </div>
       </div>
+
+      {isErrorModalOpen && <ErrorModal err={authError} onClick={openModalHandler} />}
     </div>
   )
 }

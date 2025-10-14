@@ -3,6 +3,9 @@ import * as styles from './Input.module.scss'
 import { Link } from 'react-router-dom'
 import ErrorMessage from '../ErrorMessage/ErrorMessage'
 
+//Test plug
+// const Link = ({ children }) => <>{children}</>
+
 const Input = (props) => {
   const { label, placeholder, onChange, value, name, img, authOptions = false, err } = props
   return (
@@ -14,6 +17,7 @@ const Input = (props) => {
       <div className={styles.input__wrapper}>
         <img src={img} alt={`${name} icon`} className={styles.input__img} />
         <input
+          id={name}
           placeholder={placeholder}
           onChange={onChange}
           value={value}

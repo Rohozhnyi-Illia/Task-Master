@@ -5,10 +5,17 @@ import fields from '../../utils/fields/updatePasswordFields'
 import { Input, AuthButton } from '../../components'
 import { bg } from '../../assets'
 import passwordUpdateSchema from '../../utils/validation/passwordUpdate-validation'
+import ErrorModal from '../../components/ErrorModal/ErrorModal'
 
 const UpdatePassword = () => {
   const [data, setData] = useState({ email: '', newPassword: '', repeatPassword: '' })
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
   const [errors, setErrors] = useState({})
+  const [authError, setAuthError] = useState('User already exist')
+
+  const openModalHandler = () => {
+    setIsErrorModalOpen(!isErrorModalOpen)
+  }
 
   const onChangeHandler = (e) => {
     const { name, value } = e.target
@@ -20,7 +27,7 @@ const UpdatePassword = () => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault()
-
+    openModalHandler()
     try {
       await passwordUpdateSchema.validate(data, { abortEarly: false })
       setErrors({})
@@ -69,6 +76,8 @@ const UpdatePassword = () => {
           </form>
         </div>
       </div>
+
+      {isErrorModalOpen && <ErrorModal err={authError} onClick={openModalHandler} />}
     </div>
   )
 }

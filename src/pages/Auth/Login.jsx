@@ -5,10 +5,17 @@ import fields from '../../utils/fields/loginFields'
 import { Input, AuthButton } from '../../components'
 import { bg } from '../../assets'
 import loginSchema from '../../utils/validation/sign-up-validation'
+import ErrorModal from '../../components/ErrorModal/ErrorModal'
 
 const Login = () => {
   const [data, setData] = useState({ email: '', password: '', keepLogged: false })
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
   const [errors, setErrors] = useState({})
+  const [authError, setAuthError] = useState('User already exist')
+
+  const openModalHandler = () => {
+    setIsErrorModalOpen(!isErrorModalOpen)
+  }
 
   const onChangeHandler = (e) => {
     const { name, value, type, checked } = e.target
@@ -22,6 +29,7 @@ const Login = () => {
     e.preventDefault()
 
     try {
+      openModalHandler()
       await loginSchema.validate(data, { abortEarly: false })
       setErrors({})
     } catch (err) {
@@ -71,6 +79,8 @@ const Login = () => {
           </form>
         </div>
       </div>
+
+      {isErrorModalOpen && <ErrorModal err={authError} onClick={openModalHandler} />}
     </div>
   )
 }

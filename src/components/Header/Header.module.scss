@@ -1,0 +1,220 @@
+@use '../../styles/variables.scss' as v;
+@use '../../styles/mixins.scss' as m;
+
+.header {
+  position: relative;
+  z-index: 10;
+  padding: 0 4rem;
+  height: 10rem;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background-color: var(--header-color);
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease;
+  position: sticky;
+
+  &__title {
+    @include m.text-style(v.$font-title, v.$font-weight-bold, v.$line-height-default);
+    color: var(--text-color);
+    transition: color 0.3s ease;
+  }
+
+  &__list {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  &__link {
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  &__icon_wrapper {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    background-color: #f2f2f2;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+    @include m.hover-effect();
+  }
+
+  &__icon {
+    width: 2.2rem;
+    height: 2.2rem;
+  }
+}
+
+.themeToggle {
+  position: relative;
+  width: 8rem;
+  height: 4rem;
+  background-color: #f2f2f2;
+  border-radius: 2rem;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+
+  &__icon_sun,
+  &__icon_moon {
+    width: 2.5rem;
+    height: 2.5rem;
+    position: absolute;
+    bottom: -50%;
+    transition: all 0.4s ease;
+  }
+
+  &__icon_sun {
+    left: 0.5rem;
+  }
+
+  &__icon_moon {
+    right: 0.1rem;
+  }
+
+  &__slider {
+    position: absolute;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    bottom: 0.5rem;
+    right: 0.5rem;
+    background: linear-gradient(to bottom, #cd9e15 0%, #e8c970 100%);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+    transition: transform 0.4s ease, background 0.4s ease;
+  }
+
+  &.dark {
+    background-color: #f2f2f2;
+
+    .themeToggle__slider {
+      transform: translateX(-4rem);
+      background: linear-gradient(to bottom, #fff 0%, #364c57 50%, #182b34 100%);
+    }
+
+    .themeToggle__icon_sun {
+      bottom: -50%;
+      opacity: 0;
+    }
+
+    .themeToggle__icon_moon {
+      bottom: 0.5rem;
+      opacity: 1;
+    }
+  }
+
+  &:not(.dark) {
+    .themeToggle__icon_sun {
+      bottom: 0.5rem;
+      opacity: 1;
+    }
+
+    .themeToggle__icon_moon {
+      bottom: -50%;
+      opacity: 0;
+    }
+  }
+}
+
+.header__burger {
+  display: none;
+  position: relative;
+  width: 4rem;
+  height: 4rem;
+  cursor: pointer;
+
+  span {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 3rem;
+    height: 0.4rem;
+    border-radius: 0.1rem;
+    background-color: var(--text-color);
+    transform: translateX(-50%);
+    transition: transform 0.4s ease;
+
+    &:nth-child(1) {
+      transform: translate(-50%, -1rem);
+    }
+
+    &:nth-child(2) {
+      transform: translateX(-50%);
+    }
+
+    &:nth-child(3) {
+      transform: translate(-50%, 1rem);
+    }
+  }
+
+  &.header__burger_open {
+    span:nth-child(1) {
+      transform: translate(-50%, 0) rotate(45deg);
+    }
+
+    span:nth-child(2) {
+      opacity: 0;
+    }
+
+    span:nth-child(3) {
+      transform: translate(-50%, 0) rotate(-45deg);
+    }
+  }
+}
+
+.header__link_active {
+  border: 1px solid black;
+}
+
+@media screen and (max-width: 768.1px) {
+  .header {
+    padding: 0 1rem;
+
+    &__list {
+      flex-direction: column;
+      row-gap: 3rem;
+    }
+  }
+
+  .header__burger {
+    display: block;
+    z-index: 10;
+  }
+
+  .header__nav {
+    padding: 1rem;
+    position: absolute;
+    z-index: 1;
+    height: 37rem;
+    top: 101%;
+    left: -10rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+    border-radius: 0 0 10px 0;
+    background-color: var(--nav-color);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+
+    &.header__nav_open {
+      transform: translateX(10rem);
+    }
+  }
+}
+
+@media screen and (max-width: 320.1px) {
+  .header__title {
+    font-size: v.$font-size-lg;
+  }
+}

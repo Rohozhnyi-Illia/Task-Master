@@ -1,0 +1,69 @@
+@use '../../styles/variables.scss' as v;
+@use '../../styles/mixins.scss' as m;
+
+.modal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(102, 102, 102, 0.8) 0%,
+    rgba(204, 204, 204, 0.1) 80%
+  );
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: v.$radius-lg;
+
+  &__content {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    padding: 2rem;
+    width: 100%;
+    max-width: 50rem;
+    min-height: 35rem;
+    background-color: #fff;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    border-radius: v.$radius-xl;
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__title {
+    @include m.text-style(v.$font-size-lg, v.$font-weight-semibold, v.$line-height-tight);
+    color: v.$color-accent;
+    text-align: center;
+  }
+
+  &__img {
+    width: 11rem;
+    height: 11rem;
+  }
+
+  &__text {
+    @include m.text-style(v.$font-size-sm, v.$font-weight-medium, v.$line-height-default);
+    letter-spacing: 0.1rem;
+  }
+}
+
+@media screen and (max-width: 375.1px) {
+  .modal__content {
+    min-height: 30rem;
+  }
+  .modal__img {
+    width: 8rem;
+    height: 8rem;
+  }
+}

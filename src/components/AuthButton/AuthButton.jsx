@@ -1,9 +1,9 @@
 import React from 'react'
 import * as styles from './AuthButton.module.scss'
 
-const AuthButton = ({ text }) => {
+const AuthButton = ({ text, onClick, type = 'submit' }) => {
   return (
-    <button className={styles.auth__button} type="submit">
+    <button className={styles.auth__button} onClick={onClick} type={type}>
       {text}
     </button>
   )
