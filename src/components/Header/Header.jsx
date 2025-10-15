@@ -1,6 +1,15 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { home, notification, stats, sun, moon, exit } from '../../assets'
+import {
+  home,
+  notification,
+  stats,
+  sun,
+  moon,
+  exit,
+  notificationLg,
+  closeModal,
+} from '../../assets'
 import * as styles from './Header.module.scss'
 import useTheme from '../../hooks/useTheme'
 
@@ -9,10 +18,17 @@ import useTheme from '../../hooks/useTheme'
 
 const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false)
   const { theme, setTheme } = useTheme()
   const isDark = theme === 'dark'
 
-  const modalOpenHandler = () => setIsModalOpen(!isModalOpen)
+  const notificationOpenHandler = () => setIsNotificationOpen(!isNotificationOpen)
+  const modalOpenHandler = () => {
+    setIsModalOpen(!isModalOpen)
+    if (isNotificationOpen) {
+      notificationOpenHandler()
+    }
+  }
   const toggleTheme = () => setTheme(isDark ? 'light' : 'dark')
 
   return (
@@ -29,9 +45,33 @@ const Header = () => {
             </Link>
           </li>
 
-          <li>
-            <div className={styles.header__icon_wrapper}>
+          <li className={styles.header__notification}>
+            <div className={styles.header__icon_wrapper} onClick={notificationOpenHandler}>
               <img src={notification} alt="notifications" className={styles.header__icon} />
+            </div>
+
+            <div
+              className={`${styles.header__notificationList} ${
+                isNotificationOpen ? styles.header__notificationList_open : ''
+              }`}
+            >
+              <button
+                type="button"
+                className={styles.header__notificationList_button}
+                onClick={notificationOpenHandler}
+              >
+                <img src={closeModal} alt="close button" />
+              </button>
+
+              <img
+                src={notificationLg}
+                alt="notification"
+                className={styles.header__notificationList_img}
+              />
+
+              <p className={styles.header__notificationList_text}>
+                You don't have any notifications yet
+              </p>
             </div>
           </li>
 
@@ -56,9 +96,11 @@ const Header = () => {
           </li>
 
           <li>
-            <div className={styles.header__icon_wrapper}>
-              <img src={exit} alt="logout" className={styles.header__icon} />
-            </div>
+            <Link to={'/login'}>
+              <div className={styles.header__icon_wrapper}>
+                <img src={exit} alt="logout" className={styles.header__icon} />
+              </div>
+            </Link>
           </li>
         </ul>
       </nav>

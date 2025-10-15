@@ -4,13 +4,15 @@ html[data-theme='light'] {
   --header-color: #fcfff0;
   --bg-color: #fff;
   --nav-color: #fcfff0;
+  --notification-text: #868686;
 }
 html[data-theme='dark'] {
-  --text-color: #d9d9d9;
+  --text-color: #c9c9c9;
   --accent-color: #c20f70;
   --header-color: #343434;
   --bg-color: #4c4c4c;
   --nav-color: #343434;
+  --notification-text: #fff;
 }
 
 $color-accent: #851150;

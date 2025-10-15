@@ -8,7 +8,7 @@
 
   &__container {
     width: 100%;
-    max-width: 75rem;
+    max-width: 65rem;
     min-height: 100dvh;
     padding: 8rem 2rem;
 
@@ -89,14 +89,5 @@
     max-width: 100%;
     padding: 6rem 0.5rem;
     row-gap: 2rem;
-  }
-
-  .auth__headerTitle {
-    font-size: 3.9rem;
-  }
-}
-@media screen and (max-width: 320.1px) {
-  .auth__headerTitle {
-    font-size: 3.2rem;
   }
 }

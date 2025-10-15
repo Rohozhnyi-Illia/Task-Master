@@ -5,7 +5,7 @@
   position: relative;
   z-index: 10;
   padding: 0 4rem;
-  height: 10rem;
+  height: 8rem;
 
   display: flex;
   justify-content: space-between;
@@ -56,6 +56,7 @@
 
 .themeToggle {
   position: relative;
+  z-index: 1;
   width: 8rem;
   height: 4rem;
   background-color: #f2f2f2;
@@ -123,6 +124,54 @@
       opacity: 0;
     }
   }
+}
+
+.header__notification {
+  z-index: 5;
+
+  &List {
+    position: absolute;
+    top: 2rem;
+    right: 0;
+    z-index: 9999;
+    width: 30rem;
+    min-height: 30rem;
+
+    transform: translateY(-33rem);
+    background-color: var(--nav-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    row-gap: 1rem;
+
+    &_button {
+      position: absolute;
+      right: 1rem;
+      top: 1rem;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+    }
+
+    &_img {
+      width: 7.9rem;
+      height: 9.2rem;
+    }
+
+    &_text {
+      @include m.text-style(v.$font-size-xs, v.$font-weight-medium, v.$line-height-default);
+      color: var(--notification-text);
+      transition: color 0.3s ease;
+    }
+  }
+}
+
+.header__notificationList_open {
+  transform: translateY(-2rem);
 }
 
 .header__burger {
@@ -210,6 +259,21 @@
     &.header__nav_open {
       transform: translateX(10rem);
     }
+  }
+
+  .header__notificationList {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 11;
+    width: 30rem;
+    height: 100%;
+
+    transform: translateX(-35rem);
+  }
+
+  .header__notificationList_open {
+    transform: translateX(0);
   }
 }
 

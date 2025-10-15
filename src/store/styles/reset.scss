@@ -81,6 +81,18 @@ select {
 
 .container {
   width: 100%;
-  max-width: 132rem;
+  max-width: 160rem;
   margin: 0 auto;
+}
+
+@media screen and (max-width: 768.1px) {
+  html {
+    font-size: 8px;
+  }
+}
+
+@media screen and (max-width: 425.1px) {
+  html {
+    font-size: 7px;
+  }
 }
