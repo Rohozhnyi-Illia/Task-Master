@@ -2,6 +2,6 @@
 @use '../../styles/mixins.scss' as m;
 
 .errorMessage {
-  color: v.$color-primary-light;
   @include m.text-style(v.$font-size-md, v.$font-weight-medium, v.$line-height-default);
+  color: v.$color-primary-light;
 }

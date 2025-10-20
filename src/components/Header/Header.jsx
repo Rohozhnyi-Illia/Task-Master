@@ -12,13 +12,12 @@ import {
 } from '../../assets'
 import * as styles from './Header.module.scss'
 import useTheme from '../../hooks/useTheme'
-
-// Test plug
-// const Link = ({ children }) => <>{children}</>
+import Notification from '../../pages/Application/components/Notification/Notification'
 
 const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isNotificationOpen, setIsNotificationOpen] = useState(false)
+  const [notificationList, setIsNotificationList] = useState([])
   const { theme, setTheme } = useTheme()
   const isDark = theme === 'dark'
 
@@ -48,30 +47,6 @@ const Header = () => {
           <li className={styles.header__notification}>
             <div className={styles.header__icon_wrapper} onClick={notificationOpenHandler}>
               <img src={notification} alt="notifications" className={styles.header__icon} />
-            </div>
-
-            <div
-              className={`${styles.header__notificationList} ${
-                isNotificationOpen ? styles.header__notificationList_open : ''
-              }`}
-            >
-              <button
-                type="button"
-                className={styles.header__notificationList_button}
-                onClick={notificationOpenHandler}
-              >
-                <img src={closeModal} alt="close button" />
-              </button>
-
-              <img
-                src={notificationLg}
-                alt="notification"
-                className={styles.header__notificationList_img}
-              />
-
-              <p className={styles.header__notificationList_text}>
-                You don't have any notifications yet
-              </p>
             </div>
           </li>
 
@@ -114,6 +89,38 @@ const Header = () => {
         <span></span>
         <span></span>
         <span></span>
+      </div>
+
+      <div
+        className={`${styles.header__notificationList} ${
+          isNotificationOpen ? styles.header__notificationList_open : ''
+        }`}
+      >
+        <button
+          type="button"
+          className={styles.header__notificationList_button}
+          onClick={notificationOpenHandler}
+        >
+          <img src={closeModal} alt="close button" />
+        </button>
+
+        {notificationList.length < 1 ? (
+          <div className={styles.header__notificationList_empty}>
+            <img
+              src={notificationLg}
+              alt="notification"
+              className={styles.header__notificationList_img}
+            />
+
+            <p className={styles.header__notificationList_text}>
+              You don't have any notifications yet
+            </p>
+          </div>
+        ) : (
+          <div className={styles.header__notificationList_notifications}>
+            <Notification notification={notificationList} />
+          </div>
+        )}
       </div>
     </header>
   )

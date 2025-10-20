@@ -1,9 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react'
-import * as styles from './CustomSelect.module.scss'
+import * as styles from './CategorySelect.module.scss'
 
-const CustomSelect = ({ options = [], label = 'Select category', onChange }) => {
+const CustomSelect = ({
+  options = [],
+  label = 'Select category',
+  onChange,
+  selected,
+  setSelected,
+  id,
+}) => {
   const [isOpen, setIsOpen] = useState(false)
-  const [selected, setSelected] = useState('')
   const selectRef = useRef(null)
 
   const toggleOpen = () => setIsOpen(!isOpen)
@@ -25,12 +31,12 @@ const CustomSelect = ({ options = [], label = 'Select category', onChange }) => 
   }, [])
 
   return (
-    <div className={styles.select} ref={selectRef}>
+    <div className={styles.select} ref={selectRef} id={id}>
       <div
         className={`${styles.select__trigger} ${isOpen ? styles.open : ''}`}
         onClick={toggleOpen}
       >
-        <span>{selected || 'Categoris'}</span>
+        <span>{selected || label}</span>
         <div className={styles.select__arrow}></div>
       </div>
 

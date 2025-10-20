@@ -21,6 +21,7 @@
     position: absolute;
     left: 2rem;
     top: 50%;
+
     transform: translateY(-50%);
     width: 2rem;
     height: 2rem;
@@ -32,12 +33,13 @@
     height: 6rem;
     padding-left: 4.6rem;
 
-    border: 1px solid #fff;
-    background: transparent;
-    border-radius: v.$radius-md;
     color: #fff;
     @include m.text-style(v.$font-size-md, v.$font-weight-regular, v.$line-height-default);
     letter-spacing: 0.2rem;
+
+    border: 1px solid #fff;
+    background: transparent;
+    border-radius: v.$radius-md;
     &:-webkit-autofill,
     &:-webkit-autofill:hover,
     &:-webkit-autofill:focus,
@@ -49,14 +51,20 @@
     }
 
     &::placeholder {
-      color: #fff;
       @include m.text-style(v.$font-size-md, v.$font-weight-regular, v.$line-height-default);
+      color: #fff;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: var(--accent-color);
     }
   }
 
   &__options {
     margin-top: 1.2rem;
     width: 100%;
+
     display: flex;
     flex-wrap: wrap-reverse;
     align-items: center;

@@ -5,10 +5,11 @@
   position: relative;
   width: 100%;
   font-family: inherit;
-  color: var(--text-color);
+  color: #4c4c4c;
   display: flex;
-  flex-direction: column; // если нужно с лейблом сверху
+  flex-direction: column;
   column-gap: 1.5rem;
+  flex-shrink: 0;
 
   &__label {
     @include m.text-style(v.$font-size-sm, v.$font-weight-medium, v.$line-height-default);
@@ -17,15 +18,15 @@
   }
 
   &__trigger {
-    width: 100%; // теперь растягивается по доступной ширине родителя
+    width: 100%;
     height: 4.5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 0.8rem 1.2rem;
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: v.$radius-xl;
-    padding: 0.8rem 1.2rem;
     cursor: pointer;
     transition: border-color 0.3s ease;
 
@@ -39,8 +40,9 @@
     }
 
     span {
-      @include m.text-style(v.$font-size-xs, v.$font-weight-medium, v.$line-height-default);
+      @include m.text-style(v.$font-size-sm, v.$font-weight-medium, v.$line-height-default);
       color: #b3b3b3;
+      letter-spacing: 0.5px;
     }
   }
 
@@ -61,15 +63,15 @@
     position: absolute;
     top: calc(100% + 0.4rem);
     width: 100%;
+    max-height: 18rem;
+    overflow-y: auto;
+    padding: 0.4rem 0;
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: v.$radius-md;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     list-style: none;
-    padding: 0.4rem 0;
     z-index: 10;
-    max-height: 18rem;
-    overflow-y: auto;
   }
 
   &__option {

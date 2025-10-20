@@ -11,6 +11,7 @@
     max-width: 65rem;
     min-height: 100dvh;
     padding: 8rem 2rem;
+    box-sizing: border-box;
 
     display: flex;
     align-items: center;
@@ -24,7 +25,6 @@
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-radius: v.$radius-lg;
-    box-sizing: border-box;
 
     &_wrapper {
       width: 100%;
@@ -36,10 +36,10 @@
   }
 
   &__header {
-    text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
   }
 
   &__headerTitle {

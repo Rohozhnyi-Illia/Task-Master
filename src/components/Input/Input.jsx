@@ -1,10 +1,10 @@
 import React from 'react'
 import * as styles from './Input.module.scss'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import ErrorMessage from '../ErrorMessage/ErrorMessage'
 
 //Test plug
-// const Link = ({ children }) => <>{children}</>
+const Link = ({ children }) => <>{children}</>
 
 const Input = (props) => {
   const { label, placeholder, onChange, value, name, img, authOptions = false, err } = props

@@ -1,0 +1,129 @@
+@use '@styles/variables.scss' as v;
+@use '@styles/mixins.scss' as m;
+
+.addModal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(20, 20, 20, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+
+  &__content {
+    position: relative;
+    padding: 2rem 1rem;
+    width: 100%;
+    max-width: 36rem;
+    min-height: 40rem;
+    background-color: #fff;
+    border-radius: 2rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    > div {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  &__button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 5rem;
+    height: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+
+    img {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+  }
+
+  &__textarea {
+    padding: 1rem;
+    width: 100%;
+    min-height: 10rem;
+
+    @include m.text-style(v.$font-size-xs, v.$font-weight-regular, v.$line-height-default);
+    letter-spacing: 0.2px;
+    border: 1px solid #b3b3b3;
+    background-color: #f6f6f6;
+    border-radius: v.$radius-lg;
+
+    &:focus {
+      outline: none;
+      border-color: var(--accent-color);
+    }
+  }
+
+  &__length {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    @include m.text-style(v.$font-size-xs, v.$font-weight-regular, v.$line-height-default);
+  }
+
+  .warning {
+    color: var(--accent-color);
+  }
+
+  &__deadline {
+    margin-bottom: 1rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+
+    input {
+      min-width: 0;
+      height: 4rem;
+      background-color: transparent;
+      border: 1px solid #b3b3b3;
+      border-radius: v.$radius-lg;
+
+      @include m.text-style(v.$font-size-xs, v.$font-weight-regular, v.$line-height-default);
+      color: #b3b3b3;
+      text-align: center;
+
+      &::placeholder {
+        text-align: center;
+        color: #b3b3b3;
+      }
+
+      &:focus {
+        outline: none;
+        border-color: var(--accent-color);
+      }
+    }
+  }
+
+  label {
+    @include m.text-style(v.$font-size-md, v.$font-weight-semibold, v.$line-height-default);
+    margin: 1rem 0;
+  }
+
+  &__error {
+    margin: 0.25rem 0;
+    @include m.text-style(v.$font-size-xs, v.$font-weight-medium, v.$line-height-default);
+    color: var(--accent-color);
+    text-align: left;
+  }
+}
