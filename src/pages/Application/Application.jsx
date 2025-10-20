@@ -17,17 +17,6 @@ const Application = () => {
 
   const openModalHandler = () => setIsAddModalOpen(!isAddModalOpen)
 
-  const tasks = [
-    {
-      name: 'Finish project report',
-      completed: false,
-      status: 'Active',
-      deadline: '2025-10-25',
-      category: 'Low',
-      remaining: 3,
-    },
-  ]
-
   return (
     <div className={styles.application}>
       <div className="container">
@@ -57,7 +46,7 @@ const Application = () => {
           <AddButton className={styles.application__newTaskBtn} onClick={openModalHandler} />
         </header>
 
-        <TaskList tasks={tasks} keyword={keywordValue} selected={selected} />
+        <TaskList keyword={keywordValue} selected={selected} />
       </div>
 
       {isAddModalOpen && <AddModal openModalHandler={openModalHandler} />}

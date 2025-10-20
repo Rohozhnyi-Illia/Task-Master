@@ -3,7 +3,7 @@ import * as styles from './ErrorModal.module.scss'
 import errorImg from '../../assets/images/error.svg'
 import AuthButton from '../AuthButton/AuthButton'
 
-const Modal = ({ err, onClick }) => {
+const Modal = ({ error, onClick }) => {
   return (
     <div className={styles.modal}>
       <div className={styles.modal__content}>
@@ -12,7 +12,7 @@ const Modal = ({ err, onClick }) => {
           <h4 className={styles.modal__title}>Error</h4>
         </header>
 
-        <p className={styles.modal__text}>{err}</p>
+        <p className={styles.modal__text}>{error}</p>
 
         <AuthButton text={'Try again'} type="button" onClick={onClick} />
       </div>

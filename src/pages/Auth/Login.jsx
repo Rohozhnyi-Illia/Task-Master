@@ -1,17 +1,25 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import * as styles from './Auth.module.scss'
 import fields from '../../utils/fields/loginFields'
 import { Input, AuthButton } from '../../components'
 import { bg } from '../../assets'
-import loginSchema from '../../utils/validation/sign-up-validation'
+import loginSchema from '../../utils/validation/login-validation'
 import ErrorModal from '../../components/ErrorModal/ErrorModal'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import AuthService from '../../services/authService'
+import { Loader } from '../../components'
+import { setAuth } from '../../store/authSlice'
 
 const Login = () => {
   const [data, setData] = useState({ email: '', password: '', keepLogged: false })
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [errors, setErrors] = useState({})
-  const [authError, setAuthError] = useState('User already exist')
+  const [authError, setAuthError] = useState('')
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const openModalHandler = () => {
     setIsErrorModalOpen(!isErrorModalOpen)
@@ -25,22 +33,67 @@ const Login = () => {
     }))
   }
 
+  useEffect(() => {
+    const savedAuth = JSON.parse(localStorage.getItem('authState'))
+    if (savedAuth) {
+      setData((prevData) => ({
+        ...prevData,
+        email: savedAuth.email,
+        keepLogged: true,
+      }))
+    }
+  }, [])
+
   const onSubmitHandler = async (e) => {
     e.preventDefault()
+    setErrors({})
+    setAuthError('')
+    setIsLoading(true)
 
     try {
-      openModalHandler()
       await loginSchema.validate(data, { abortEarly: false })
-      setErrors({})
-    } catch (err) {
-      const newErrors = {}
-      err.inner.forEach((e) => {
-        newErrors[e.path] = e.message
-      })
-      setErrors(newErrors)
-    }
 
-    return
+      const res = await AuthService.login({
+        email: data.email,
+        password: data.password,
+      })
+
+      console.log(res)
+
+      if (!res.success) {
+        setAuthError(res.error || 'Something went wrong')
+        openModalHandler()
+        return
+      }
+
+      const authState = {
+        id: res.data.id,
+        email: res.data.email,
+        name: res.data.name,
+        accessToken: res.data.accessToken,
+        isAuth: true,
+      }
+      dispatch(setAuth(authState))
+
+      if (data.keepLogged) {
+        localStorage.setItem('authState', JSON.stringify(authState))
+      }
+
+      navigate('/application')
+    } catch (err) {
+      if (err.inner) {
+        const newErrors = {}
+        err.inner.forEach((e) => {
+          newErrors[e.path] = e.message
+        })
+        setErrors(newErrors)
+      } else {
+        setAuthError(err.message)
+        setIsErrorModalOpen(true)
+      }
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -61,11 +114,12 @@ const Login = () => {
                 label={field.label}
                 placeholder={field.placeholder}
                 name={field.name}
-                value={data[field.name]}
+                value={data[field.name] ?? ''}
                 onChange={onChangeHandler}
                 img={field.img}
                 authOptions={field.authOptions}
                 err={errors[field.name]}
+                checkValue={data.keepLogged}
               />
             ))}
 
@@ -80,7 +134,10 @@ const Login = () => {
         </div>
       </div>
 
-      {isErrorModalOpen && <ErrorModal err={authError} onClick={openModalHandler} />}
+      {authError && isErrorModalOpen && (
+        <ErrorModal error={authError} onClick={openModalHandler} />
+      )}
+      {isLoading && <Loader />}
     </div>
   )
 }

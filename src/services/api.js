@@ -1,8 +1,10 @@
 // api.js
 import axios from 'axios'
+import store from '../store/store'
+import { logout, setAuth } from '../store/authSlice'
 
 const api = axios.create({
-  baseURL: 'http://localhost:6000/api',
+  baseURL: 'http://localhost:9000/api',
   withCredentials: true,
 })
 
@@ -11,18 +13,17 @@ let failedQueue = []
 
 const processQueue = (error, token = null) => {
   failedQueue.forEach((prom) => {
-    if (error) {
-      prom.reject(error)
-    } else {
-      prom.resolve(token)
-    }
+    if (error) prom.reject(error)
+    else prom.resolve(token)
   })
   failedQueue = []
 }
 
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('accessToken')
+    const state = store.getState()
+    const token = state.auth?.accessToken
+
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`
     }
@@ -38,11 +39,11 @@ api.interceptors.response.use(
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
-        return new Promise(function (resolve, reject) {
+        return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject })
         })
           .then((token) => {
-            originalRequest.headers['Authorization'] = 'Bearer ' + token
+            originalRequest.headers['Authorization'] = `Bearer ${token}`
             return api(originalRequest)
           })
           .catch((err) => Promise.reject(err))
@@ -51,24 +52,29 @@ api.interceptors.response.use(
       originalRequest._retry = true
       isRefreshing = true
 
-      return new Promise(async (resolve, reject) => {
-        try {
-          const res = await api.post('/auth/refresh')
-          const { accessToken } = res.data
-          localStorage.setItem('accessToken', accessToken)
+      try {
+        const res = await api.post('/auth/refresh')
+        const { accessToken } = res.data
 
-          api.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken
-          originalRequest.headers['Authorization'] = 'Bearer ' + accessToken
+        const prevState = store.getState().auth
+        store.dispatch(setAuth({ ...prevState, accessToken }))
 
-          processQueue(null, accessToken)
-          resolve(api(originalRequest))
-        } catch (err) {
-          processQueue(err, null)
-          reject(err)
-        } finally {
-          isRefreshing = false
-        }
-      })
+        processQueue(null, accessToken)
+
+        originalRequest.headers['Authorization'] = `Bearer ${accessToken}`
+        return api(originalRequest)
+      } catch (err) {
+        processQueue(err, null)
+        store.dispatch(logout())
+
+        return Promise.reject(err)
+      } finally {
+        isRefreshing = false
+      }
+    }
+
+    if (error.response?.status === 403) {
+      store.dispatch(logout())
     }
 
     return Promise.reject(error)

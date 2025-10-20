@@ -13,13 +13,21 @@ import {
 import * as styles from './Header.module.scss'
 import useTheme from '../../hooks/useTheme'
 import Notification from '../../pages/Application/components/Notification/Notification'
+import { logout } from '@store/authSlice'
+import { useDispatch } from 'react-redux'
+import AuthService from '@services/authService'
+import { ErrorModal, Loader } from '@components'
 
 const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [isNotificationOpen, setIsNotificationOpen] = useState(false)
   const [notificationList, setIsNotificationList] = useState([])
+  const [authError, setAuthError] = useState('')
   const { theme, setTheme } = useTheme()
   const isDark = theme === 'dark'
+
+  const dispatch = useDispatch()
 
   const notificationOpenHandler = () => setIsNotificationOpen(!isNotificationOpen)
   const modalOpenHandler = () => {
@@ -29,6 +37,25 @@ const Header = () => {
     }
   }
   const toggleTheme = () => setTheme(isDark ? 'light' : 'dark')
+
+  const logoutHandler = async () => {
+    setAuthError('')
+    setIsLoading(true)
+
+    try {
+      const res = await AuthService.logout()
+      console.log(res)
+      if (!res.success) {
+        setAuthError(res.error || 'Something went wrong')
+        return
+      }
+      dispatch(logout())
+    } catch (error) {
+      setAuthError(error.message || 'Network error')
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   return (
     <header className={styles.header}>
@@ -70,12 +97,10 @@ const Header = () => {
             </div>
           </li>
 
-          <li>
-            <Link to={'/login'}>
-              <div className={styles.header__icon_wrapper}>
-                <img src={exit} alt="logout" className={styles.header__icon} />
-              </div>
-            </Link>
+          <li onClick={!isLoading ? logoutHandler : undefined}>
+            <div className={styles.header__icon_wrapper}>
+              <img src={exit} alt="logout" className={styles.header__icon} />
+            </div>
           </li>
         </ul>
       </nav>
@@ -122,6 +147,9 @@ const Header = () => {
           </div>
         )}
       </div>
+
+      {authError && <ErrorModal error={authError} onClick={() => setAuthError('')} />}
+      {isLoading && <Loader />}
     </header>
   )
 }

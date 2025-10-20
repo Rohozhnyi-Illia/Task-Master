@@ -1,13 +1,21 @@
 import React from 'react'
 import * as styles from './Input.module.scss'
-// import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import ErrorMessage from '../ErrorMessage/ErrorMessage'
 
-//Test plug
-const Link = ({ children }) => <>{children}</>
-
 const Input = (props) => {
-  const { label, placeholder, onChange, value, name, img, authOptions = false, err } = props
+  const {
+    label,
+    placeholder,
+    onChange,
+    value,
+    name,
+    img,
+    authOptions = false,
+    err,
+    checkValue,
+  } = props
+
   return (
     <div className={styles.input}>
       <label htmlFor={name} className={styles.input__label}>
@@ -31,7 +39,7 @@ const Input = (props) => {
       {authOptions && (
         <div className={styles.input__options}>
           <div className={styles.input__check}>
-            <input type="checkbox" name="keepLogged" onChange={onChange} />
+            <input type="checkbox" name="keepLogged" onChange={onChange} value={checkValue} />
             <label htmlFor="keepLoged">Keep me logged in</label>
           </div>
 

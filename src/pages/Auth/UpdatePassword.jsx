@@ -1,17 +1,21 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import * as styles from './Auth.module.scss'
-import fields from '../../utils/fields/updatePasswordFields'
-import { Input, AuthButton } from '../../components'
+import fields from '@utils/fields/updatePasswordFields'
+import { Input, AuthButton, ErrorModal } from '@components'
 import { bg } from '../../assets'
-import passwordUpdateSchema from '../../utils/validation/passwordUpdate-validation'
-import ErrorModal from '../../components/ErrorModal/ErrorModal'
+import passwordUpdateSchema from '@utils/validation/passwordUpdate-validation'
+import { useNavigate } from 'react-router-dom'
+import AuthService from '@services/authService'
+import { Loader } from '@components'
 
 const UpdatePassword = () => {
   const [data, setData] = useState({ email: '', newPassword: '', repeatPassword: '' })
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
   const [errors, setErrors] = useState({})
-  const [authError, setAuthError] = useState('User already exist')
+  const [authError, setAuthError] = useState()
+  const [isLoading, setIsLoading] = useState(false)
+  const navigate = useNavigate()
 
   const openModalHandler = () => {
     setIsErrorModalOpen(!isErrorModalOpen)
@@ -27,19 +31,42 @@ const UpdatePassword = () => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault()
-    openModalHandler()
+    setAuthError('')
+    setErrors({})
+    setIsLoading(true)
+
     try {
       await passwordUpdateSchema.validate(data, { abortEarly: false })
-      setErrors({})
-    } catch (err) {
-      const newErrors = {}
-      err.inner.forEach((e) => {
-        newErrors[e.path] = e.message
-      })
-      setErrors(newErrors)
-    }
 
-    return
+      const res = await AuthService.updatePassword({
+        email: data.email,
+        newPassword: data.newPassword,
+        repeatPassword: data.repeatPassword,
+      })
+
+      console.log(res)
+
+      if (!res.success) {
+        setAuthError(res.error || 'Something went wrong')
+        openModalHandler()
+        return
+      }
+
+      navigate('/login')
+    } catch (err) {
+      if (err.inner) {
+        const newErrors = {}
+        err.inner.forEach((e) => {
+          newErrors[e.path] = e.message
+        })
+        setErrors(newErrors)
+      } else {
+        setAuthError(err.message)
+        setIsErrorModalOpen(true)
+      }
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -58,7 +85,7 @@ const UpdatePassword = () => {
                 label={field.label}
                 placeholder={field.placeholder}
                 name={field.name}
-                value={data[field.name]}
+                value={data[field.name] ?? ''}
                 onChange={onChangeHandler}
                 img={field.img}
                 authOptions={field.authOptions}
@@ -77,7 +104,8 @@ const UpdatePassword = () => {
         </div>
       </div>
 
-      {isErrorModalOpen && <ErrorModal err={authError} onClick={openModalHandler} />}
+      {isErrorModalOpen && <ErrorModal error={authError} onClick={openModalHandler} />}
+      {isLoading && <Loader />}
     </div>
   )
 }
