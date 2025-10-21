@@ -3,13 +3,15 @@ import * as styles from './TaskList.module.scss'
 import { noData, back, next } from '@assets'
 import Task from '../Task/Task'
 import TaskMobile from '../TaskMobile/TaskMobile'
+import { useSelector } from 'react-redux'
 
-const TaskList = ({ tasks = [], keyword, selected }) => {
+const TaskList = ({ keyword, selected }) => {
+  const tasks = useSelector((state) => state.tasks)
   const [currentPage, setCurrentPage] = useState(1)
   const taskPerPage = 10
 
   const filteredTasks = tasks.filter((task) => {
-    const matchesKeyword = !keyword || task.name.toLowerCase().includes(keyword.toLowerCase())
+    const matchesKeyword = !keyword || task.task.toLowerCase().includes(keyword.toLowerCase())
     const matchesCategory = !selected || selected === 'All' || task.category === selected
     return matchesKeyword && matchesCategory
   })
@@ -53,8 +55,8 @@ const TaskList = ({ tasks = [], keyword, selected }) => {
               </tr>
             </thead>
             <tbody>
-              {currentTasks.map((task, index) => (
-                <Task key={index} task={task} />
+              {currentTasks.map((task) => (
+                <Task key={task._id} task={task} />
               ))}
             </tbody>
           </table>
@@ -72,8 +74,8 @@ const TaskList = ({ tasks = [], keyword, selected }) => {
 
       {tasks.length > 0 && (
         <div className={styles.taskList__cardWrapper}>
-          {currentTasks.map((task, index) => (
-            <TaskMobile key={index} task={task} />
+          {currentTasks.map((task) => (
+            <TaskMobile key={task._id} task={task} />
           ))}
         </div>
       )}

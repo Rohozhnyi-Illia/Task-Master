@@ -2,6 +2,8 @@
 @use '@styles/mixins.scss' as m;
 
 .task {
+  animation: slideFadeIn 0.3s ease forwards;
+
   th,
   td {
     padding: 1rem;
@@ -88,6 +90,26 @@
       max-width: 2.5rem;
       max-height: 2.5rem;
     }
+  }
+}
+
+.task.done {
+  th,
+  td {
+    border: 1px solid #e7e7e7;
+    background-color: var(--nav-color);
+    transition: all 0.4s ease;
+  }
+}
+
+@keyframes slideFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(2rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 

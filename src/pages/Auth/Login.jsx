@@ -1,43 +1,39 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import * as styles from './Auth.module.scss'
 import fields from '../../utils/fields/loginFields'
-import { Input, AuthButton } from '../../components'
+import { Input, AuthButton, Loader, ErrorModal } from '../../components'
 import { bg } from '../../assets'
 import loginSchema from '../../utils/validation/login-validation'
-import ErrorModal from '../../components/ErrorModal/ErrorModal'
-import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import AuthService from '../../services/authService'
-import { Loader } from '../../components'
 import { setAuth } from '../../store/authSlice'
 
 const Login = () => {
   const [data, setData] = useState({ email: '', password: '', keepLogged: false })
-  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
   const [errors, setErrors] = useState({})
   const [authError, setAuthError] = useState('')
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const openModalHandler = () => {
-    setIsErrorModalOpen(!isErrorModalOpen)
-  }
+  const openModalHandler = () => setIsErrorModalOpen(!isErrorModalOpen)
 
   const onChangeHandler = (e) => {
     const { name, value, type, checked } = e.target
-    setData((prevData) => ({
-      ...prevData,
+    setData((prev) => ({
+      ...prev,
       [name]: type === 'checkbox' ? checked : value,
     }))
   }
 
   useEffect(() => {
     const savedAuth = JSON.parse(localStorage.getItem('authState'))
-    if (savedAuth) {
-      setData((prevData) => ({
-        ...prevData,
+    if (savedAuth?.email) {
+      setData((prev) => ({
+        ...prev,
         email: savedAuth.email,
         keepLogged: true,
       }))
@@ -58,14 +54,6 @@ const Login = () => {
         password: data.password,
       })
 
-      console.log(res)
-
-      if (!res.success) {
-        setAuthError(res.error || 'Something went wrong')
-        openModalHandler()
-        return
-      }
-
       const authState = {
         id: res.data.id,
         email: res.data.email,
@@ -73,6 +61,7 @@ const Login = () => {
         accessToken: res.data.accessToken,
         isAuth: true,
       }
+
       dispatch(setAuth(authState))
 
       if (data.keepLogged) {
@@ -88,7 +77,7 @@ const Login = () => {
         })
         setErrors(newErrors)
       } else {
-        setAuthError(err.message)
+        setAuthError(err.message || 'Something went wrong')
         setIsErrorModalOpen(true)
       }
     } finally {

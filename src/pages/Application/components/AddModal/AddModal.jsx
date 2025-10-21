@@ -5,6 +5,10 @@ import AddButton from '../AddButton/AddButton'
 import { closeModal } from '@assets'
 import addTaskSchema from '@utils/validation/addTask-validation'
 import { ErrorMessage } from '@components'
+import { ErrorModal, Loader } from '@components'
+import TaskService from '@services/taskService'
+import { createTask } from '@store/tasksSlice'
+import { useDispatch } from 'react-redux'
 
 const AddModal = ({ openModalHandler }) => {
   const [categorySelected, setCategorySelected] = useState('')
@@ -12,6 +16,10 @@ const AddModal = ({ openModalHandler }) => {
   const [task, setTask] = useState('')
   const [deadline, setDeadline] = useState({ day: '', month: '', year: '' })
   const [errors, setErrors] = useState({})
+  const [authError, setAuthError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
+  const dispatch = useDispatch()
 
   const onChangeHandler = (e) => {
     const { value } = e.target
@@ -22,6 +30,11 @@ const AddModal = ({ openModalHandler }) => {
   const deadlineHandler = (e) => {
     const { name, value } = e.target
     setDeadline({ ...deadline, [name]: value })
+  }
+
+  const closeModalHandler = () => {
+    setIsErrorModalOpen(false)
+    openModalHandler()
   }
 
   const onSubmitHandler = async (e) => {
@@ -39,21 +52,47 @@ const AddModal = ({ openModalHandler }) => {
       await addTaskSchema.validate(formData, { abortEarly: false })
       setErrors({})
 
-      // const formattedDate = new Date(
-      //   Number(deadline.year),
-      //   Number(deadline.month) - 1,
-      //   Number(deadline.day)
-      // )
+      const formattedDate = new Date(
+        Number(deadline.year),
+        Number(deadline.month) - 1,
+        Number(deadline.day)
+      )
 
+      const res = await TaskService.createTask({
+        task,
+        status: 'Active',
+        category: categorySelected,
+        remainingTime: reminderSelected,
+        deadline: formattedDate,
+      })
+
+      console.log(res)
+
+      if (!res._id) {
+        setAuthError(res.error)
+        throw new Error(res.error || 'Error creating task')
+      }
+
+      dispatch(createTask(res))
+      console.log('✅ Added task to store:', res)
+      setTask('')
+      setCategorySelected('')
+      setReminderSelected('')
+      setDeadline({ day: '', month: '', year: '' })
       openModalHandler()
     } catch (err) {
-      const newErrors = {}
       if (err.inner) {
+        const newErrors = {}
         err.inner.forEach((e) => {
           newErrors[e.path] = e.message
         })
+        setErrors(newErrors)
+      } else {
+        setAuthError(err.message || 'Something went wrong')
+        setIsErrorModalOpen(true)
       }
-      setErrors(newErrors)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -122,6 +161,7 @@ const AddModal = ({ openModalHandler }) => {
               id="day"
               placeholder="Day"
               onChange={deadlineHandler}
+              value={deadline.day}
             />
             <input
               type="number"
@@ -129,6 +169,7 @@ const AddModal = ({ openModalHandler }) => {
               id="month"
               placeholder="Month"
               onChange={deadlineHandler}
+              value={deadline.month}
             />
             <input
               type="number"
@@ -136,6 +177,7 @@ const AddModal = ({ openModalHandler }) => {
               id="year"
               placeholder="Year"
               onChange={deadlineHandler}
+              value={deadline.year}
             />
           </div>
           {errors.day && (
@@ -153,6 +195,9 @@ const AddModal = ({ openModalHandler }) => {
           <AddButton type="submit" />
         </div>
       </form>
+
+      {isLoading && <Loader />}
+      {isErrorModalOpen && <ErrorModal error={authError} onClick={closeModalHandler} />}
     </div>
   )
 }

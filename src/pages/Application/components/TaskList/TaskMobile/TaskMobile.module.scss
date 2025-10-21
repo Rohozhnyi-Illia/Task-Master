@@ -9,6 +9,7 @@
 
   border-radius: v.$radius-lg;
   background-color: #fff;
+  animation: slideFadeIn 0.3s ease forwards;
 
   &__header {
     display: flex;
@@ -96,5 +97,21 @@
   &__deleteIcon {
     width: 2.1rem;
     height: 2.1rem;
+  }
+}
+
+.taskMobile.done {
+  transition: all 0.3s ease;
+  background-color: var(--nav-color);
+}
+
+@keyframes slideFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateX(5rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
   }
 }

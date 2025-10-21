@@ -1,18 +1,10 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import {
-  home,
-  notification,
-  stats,
-  sun,
-  moon,
-  exit,
-  notificationLg,
-  closeModal,
-} from '../../assets'
+import { home, notification, stats, sun } from '../../assets'
+import { moon, exit, notificationLg, closeModal } from '../../assets'
 import * as styles from './Header.module.scss'
 import useTheme from '../../hooks/useTheme'
-import Notification from '../../pages/Application/components/Notification/Notification'
+import Notification from '@pages/Application/components/Notification/Notification'
 import { logout } from '@store/authSlice'
 import { useDispatch } from 'react-redux'
 import AuthService from '@services/authService'
