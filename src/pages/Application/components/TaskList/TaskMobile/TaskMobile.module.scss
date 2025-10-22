@@ -9,7 +9,7 @@
 
   border-radius: v.$radius-lg;
   background-color: #fff;
-  animation: slideFadeIn 0.3s ease forwards;
+  animation: slideInPop 0.45s cubic-bezier(0.25, 1.1, 0.3, 1) forwards;
 
   &__header {
     display: flex;
@@ -98,20 +98,40 @@
     width: 2.1rem;
     height: 2.1rem;
   }
+
+  &.done {
+    transition: background-color 0.3s ease, transform 0.3s ease, color 0.3s ease;
+    background-color: var(--nav-color);
+    transform: scale(0.98);
+
+    .taskMobile__name {
+      color: var(--text-color);
+      transition: color 0.3s ease;
+    }
+
+    .taskMobile__category {
+      background-color: #999;
+      transition: background-color 0.3s ease;
+    }
+
+    .taskMobile__status {
+      background-color: #999;
+      transition: background-color 0.3s ease;
+    }
+  }
 }
 
-.taskMobile.done {
-  transition: all 0.3s ease;
-  background-color: var(--nav-color);
-}
-
-@keyframes slideFadeIn {
+@keyframes slideInPop {
   0% {
     opacity: 0;
-    transform: translateX(5rem);
+    transform: translateX(40px) scale(0.95);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(-4px) scale(1.03);
   }
   100% {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateX(0) scale(1);
   }
 }

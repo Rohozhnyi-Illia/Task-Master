@@ -22,10 +22,8 @@ const Task = ({ task }) => {
 
     try {
       await TaskService.updateStatus(task._id, newStatus)
-      console.log('✅ Server update response: task status updated to', newStatus)
     } catch (error) {
       dispatch(updateStatus({ id: task._id, status: prevStatus }))
-      console.error('❌ Complete error:', error)
       setFetchError(error.message || 'Error updating task')
     }
   }
@@ -34,13 +32,15 @@ const Task = ({ task }) => {
     setFetchError('')
 
     try {
-      console.log('🗑️ Deleting task:', taskId)
       const res = await TaskService.deleteTasks(taskId)
-      console.log('✅ Server delete response:', res)
+
+      if (!res.success) {
+        setFetchError(res.error)
+        return
+      }
 
       dispatch(deleteTasks(taskId))
     } catch (error) {
-      console.error('❌ Delete error:', error)
       setFetchError(error.message || 'Error deleting task')
     }
   }

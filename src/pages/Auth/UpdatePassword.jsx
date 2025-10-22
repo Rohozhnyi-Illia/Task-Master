@@ -44,11 +44,9 @@ const UpdatePassword = () => {
         repeatPassword: data.repeatPassword,
       })
 
-      console.log(res)
-
       if (!res.success) {
-        setAuthError(res.error || 'Something went wrong')
-        openModalHandler()
+        setAuthError(res.error)
+        setIsErrorModalOpen(true)
         return
       }
 

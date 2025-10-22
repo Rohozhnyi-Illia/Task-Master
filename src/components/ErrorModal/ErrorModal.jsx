@@ -13,7 +13,7 @@ const ErrorModal = ({ error, onClick }) => {
           <h4 className={styles.modal__title}>Error</h4>
         </header>
 
-        <p className={styles.modal__text}>{error}</p>
+        <p className={styles.modal__text}>{`"${error}"`}</p>
 
         <AuthButton text={'Try again'} type="button" onClick={onClick} />
       </div>

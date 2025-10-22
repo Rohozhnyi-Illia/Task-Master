@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { home, notification, stats, sun } from '../../assets'
 import { moon, exit, notificationLg, closeModal } from '../../assets'
@@ -6,22 +6,25 @@ import * as styles from './Header.module.scss'
 import useTheme from '../../hooks/useTheme'
 import Notification from '@pages/Application/components/Notification/Notification'
 import { logout } from '@store/authSlice'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import AuthService from '@services/authService'
-import { ErrorModal, Loader } from '@components'
+import { ErrorModal } from '@components'
+import NotificationService from '../../services/notificationService'
+import { getNotifications } from '../../store/notificationSlice'
 
 const Header = () => {
+  const notificationsList = useSelector((state) => state.notification) || []
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isNotificationOpen, setIsNotificationOpen] = useState(false)
-  const [notificationList, setIsNotificationList] = useState([])
-  const [authError, setAuthError] = useState('')
+  const [fetchError, setFetchError] = useState('')
   const { theme, setTheme } = useTheme()
   const isDark = theme === 'dark'
 
   const dispatch = useDispatch()
 
   const notificationOpenHandler = () => setIsNotificationOpen(!isNotificationOpen)
+
   const modalOpenHandler = () => {
     setIsModalOpen(!isModalOpen)
     if (isNotificationOpen) {
@@ -31,23 +34,52 @@ const Header = () => {
   const toggleTheme = () => setTheme(isDark ? 'light' : 'dark')
 
   const logoutHandler = async () => {
-    setAuthError('')
+    setFetchError('')
     setIsLoading(true)
 
     try {
       const res = await AuthService.logout()
-      console.log(res)
+
       if (!res.success) {
-        setAuthError(res.error || 'Something went wrong')
+        setFetchError(res.error || 'Something went wrong')
         return
       }
+
       dispatch(logout())
     } catch (error) {
-      setAuthError(error.message || 'Network error')
+      setFetchError(error.message || 'Network error')
     } finally {
       setIsLoading(false)
     }
   }
+
+  useEffect(() => {
+    let intervalId
+
+    const fetchData = async () => {
+      setFetchError('')
+
+      try {
+        const res = await NotificationService.getUserNotifications()
+        console.log(res.data)
+
+        if (!res.success) {
+          setFetchError(res.error || 'Something went wrong')
+          return
+        }
+
+        dispatch(getNotifications(res.data))
+      } catch (error) {
+        setFetchError(error.message || 'Something went wrong')
+      }
+    }
+
+    fetchData()
+
+    intervalId = setInterval(fetchData, 5 * 60 * 1000)
+
+    return () => clearInterval(intervalId)
+  }, [dispatch])
 
   return (
     <header className={styles.header}>
@@ -121,7 +153,7 @@ const Header = () => {
           <img src={closeModal} alt="close button" />
         </button>
 
-        {notificationList.length < 1 ? (
+        {notificationsList.length === 0 ? (
           <div className={styles.header__notificationList_empty}>
             <img
               src={notificationLg}
@@ -135,13 +167,14 @@ const Header = () => {
           </div>
         ) : (
           <div className={styles.header__notificationList_notifications}>
-            <Notification notification={notificationList} />
+            {notificationsList.map((item) => (
+              <Notification key={item._id} notification={item.message} />
+            ))}
           </div>
         )}
       </div>
 
-      {authError && <ErrorModal error={authError} onClick={() => setAuthError('')} />}
-      {isLoading && <Loader />}
+      {fetchError && <ErrorModal error={fetchError} onClick={() => setFetchError('')} />}
     </header>
   )
 }

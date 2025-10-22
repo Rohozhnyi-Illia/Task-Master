@@ -48,10 +48,8 @@ const SignUp = () => {
         name: data.name,
       })
 
-      console.log(res)
-
       if (!res.success) {
-        setAuthError(res.error || 'Something went wrong')
+        setAuthError(res.error)
         setIsErrorModalOpen(true)
         return
       }

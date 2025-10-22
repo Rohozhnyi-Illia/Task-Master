@@ -17,13 +17,15 @@ const TaskMobile = ({ task }) => {
     setFetchError('')
 
     try {
-      console.log('🗑️ Deleting task:', taskId)
       const res = await TaskService.deleteTasks(taskId)
-      console.log('✅ Server delete response:', res)
+
+      if (!res.success) {
+        setFetchError(res.error)
+        return
+      }
 
       dispatch(deleteTasks(taskId))
     } catch (error) {
-      console.error('❌ Delete error:', error)
       setFetchError(error.message || 'Error deleting task')
     }
   }
@@ -37,16 +39,14 @@ const TaskMobile = ({ task }) => {
 
     try {
       await TaskService.updateStatus(task._id, newStatus)
-      console.log('✅ Server update response: task status updated to', newStatus)
     } catch (error) {
       dispatch(updateStatus({ id: task._id, status: prevStatus }))
-      console.error('❌ Complete error:', error)
       setFetchError(error.message || 'Error updating task')
     }
   }
 
   return (
-    <div className={isCompleted ? `${styles.taskMobile} ${styles.done}` : styles.taskMobile}>
+    <div className={`${styles.taskMobile} ${isCompleted ? styles.done : ''}`}>
       <header className={styles.taskMobile__header}>
         <div className={styles.taskMobile__category}>
           <p className={styles.taskMobile__categoryText}>{task.category}</p>

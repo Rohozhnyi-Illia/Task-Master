@@ -6,7 +6,7 @@ const taskService = class taskService {
   async getAllTasks() {
     try {
       const { data } = await api.get('/tasks')
-      return data.tasks || data
+      return { success: true, data: data.tasks || data }
     } catch (err) {
       console.error('Get All Tasks Error:', err)
       throw err
@@ -23,7 +23,7 @@ const taskService = class taskService {
         deadline,
         remainingTime,
       })
-      return data
+      return { success: true, data }
     } catch (error) {
       const message =
         error.response?.data?.error ||
@@ -38,7 +38,7 @@ const taskService = class taskService {
   async deleteTasks(id) {
     try {
       const { data } = await api.delete(`${URL}/${id}`)
-      return data
+      return { success: true, data }
     } catch (error) {
       const message =
         error.response?.data?.error ||
@@ -68,7 +68,7 @@ const taskService = class taskService {
   async updateStatus(id, status) {
     try {
       const { data } = await api.patch(`${URL}/${id}/status`, { status })
-      return data
+      return { success: true, data }
     } catch (error) {
       const message =
         error.response?.data?.error ||

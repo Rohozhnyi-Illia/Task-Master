@@ -16,7 +16,7 @@ const AddModal = ({ openModalHandler }) => {
   const [task, setTask] = useState('')
   const [deadline, setDeadline] = useState({ day: '', month: '', year: '' })
   const [errors, setErrors] = useState({})
-  const [authError, setAuthError] = useState('')
+  const [fetchError, setFetchError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
   const dispatch = useDispatch()
@@ -62,24 +62,23 @@ const AddModal = ({ openModalHandler }) => {
         task,
         status: 'Active',
         category: categorySelected,
-        remainingTime: reminderSelected,
+        remainingTime: Number(reminderSelected),
         deadline: formattedDate,
       })
 
-      console.log(res)
-
-      if (!res._id) {
-        setAuthError(res.error)
-        throw new Error(res.error || 'Error creating task')
+      if (!res.success) {
+        setFetchError(res.error)
+        return
       }
 
-      dispatch(createTask(res))
-      console.log('✅ Added task to store:', res)
+      dispatch(createTask(res.data))
+
       setTask('')
       setCategorySelected('')
       setReminderSelected('')
       setDeadline({ day: '', month: '', year: '' })
-      openModalHandler()
+
+      closeModalHandler()
     } catch (err) {
       if (err.inner) {
         const newErrors = {}
@@ -88,7 +87,7 @@ const AddModal = ({ openModalHandler }) => {
         })
         setErrors(newErrors)
       } else {
-        setAuthError(err.message || 'Something went wrong')
+        setFetchError(err.message || 'Something went wrong')
         setIsErrorModalOpen(true)
       }
     } finally {
@@ -197,7 +196,7 @@ const AddModal = ({ openModalHandler }) => {
       </form>
 
       {isLoading && <Loader />}
-      {isErrorModalOpen && <ErrorModal error={authError} onClick={closeModalHandler} />}
+      {isErrorModalOpen && <ErrorModal error={fetchError} onClick={closeModalHandler} />}
     </div>
   )
 }

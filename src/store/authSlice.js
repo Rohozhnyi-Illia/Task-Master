@@ -8,16 +8,17 @@ const authSlice = createSlice({
     name: '',
     accessToken: '',
     isAuth: false,
-    keepLoged: false,
+    keepLogged: false,
   },
   reducers: {
     setAuth(state, action) {
-      const { email, name, accessToken, id } = action.payload
+      const { email, name, accessToken, id, keepLogged } = action.payload
       state.email = email
       state.name = name
       state.accessToken = accessToken
       state.id = id
       state.isAuth = true
+      state.keepLogged = !!keepLogged
     },
 
     logout: (state) => {
@@ -26,6 +27,7 @@ const authSlice = createSlice({
       state.email = null
       state.accessToken = null
       state.isAuth = false
+      state.keepLogged = false
       localStorage.removeItem('authState')
     },
   },

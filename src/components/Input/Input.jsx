@@ -14,6 +14,7 @@ const Input = (props) => {
     authOptions = false,
     err,
     checkValue,
+    type = 'text',
   } = props
 
   return (
@@ -23,9 +24,10 @@ const Input = (props) => {
       </label>
 
       <div className={styles.input__wrapper}>
-        <img src={img} alt={`${name} icon`} className={styles.input__img} />
+        {img && <img src={img} alt={`${name} icon`} className={styles.input__img} />}
         <input
           id={name}
+          type={type}
           placeholder={placeholder}
           onChange={onChange}
           value={value}
@@ -34,13 +36,19 @@ const Input = (props) => {
         />
       </div>
 
-      {ErrorMessage && <ErrorMessage error={err} />}
+      {err && <ErrorMessage error={err} />}
 
       {authOptions && (
         <div className={styles.input__options}>
           <div className={styles.input__check}>
-            <input type="checkbox" name="keepLogged" onChange={onChange} value={checkValue} />
-            <label htmlFor="keepLoged">Keep me logged in</label>
+            <input
+              id="keepLogged"
+              type="checkbox"
+              name="keepLogged"
+              onChange={onChange}
+              checked={!!checkValue}
+            />
+            <label htmlFor="keepLogged">Keep me logged in</label>
           </div>
 
           <Link className={styles.input__link} to={'/update-password'}>

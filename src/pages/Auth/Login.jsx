@@ -10,7 +10,11 @@ import AuthService from '../../services/authService'
 import { setAuth } from '../../store/authSlice'
 
 const Login = () => {
-  const [data, setData] = useState({ email: '', password: '', keepLogged: false })
+  const [data, setData] = useState({
+    email: '',
+    password: '',
+    keepLogged: false,
+  })
   const [errors, setErrors] = useState({})
   const [authError, setAuthError] = useState('')
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
@@ -31,14 +35,18 @@ const Login = () => {
 
   useEffect(() => {
     const savedAuth = JSON.parse(localStorage.getItem('authState'))
-    if (savedAuth?.email) {
+
+    if (savedAuth?.keepLogged && savedAuth?.accessToken) {
+      dispatch(setAuth(savedAuth))
+      navigate('/application')
+    } else if (savedAuth?.email) {
       setData((prev) => ({
         ...prev,
         email: savedAuth.email,
         keepLogged: true,
       }))
     }
-  }, [])
+  }, [dispatch, navigate])
 
   const onSubmitHandler = async (e) => {
     e.preventDefault()
@@ -54,12 +62,19 @@ const Login = () => {
         password: data.password,
       })
 
+      if (!res.success) {
+        setAuthError(res.error)
+        setIsErrorModalOpen(true)
+        return
+      }
+
       const authState = {
         id: res.data.id,
         email: res.data.email,
         name: res.data.name,
         accessToken: res.data.accessToken,
         isAuth: true,
+        keepLogged: !!data.keepLogged,
       }
 
       dispatch(setAuth(authState))

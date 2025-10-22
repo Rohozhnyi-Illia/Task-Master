@@ -7,7 +7,7 @@ import TaskList from './components/TaskList/TaskList/TaskList'
 import AddModal from './components/AddModal/AddModal'
 import { Loader, ErrorModal } from '@components'
 import TaskService from '../../services/taskService'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { getTasks } from '../../store/tasksSlice'
 
 const Application = () => {
@@ -25,12 +25,22 @@ const Application = () => {
   const openModalHandler = () => setIsAddModalOpen(!isAddModalOpen)
 
   useEffect(() => {
+    setIsLoading(true)
+
     const fetchTasks = async () => {
       try {
         const res = await TaskService.getAllTasks()
-        dispatch(getTasks(res))
+
+        if (!res.success) {
+          setFetchError(res.error)
+          return
+        }
+
+        dispatch(getTasks(res.data))
       } catch (err) {
         console.error(err)
+      } finally {
+        setIsLoading(false)
       }
     }
     fetchTasks()
