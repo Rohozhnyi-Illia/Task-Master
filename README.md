@@ -51,8 +51,8 @@ npm install
 ## Running
 
 ```bash
-npm start # development mode
-npm run build # production build
+- npm start # development mode
+- npm run build # production build
 ```
 
 Default frontend URL: http://localhost:3000
