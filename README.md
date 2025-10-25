@@ -64,29 +64,29 @@ Frontend communicates with TaskMaster-Backend through Axios services:
 
 ## AuthService
 
-• register({ email, password, name }) — register a new user
-• login({ email, password }) — login
-• logout() — logout
-• updatePassword({ email, newPassword, repeatPassword }) — change password
+- register({ email, password, name }) — register a new user
+- login({ email, password }) — login
+- logout() — logout
+- updatePassword({ email, newPassword, repeatPassword }) — change password
 
 ## TaskService
 
-• getAllTasks() — get all tasks
-• createTask({ task, status, category, deadline, remainingTime }) — create a new task
-• deleteTasks(id) — delete a task
-• completeTask(id) — mark a task as completed
-• updateStatus(id, status) — update task status
+- getAllTasks() — get all tasks
+- createTask({ task, status, category, deadline, remainingTime }) — create a new task
+- deleteTasks(id) — delete a task
+- completeTask(id) — mark a task as completed
+- updateStatus(id, status) — update task status
 
 ## NotificationService
 
-• getUserNotifications() — get user notifications
-• markAsRead(id) — mark a notification as read
-• deleteNotification(id) — delete a notification
+- getUserNotifications() — get user notifications
+- markAsRead(id) — mark a notification as read
+- deleteNotification(id) — delete a notification
 
 ## Notes
 
-• First version of the project; no email integration yet
-• Backend must be running for frontend to function correctly
+- First version of the project; no email integration yet
+- Backend must be running for frontend to function correctly
 
 ## Author
 
