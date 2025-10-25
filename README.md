@@ -1,12 +1,15 @@
 # TaskMaster Frontend
 
-!![Application](./src/assets/preview/Application.jpg)
+![Application](./src/assets/preview/Application.jpg)
 _Main Dashboard_
 ![Application Dark](./src/assets/preview/Application-dark.jpg)
 _Dark Theme_
 ![Statistics](./src/assets/preview/Statistics.jpg)
+_Statistics Page_
 ![Login](./src/assets/preview/Login.jpg)
+_Login Page_
 ![Adding Data](./src/assets/preview/Add-modal.jpg)
+_Adding Data Modal Window_
 
 Frontend application for **TaskMaster** — a task management platform with deadlines, notifications, and user authentication. Built with React, Redux Toolkit, SCSS, and Webpack.
 
