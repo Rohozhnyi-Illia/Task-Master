@@ -1,70 +1,90 @@
-# Getting Started with Create React App
+# TaskMaster Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+!![Application](./src/assets/preview/Application.jpg)
+_Main Dashboard_
+![Application Dark](./src/assets/preview/Application-dark.jpg)
+_Dark Theme_
+![Statistics](./src/assets/preview/Statistics.jpg)
+![Login](./src/assets/preview/Login.jpg)
+![Adding Data](./src/assets/preview/Add-modal.jpg)
 
-## Available Scripts
+Frontend application for **TaskMaster** — a task management platform with deadlines, notifications, and user authentication. Built with React, Redux Toolkit, SCSS, and Webpack.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- User registration, login, and password update
+- JWT-based authentication with access and refresh tokens
+- Task management: create, update, complete, and delete tasks
+- Task notifications: reminders, deadlines, and overdue alerts
+- Dark/light theme toggle
+- Responsive design for mobile and desktop
+- Automatic token refresh and optimistic UI updates
+- Error handling with modals and loaders
+- Validation of forms, deadlines, and data
+- Custom favicon and app branding
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Technologies
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- React 18 / Hooks
+- Redux Toolkit for state management
+- React Router for navigation
+- Axios with interceptors for API calls
+- SCSS for styling
+- Webpack for bundling
+- Yup for validating all forms
 
-### `npm test`
+## Installation
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+git clone https://github.com/Rohozhnyi-Illia/Task-Master.git
+cd Task-Master
+npm install
+```
 
-### `npm run build`
+## Running
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+npm start # development mode
+npm run build # production build
+Default frontend URL: http://localhost:3000
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Pages
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **Login** — user authentication
+- **SignUp** — create a new account
+- **UpdatePassword** — change password
+- **Application** — main dashboard with tasks and notifications
+- **StatsPage** — overview of completed tasks
 
-### `npm run eject`
+## API Services
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Frontend communicates with TaskMaster-Backend through Axios services:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## AuthService
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+• register({ email, password, name }) — register a new user
+• login({ email, password }) — login
+• logout() — logout
+• updatePassword({ email, newPassword, repeatPassword }) — change password
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## TaskService
 
-## Learn More
+• getAllTasks() — get all tasks
+• createTask({ task, status, category, deadline, remainingTime }) — create a new task
+• deleteTasks(id) — delete a task
+• completeTask(id) — mark a task as completed
+• updateStatus(id, status) — update task status
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## NotificationService
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+• getUserNotifications() — get user notifications
+• markAsRead(id) — mark a notification as read
+• deleteNotification(id) — delete a notification
 
-### Code Splitting
+## Notes
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+• First version of the project; no email integration yet
+• Backend must be running for frontend to function correctly
 
-### Analyzing the Bundle Size
+## Author
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Illia Rohozhnyi
