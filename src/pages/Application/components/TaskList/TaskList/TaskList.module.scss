@@ -91,7 +91,7 @@
   }
 
   .pagination {
-    padding: 4rem 0;
+    padding: 2rem 0;
     margin-top: auto;
     display: flex;
     align-items: center;
@@ -151,14 +151,14 @@
   }
 }
 
-@media screen and (max-width: 1024.1px) {
+@media screen and (max-width: 1024px) {
   .taskList__cardWrapper {
     display: grid;
     gap: 2rem;
     width: 100%;
     padding: 1rem;
     box-sizing: border-box;
-    align-items: stretch;
+    align-items: start;
 
     grid-template-columns: 1fr;
   }

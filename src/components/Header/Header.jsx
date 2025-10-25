@@ -98,6 +98,12 @@ const Header = () => {
           <li className={styles.header__notification}>
             <div className={styles.header__icon_wrapper} onClick={notificationOpenHandler}>
               <img src={notification} alt="notifications" className={styles.header__icon} />
+
+              {notificationsList.length > 0 && (
+                <div className={styles.header__notification_quantity}>
+                  {notificationsList.length}
+                </div>
+              )}
             </div>
           </li>
 
@@ -168,7 +174,12 @@ const Header = () => {
         ) : (
           <div className={styles.header__notificationList_notifications}>
             {notificationsList.map((item) => (
-              <Notification key={item._id} notification={item.message} />
+              <Notification
+                key={item._id}
+                notification={item.message}
+                id={item._id}
+                isRead={item.isRead}
+              />
             ))}
           </div>
         )}

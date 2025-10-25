@@ -10,6 +10,7 @@
   border-radius: v.$radius-lg;
   background-color: #fff;
   animation: slideInPop 0.45s cubic-bezier(0.25, 1.1, 0.3, 1) forwards;
+  transition: background-color 0.3s ease, transform 0.3s ease, color 0.3s ease;
 
   &__header {
     display: flex;

@@ -3,25 +3,45 @@
 
 .notification {
   position: relative;
-  padding: 1.6rem 0.5rem;
+  padding: 1.4rem 0.5rem;
   width: 100%;
-  min-height: 6.6rem;
 
   background-color: var(--accent-color);
   border-radius: v.$radius-lg;
+
+  img {
+    width: 3rem;
+  }
 
   &__item {
     position: absolute;
   }
 
   &__text {
-    @include m.text-style(
-      v.$font-size-notification,
-      v.$font-weight-medium,
-      v.$line-height-default
-    );
-
+    margin-top: 3rem;
+    @include m.text-style(v.$font-size-xs, v.$font-weight-medium, v.$line-height-default);
     color: #fff;
+  }
+
+  button {
+    position: absolute;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+
+    svg {
+      color: #fff;
+      font-size: 2rem;
+      @include m.hover-effect();
+    }
+  }
+
+  &__complete {
+    right: 3.2rem;
+  }
+
+  &__delete {
+    right: 0.3rem;
   }
 
   &::after {
@@ -35,6 +55,16 @@
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
     border-top: 20px solid var(--accent-color);
+  }
+
+  &.read {
+    background-color: #999;
+    transition: background-color 0.3s ease;
+
+    &::after {
+      border-top: 20px solid #999;
+      transition: border-top 0.3s ease;
+    }
   }
 }
 

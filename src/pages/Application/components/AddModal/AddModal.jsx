@@ -9,6 +9,7 @@ import { ErrorModal, Loader } from '@components'
 import TaskService from '@services/taskService'
 import { createTask } from '@store/tasksSlice'
 import { useDispatch } from 'react-redux'
+import firstLetterToUpperCase from '@utils/helpers/firstLetterToUpperCase'
 
 const AddModal = ({ openModalHandler }) => {
   const [categorySelected, setCategorySelected] = useState('')
@@ -41,7 +42,7 @@ const AddModal = ({ openModalHandler }) => {
     e.preventDefault()
 
     const formData = {
-      task: task.trim(),
+      task: firstLetterToUpperCase(task.trim()),
       category: categorySelected.trim(),
       day: deadline.day,
       month: deadline.month,
@@ -57,9 +58,21 @@ const AddModal = ({ openModalHandler }) => {
         Number(deadline.month) - 1,
         Number(deadline.day)
       )
+      const now = new Date()
+      formattedDate.setHours(0, 0, 0)
+      now.setHours(0, 0, 0)
+
+      if (formattedDate < now) {
+        setErrors((prev) => ({
+          ...prev,
+          date: 'Deadline must be in the future',
+        }))
+
+        return
+      }
 
       const res = await TaskService.createTask({
-        task,
+        task: formData.task,
         status: 'Active',
         category: categorySelected,
         remainingTime: Number(reminderSelected),
@@ -98,7 +111,7 @@ const AddModal = ({ openModalHandler }) => {
   return (
     <div className={styles.addModal}>
       <form className={styles.addModal__content} onSubmit={onSubmitHandler}>
-        <button className={styles.addModal__button} onClick={openModalHandler}>
+        <button className={styles.addModal__button} onClick={openModalHandler} type="button">
           <img src={closeModal} alt="close" />
         </button>
 
@@ -134,6 +147,7 @@ const AddModal = ({ openModalHandler }) => {
             onChange={(val) => setReminderSelected(val)}
             selected={reminderSelected}
             setSelected={setReminderSelected}
+            label="When to remind?"
           />
         </div>
 
@@ -187,6 +201,9 @@ const AddModal = ({ openModalHandler }) => {
           )}
           {errors.year && (
             <ErrorMessage error={errors.year} className={styles.addModal__error} />
+          )}
+          {errors.date && (
+            <ErrorMessage error={errors.date} className={styles.addModal__error} />
           )}
         </div>
 
