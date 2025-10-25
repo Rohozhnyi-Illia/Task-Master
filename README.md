@@ -2,12 +2,16 @@
 
 _Main Dashboard_
 ![Application](./src/assets/preview/Application.jpg)
+
 _Dark Theme_
 ![Application Dark](./src/assets/preview/Application-dark.jpg)
+
 _Statistics Page_
 ![Statistics](./src/assets/preview/Statistics.jpg)
+
 _Login Page_
 ![Login](./src/assets/preview/Login.jpg)
+
 _Adding Data Modal Window_
 ![Adding Data](./src/assets/preview/Add-modal.jpg)
 
