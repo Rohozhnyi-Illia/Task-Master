@@ -1,11 +1,14 @@
 # TaskMaster Frontend
 
-!![Application](./src/assets/preview/Application.jpg)
 _Main Dashboard_
-![Application Dark](./src/assets/preview/Application-dark.jpg)
+![Application](./src/assets/preview/Application.jpg)
 _Dark Theme_
+![Application Dark](./src/assets/preview/Application-dark.jpg)
+_Statistics Page_
 ![Statistics](./src/assets/preview/Statistics.jpg)
+_Login Page_
 ![Login](./src/assets/preview/Login.jpg)
+_Adding Data Modal Window_
 ![Adding Data](./src/assets/preview/Add-modal.jpg)
 
 Frontend application for **TaskMaster** — a task management platform with deadlines, notifications, and user authentication. Built with React, Redux Toolkit, SCSS, and Webpack.
@@ -43,8 +46,11 @@ npm install
 
 ## Running
 
+```bash
 npm start # development mode
 npm run build # production build
+```
+
 Default frontend URL: http://localhost:3000
 
 ## Pages
@@ -61,29 +67,29 @@ Frontend communicates with TaskMaster-Backend through Axios services:
 
 ## AuthService
 
-• register({ email, password, name }) — register a new user
-• login({ email, password }) — login
-• logout() — logout
-• updatePassword({ email, newPassword, repeatPassword }) — change password
+- register({ email, password, name }) — register a new user
+- login({ email, password }) — login
+- logout() — logout
+- updatePassword({ email, newPassword, repeatPassword }) — change password
 
 ## TaskService
 
-• getAllTasks() — get all tasks
-• createTask({ task, status, category, deadline, remainingTime }) — create a new task
-• deleteTasks(id) — delete a task
-• completeTask(id) — mark a task as completed
-• updateStatus(id, status) — update task status
+- getAllTasks() — get all tasks
+- createTask({ task, status, category, deadline, remainingTime }) — create a new task
+- deleteTasks(id) — delete a task
+- completeTask(id) — mark a task as completed
+- updateStatus(id, status) — update task status
 
 ## NotificationService
 
-• getUserNotifications() — get user notifications
-• markAsRead(id) — mark a notification as read
-• deleteNotification(id) — delete a notification
+- getUserNotifications() — get user notifications
+- markAsRead(id) — mark a notification as read
+- deleteNotification(id) — delete a notification
 
 ## Notes
 
-• First version of the project; no email integration yet
-• Backend must be running for frontend to function correctly
+- First version of the project; no email integration yet
+- Backend must be running for frontend to function correctly
 
 ## Author
 
