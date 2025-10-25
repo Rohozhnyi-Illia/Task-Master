@@ -1,11 +1,13 @@
 import axios from 'axios'
 import store from '../store/store'
 import { setAuth, logout } from '../store/authSlice'
-import AuthService from './authService'
 
 const api = axios.create({
   baseURL: 'http://localhost:9000/api',
   withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json',
+  },
 })
 
 let isRefreshing = false
@@ -27,6 +29,7 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (res) => res,
+
   async (error) => {
     const originalRequest = error.config
 
@@ -52,6 +55,7 @@ api.interceptors.response.use(
         )
 
         const newAccessToken = refreshRes.data.accessToken
+
         store.dispatch(setAuth({ ...store.getState().auth, accessToken: newAccessToken }))
 
         processQueue(null, newAccessToken)
