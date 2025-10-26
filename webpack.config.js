@@ -44,7 +44,7 @@ if (shouldAnalyze) {
 module.exports = {
   entry: './src/index.js',
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'build'),
     filename: 'js/[name].[contenthash].js',
     publicPath: '/',
     clean: true,
