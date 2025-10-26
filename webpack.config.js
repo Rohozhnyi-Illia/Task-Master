@@ -3,13 +3,15 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const isProduction = process.env.NODE_ENV === 'production'
-const shouldAnalyze = process.env.ANALYZE === 'true'
 
 const plugins = [
   new CleanWebpackPlugin(),
   new HtmlWebpackPlugin({
     template: './public/index.html',
+    inject: 'body',
+  }),
+  new MiniCssExtractPlugin({
+    filename: 'css/styles.[contenthash].css',
   }),
   new CopyWebpackPlugin({
     patterns: [
@@ -22,25 +24,6 @@ const plugins = [
   }),
 ]
 
-if (isProduction) {
-  plugins.push(
-    new MiniCssExtractPlugin({
-      filename: 'css/styles.[contenthash].css',
-    })
-  )
-}
-
-if (shouldAnalyze) {
-  const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-  plugins.push(
-    new BundleAnalyzerPlugin({
-      analyzerMode: 'static',
-      openAnalyzer: true,
-      reportFilename: path.resolve(__dirname, 'dist/bundle-report.html'),
-    })
-  )
-}
-
 module.exports = {
   entry: './src/index.js',
   output: {
@@ -49,8 +32,8 @@ module.exports = {
     publicPath: '/',
     clean: true,
   },
-  mode: isProduction ? 'production' : 'development',
-  devtool: isProduction ? 'source-map' : 'eval-source-map',
+  mode: 'production',
+  devtool: 'source-map',
   resolve: {
     extensions: ['.js', '.jsx'],
     alias: {
@@ -72,11 +55,7 @@ module.exports = {
       },
       {
         test: /\.s[ac]ss$/i,
-        use: [
-          isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-          'css-loader',
-          'sass-loader',
-        ],
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
       },
       {
         test: /\.(png|jpe?g|gif|svg)$/i,
@@ -91,13 +70,6 @@ module.exports = {
     ],
   },
   plugins,
-  devServer: {
-    historyApiFallback: true,
-    static: path.resolve(__dirname, 'public'),
-    port: 3000,
-    open: true,
-    hot: true,
-  },
   optimization: {
     splitChunks: {
       cacheGroups: {
