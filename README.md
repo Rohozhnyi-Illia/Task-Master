@@ -17,7 +17,7 @@ _Adding Data Modal Window_
 
 Frontend application for **TaskMaster** — a task management platform with deadlines, notifications, and user authentication. Built with React, Redux Toolkit, SCSS, and Webpack.
 
-## Ссылки
+## Links
 
 [![Demo](https://img.shields.io/badge/demo-online-brightgreen)](https://verdant-sfogliatella-0ba40c.netlify.app/)  
 [![API for UI](https://img.shields.io/badge/API-backend-blue)](https://github.com/Rohozhnyi-Illia/TaskMaster-backend)
