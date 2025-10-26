@@ -11,10 +11,11 @@ import { Loader } from '@components'
 
 const UpdatePassword = () => {
   const [data, setData] = useState({ email: '', newPassword: '', repeatPassword: '' })
-  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
   const [errors, setErrors] = useState({})
   const [authError, setAuthError] = useState()
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+
   const navigate = useNavigate()
 
   const openModalHandler = () => {

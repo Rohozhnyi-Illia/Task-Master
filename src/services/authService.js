@@ -1,11 +1,9 @@
 import api from './api'
 
-const URL = 'http://localhost:9000/api/auth'
-
 const authService = class AuthServcie {
   async register({ email, password, name }) {
     try {
-      const res = await api.post(`${URL}/register`, { email, password, name })
+      const res = await api.post('/auth/register', { email, password, name })
       return { success: true, data: res.data }
     } catch (error) {
       const message =
@@ -13,14 +11,13 @@ const authService = class AuthServcie {
         error.response?.data?.message ||
         error.message ||
         'Error'
-
       return { success: false, error: message }
     }
   }
 
   async login({ email, password }) {
     try {
-      const res = await api.post(`${URL}/login`, { email, password })
+      const res = await api.post('/auth/login', { email, password })
       return { success: true, data: res.data }
     } catch (error) {
       const message =
@@ -28,14 +25,13 @@ const authService = class AuthServcie {
         error.response?.data?.message ||
         error.message ||
         'Error'
-
       return { success: false, error: message }
     }
   }
 
   async logout() {
     try {
-      const res = await api.post(`${URL}/logout`)
+      const res = await api.post('/auth/logout')
       return { success: true, data: res.data }
     } catch (error) {
       const message =
@@ -43,19 +39,17 @@ const authService = class AuthServcie {
         error.response?.data?.message ||
         error.message ||
         'Error'
-
       return { success: false, error: message }
     }
   }
 
   async updatePassword({ email, newPassword, repeatPassword }) {
     try {
-      const res = await api.post(`${URL}/update-password`, {
+      const res = await api.post('/auth/update-password', {
         email,
         newPassword,
         repeatPassword,
       })
-
       return { success: true, data: res.data }
     } catch (error) {
       const message =
@@ -63,7 +57,6 @@ const authService = class AuthServcie {
         error.response?.data?.message ||
         error.message ||
         'Error'
-
       return { success: false, error: message }
     }
   }

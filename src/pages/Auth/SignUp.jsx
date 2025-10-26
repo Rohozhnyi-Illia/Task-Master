@@ -14,10 +14,11 @@ import { Loader } from '@components'
 
 const SignUp = () => {
   const [data, setData] = useState({ name: '', email: '', password: '' })
-  const [isLoading, setIsLoading] = useState(false)
-  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
   const [errors, setErrors] = useState({})
   const [authError, setAuthError] = useState('')
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+
   const dispatch = useDispatch()
   const navigate = useNavigate()
 

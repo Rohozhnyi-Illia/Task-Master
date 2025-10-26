@@ -3,7 +3,8 @@ import * as styles from './ScaleChart.module.scss'
 
 const ScaleChart = (props) => {
   const { category, totalQuantity, completedQuantity } = props
-  const completedPercent = Math.round((completedQuantity / totalQuantity) * 100)
+  const completedPercent =
+    totalQuantity > 0 ? Math.round((completedQuantity / totalQuantity) * 100) : 0
 
   return (
     <div className={styles.scaleWrapper}>

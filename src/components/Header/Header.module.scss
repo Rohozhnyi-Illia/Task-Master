@@ -100,7 +100,7 @@
 
       &_text {
         @include m.text-style(v.$font-size-xs, v.$font-weight-medium, v.$line-height-default);
-        color: var(--notification-text);
+        color: var(--text-color);
         text-align: center;
         transition: color 0.3s ease;
       }

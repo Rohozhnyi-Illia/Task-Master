@@ -1,11 +1,11 @@
 import api from './api'
 
-const URL = 'http://localhost:9000/api/notification'
+
 
 const notificationService = class notificationService {
   async getUserNotifications() {
     try {
-      const { data } = await api.get(`${URL}/`)
+      const { data } = await api.get('/notification') 
       return { success: true, data }
     } catch (error) {
       const message =
@@ -13,14 +13,13 @@ const notificationService = class notificationService {
         error.response?.data?.message ||
         error.message ||
         'Error fetching notifications'
-
       return { success: false, error: message }
     }
   }
 
   async markAsRead(id) {
     try {
-      const { data } = await api.patch(`${URL}/${id}/read`)
+      const { data } = await api.patch(`/notification/${id}/read`)
       return { success: true, data }
     } catch (error) {
       const message =
@@ -28,14 +27,13 @@ const notificationService = class notificationService {
         error.response?.data?.message ||
         error.message ||
         'Error marking notification as read'
-
       return { success: false, error: message }
     }
   }
 
   async deleteNotification(id) {
     try {
-      const { data } = await api.delete(`${URL}/${id}`)
+      const { data } = await api.delete(`/notification/${id}`)
       return { success: true, data }
     } catch (error) {
       const message =
@@ -43,7 +41,6 @@ const notificationService = class notificationService {
         error.response?.data?.message ||
         error.message ||
         'Error deleting notification'
-
       return { success: false, error: message }
     }
   }

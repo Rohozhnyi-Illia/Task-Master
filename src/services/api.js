@@ -3,7 +3,7 @@ import store from '../store/store'
 import { setAuth, logout } from '../store/authSlice'
 
 const api = axios.create({
-  baseURL: 'http://localhost:9000/api',
+  baseURL: 'https://taskmaster-backend-e940.onrender.com/api',
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ api.interceptors.response.use(
 
       try {
         const refreshRes = await axios.post(
-          'http://localhost:9000/api/auth/refresh',
+          'https://taskmaster-backend-e940.onrender.com/api/auth/refresh',
           {},
           { withCredentials: true }
         )

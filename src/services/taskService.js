@@ -1,11 +1,9 @@
 import api from './api'
 
-const URL = 'http://localhost:9000/api/tasks'
-
 const taskService = class taskService {
   async getAllTasks() {
     try {
-      const { data } = await api.get('/tasks')
+      const { data } = await api.get('/tasks') // относительный путь
       return { success: true, data: data.tasks || data }
     } catch (err) {
       console.error('Get All Tasks Error:', err)
@@ -13,10 +11,9 @@ const taskService = class taskService {
     }
   }
 
-  async createTask(props) {
-    const { task, status, category, deadline, remainingTime } = props
+  async createTask({ task, status, category, deadline, remainingTime }) {
     try {
-      const { data } = await api.post(`${URL}/`, {
+      const { data } = await api.post('/tasks', {
         task,
         status,
         category,
@@ -30,14 +27,13 @@ const taskService = class taskService {
         error.response?.data?.message ||
         error.message ||
         'Error'
-
       return { success: false, error: message }
     }
   }
 
   async deleteTasks(id) {
     try {
-      const { data } = await api.delete(`${URL}/${id}`)
+      const { data } = await api.delete(`/tasks/${id}`)
       return { success: true, data }
     } catch (error) {
       const message =
@@ -45,29 +41,13 @@ const taskService = class taskService {
         error.response?.data?.message ||
         error.message ||
         'Error'
-
       return { success: false, error: message }
     }
   }
 
   async completeTask(id) {
     try {
-      const { data } = await api.patch(`${URL}/${id}/complete`)
-      return data
-    } catch (error) {
-      const message =
-        error.response?.data?.error ||
-        error.response?.data?.message ||
-        error.message ||
-        'Error'
-
-      return { success: false, error: message }
-    }
-  }
-
-  async updateStatus(id, status) {
-    try {
-      const { data } = await api.patch(`${URL}/${id}/status`, { status })
+      const { data } = await api.patch(`/tasks/${id}/complete`)
       return { success: true, data }
     } catch (error) {
       const message =
@@ -75,7 +55,20 @@ const taskService = class taskService {
         error.response?.data?.message ||
         error.message ||
         'Error'
+      return { success: false, error: message }
+    }
+  }
 
+  async updateStatus(id, status) {
+    try {
+      const { data } = await api.patch(`/tasks/${id}/status`, { status })
+      return { success: true, data }
+    } catch (error) {
+      const message =
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        error.message ||
+        'Error'
       return { success: false, error: message }
     }
   }

@@ -123,7 +123,7 @@
   &__error {
     margin: 0.25rem 0;
     @include m.text-style(v.$font-size-xs, v.$font-weight-medium, v.$line-height-default);
-    color: var(--accent-color);
+    color: #c20f70;
     text-align: left;
   }
 }
