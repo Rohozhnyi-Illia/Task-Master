@@ -1,4 +1,4 @@
-import { mdiPassword, mail } from '../../assets'
+import { mail } from '../../assets'
 
 const FIELDS = [
   {
@@ -6,20 +6,6 @@ const FIELDS = [
     name: 'email',
     placeholder: 'Enter Your Email...',
     img: mail,
-  },
-  {
-    label: 'New Password',
-    name: 'newPassword',
-    placeholder: 'Enter New Password...',
-    img: mdiPassword,
-    type: 'password',
-  },
-  {
-    label: 'Repeat Password',
-    name: 'repeatPassword',
-    placeholder: 'Repeat Your Password...',
-    img: mdiPassword,
-    type: 'password',
   },
 ]
 

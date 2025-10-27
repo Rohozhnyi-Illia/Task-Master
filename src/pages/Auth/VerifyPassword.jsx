@@ -1,29 +1,44 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import * as styles from './Auth.module.scss'
-import fields from '@utils/fields/updatePasswordFields'
-import { Input, AuthButton, ErrorModal } from '@components'
-import { bg } from '../../assets'
-import passwordUpdateSchema from '@utils/validation/passwordUpdate-validation'
+import fields from '@utils/fields/verifyPasswordFields'
+import { Input, AuthButton, ErrorModal, AccessModal } from '@components'
+import { bg } from '@assets'
+import passwordVerifySchema from '@utils/validation/passwordVerify-validation'
 import { useNavigate } from 'react-router-dom'
 import AuthService from '@services/authService'
 import { Loader } from '@components'
-import { useDispatch } from 'react-redux'
-import { updateEmail } from '@store/authSlice'
+import { useDispatch, useSelector } from 'react-redux'
 
-const UpdatePassword = () => {
-  const [data, setData] = useState({ email: '' })
+const VerifyPassword = () => {
+  const [data, setData] = useState({
+    newPassword: '',
+    repeatPassword: '',
+    verifyCode: '',
+  })
   const [errors, setErrors] = useState({})
-  const [authError, setAuthError] = useState('')
+  const [authError, setAuthError] = useState()
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-
+  const [accessAction, setAccessAction] = useState(false)
   const navigate = useNavigate()
-  const dispatch = useDispatch()
+
+  const email = useSelector((state) => state.auth.email)
 
   const openModalHandler = () => {
     setIsErrorModalOpen(!isErrorModalOpen)
   }
+
+  const navigateHandler = () => {
+    setAccessAction(false)
+    navigate('/login')
+  }
+
+  useEffect(() => {
+    if (!email && !accessAction) {
+      navigate('/update-password', { replace: true })
+    }
+  }, [email, accessAction, navigate])
 
   const onChangeHandler = (e) => {
     const { name, value } = e.target
@@ -40,21 +55,23 @@ const UpdatePassword = () => {
     setIsLoading(true)
 
     try {
-      await passwordUpdateSchema.validate(data, { abortEarly: false })
+      await passwordVerifySchema.validate(data, { abortEarly: false })
 
-      const res = await AuthService.updatePassword({
-        email: data.email,
+      const res = await AuthService.verifyPassword({
+        email,
+        newPassword: data.newPassword,
+        repeatPassword: data.repeatPassword,
+        verifyCode: data.verifyCode,
       })
 
       if (!res.success) {
         setAuthError(res.error)
-        openModalHandler()
+        setIsErrorModalOpen(true)
         return
       }
 
       if (res.success) {
-        dispatch(updateEmail(data.email))
-        navigate('/verify-password')
+        setAccessAction(true)
       }
     } catch (err) {
       if (err.inner) {
@@ -77,8 +94,10 @@ const UpdatePassword = () => {
       <div className={styles.auth__container}>
         <div className={styles.auth__container_wrapper}>
           <div className={styles.auth__header}>
-            <h2 className={styles.auth__headerTitle}>Update Password</h2>
-            <p className={styles.auth__headerSubtitle}>Let’s get you back in</p>
+            <h2 className={styles.auth__headerTitle}>Verify Your Code</h2>
+            <p className={styles.auth__headerSubtitle}>
+              Enter the 6-digit code we sent to your email
+            </p>
           </div>
 
           <form className={styles.auth__form} onSubmit={onSubmitHandler}>
@@ -93,7 +112,7 @@ const UpdatePassword = () => {
                 img={field.img}
                 authOptions={field.authOptions}
                 err={errors[field.name]}
-                type={field.type || 'text'}
+                type={field.type !== 'password' ? 'text' : 'password'}
               />
             ))}
 
@@ -110,8 +129,9 @@ const UpdatePassword = () => {
 
       {isErrorModalOpen && <ErrorModal error={authError} onClick={openModalHandler} />}
       {isLoading && <Loader />}
+      {accessAction && <AccessModal onClick={navigateHandler} />}
     </div>
   )
 }
 
-export default UpdatePassword
+export default VerifyPassword

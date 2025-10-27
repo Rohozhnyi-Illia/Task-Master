@@ -30,8 +30,12 @@ const authSlice = createSlice({
       state.keepLogged = false
       localStorage.removeItem('authState')
     },
+
+    updateEmail(state, action) {
+      state.email = action.payload
+    },
   },
 })
 
-export const { setAuth, logout } = authSlice.actions
+export const { setAuth, logout, updateEmail } = authSlice.actions
 export default authSlice.reducer

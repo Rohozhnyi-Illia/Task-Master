@@ -43,13 +43,29 @@ const authService = class AuthServcie {
     }
   }
 
-  async updatePassword({ email, newPassword, repeatPassword }) {
+  async updatePassword({ email }) {
     try {
-      const res = await api.post('/auth/update-password', {
+      const res = await api.post('/auth/update-password', { email })
+      return { success: true, data: res.data }
+    } catch (error) {
+      const message =
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        error.message ||
+        'Error'
+      return { success: false, error: message }
+    }
+  }
+
+  async verifyPassword({ email, newPassword, repeatPassword, verifyCode }) {
+    try {
+      const res = await api.post('/auth/verify-password', {
         email,
         newPassword,
         repeatPassword,
+        verifyCode,
       })
+
       return { success: true, data: res.data }
     } catch (error) {
       const message =

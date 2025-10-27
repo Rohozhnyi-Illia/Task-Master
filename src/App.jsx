@@ -12,6 +12,7 @@ const SignUp = lazy(() => import('./pages/Auth/SignUp'))
 const Statistics = lazy(() => import('./pages/Statistics/StatsPage'))
 const HeaderLayout = lazy(() => import('./layout/HeaderLayout'))
 const Application = lazy(() => import('./pages/Application/Application'))
+const VerifyPassword = lazy(() => import('./pages/Auth/VerifyPassword'))
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/update-password" element={<UpdatePassword />} />
+            <Route path="/verify-password" element={<VerifyPassword />} />
 
             <Route
               element={
