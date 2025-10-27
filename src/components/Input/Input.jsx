@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import * as styles from './Input.module.scss'
 import { Link } from 'react-router-dom'
 import ErrorMessage from '../ErrorMessage/ErrorMessage'
+import { IoIosEye, IoMdEyeOff } from 'react-icons/io'
 
 const Input = (props) => {
   const {
@@ -17,6 +18,13 @@ const Input = (props) => {
     type = 'text',
   } = props
 
+  const [showPassword, setShowPassword] = useState(false)
+  const isPasswordField = type === 'password'
+
+  const changePasswordTypeHandler = () => {
+    setShowPassword(!showPassword)
+  }
+
   return (
     <div className={styles.input}>
       <label htmlFor={name} className={styles.input__label}>
@@ -25,15 +33,27 @@ const Input = (props) => {
 
       <div className={styles.input__wrapper}>
         {img && <img src={img} alt={`${name} icon`} className={styles.input__img} />}
+
         <input
           id={name}
-          type={type}
+          type={isPasswordField && showPassword ? 'text' : type}
           placeholder={placeholder}
           onChange={onChange}
           value={value}
           name={name}
           className={styles.input__input}
         />
+
+        {isPasswordField && (
+          <button
+            className={styles.input__typeButton}
+            type="button"
+            onClick={changePasswordTypeHandler}
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
+          >
+            {showPassword ? <IoMdEyeOff /> : <IoIosEye />}
+          </button>
+        )}
       </div>
 
       {err && <ErrorMessage error={err} />}

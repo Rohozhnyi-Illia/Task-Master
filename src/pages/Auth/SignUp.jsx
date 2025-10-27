@@ -102,6 +102,7 @@ const SignUp = () => {
                 img={field.img}
                 authOptions={field.authOptions}
                 err={errors[field.name]}
+                type={field.type !== 'password' ? 'text' : 'password'}
               />
             ))}
 

@@ -1,6 +1,7 @@
 export { default as AuthButton } from './AuthButton/AuthButton'
 export { default as Input } from './Input/Input'
 export { default as ErrorMessage } from './ErrorMessage/ErrorMessage'
-export { default as ErrorModal } from './ErrorModal/ErrorModal'
+export { default as ErrorModal } from './Modals/ErrorModal/ErrorModal'
 export { default as Header } from './Header/Header'
 export { default as Loader } from './Loader/Loader'
+export { default as AccessModal } from './Modals/AcessModal/AcessModal'

@@ -3,7 +3,8 @@ import store from '../store/store'
 import { setAuth, logout } from '../store/authSlice'
 
 const api = axios.create({
-  baseURL: 'https://taskmaster-backend-e940.onrender.com/api',
+  // baseURL: 'https://taskmaster-backend-e940.onrender.com/api',
+  baseURL: 'http://localhost:9000/api',
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',

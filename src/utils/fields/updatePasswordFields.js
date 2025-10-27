@@ -12,12 +12,14 @@ const FIELDS = [
     name: 'newPassword',
     placeholder: 'Enter New Password...',
     img: mdiPassword,
+    type: 'password',
   },
   {
     label: 'Repeat Password',
     name: 'repeatPassword',
     placeholder: 'Repeat Your Password...',
     img: mdiPassword,
+    type: 'password',
   },
 ]
 

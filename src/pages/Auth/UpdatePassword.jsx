@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import * as styles from './Auth.module.scss'
 import fields from '@utils/fields/updatePasswordFields'
-import { Input, AuthButton, ErrorModal } from '@components'
+import { Input, AuthButton, ErrorModal, AccessModal } from '@components'
 import { bg } from '../../assets'
 import passwordUpdateSchema from '@utils/validation/passwordUpdate-validation'
 import { useNavigate } from 'react-router-dom'
@@ -15,11 +15,17 @@ const UpdatePassword = () => {
   const [authError, setAuthError] = useState()
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [accessAction, setAccessAction] = useState(false)
 
   const navigate = useNavigate()
 
   const openModalHandler = () => {
     setIsErrorModalOpen(!isErrorModalOpen)
+  }
+
+  const navigateHandler = () => {
+    navigate('/login')
+    setAccessAction(false)
   }
 
   const onChangeHandler = (e) => {
@@ -51,7 +57,9 @@ const UpdatePassword = () => {
         return
       }
 
-      navigate('/login')
+      if (res.success) {
+        setAccessAction(true)
+      }
     } catch (err) {
       if (err.inner) {
         const newErrors = {}
@@ -89,6 +97,7 @@ const UpdatePassword = () => {
                 img={field.img}
                 authOptions={field.authOptions}
                 err={errors[field.name]}
+                type={field.type !== 'password' ? 'text' : 'password'}
               />
             ))}
 
@@ -98,13 +107,14 @@ const UpdatePassword = () => {
               </p>
             </div>
 
-            <AuthButton text="Sign Up" />
+            <AuthButton text="Update" />
           </form>
         </div>
       </div>
 
       {isErrorModalOpen && <ErrorModal error={authError} onClick={openModalHandler} />}
       {isLoading && <Loader />}
+      {accessAction && <AccessModal onClick={navigateHandler} />}
     </div>
   )
 }

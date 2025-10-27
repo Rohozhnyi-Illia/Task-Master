@@ -1,0 +1,66 @@
+@use '@styles/variables.scss' as v;
+@use '@styles/mixins.scss' as m;
+
+.modal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(102, 102, 102, 0.8) 0%,
+    rgba(204, 204, 204, 0.1) 80%
+  );
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  animation: fadeIn 0.25s ease;
+
+  &__content {
+    position: relative;
+    padding: 3rem;
+    width: 100%;
+    max-width: 40rem;
+    min-height: 35rem;
+    background-color: #fff;
+    border-radius: 2.5rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    text-align: center;
+
+    transform: scale(0.9);
+    animation: scaleIn 0.5s ease forwards;
+
+    &.error {
+      border: 1px solid v.$color-accent;
+      background-color: #fff0f5;
+    }
+
+    &.access {
+      border: 1px solid v.$color-primary-dark;
+      background-color: #e9e9ff;
+    }
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: translateY(10px) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}

@@ -18,6 +18,7 @@ const FIELDS = [
     name: 'password',
     placeholder: 'Enter Your Password...',
     img: mdiPassword,
+    type: 'password',
   },
 ]
 

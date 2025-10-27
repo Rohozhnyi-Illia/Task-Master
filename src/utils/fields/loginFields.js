@@ -13,6 +13,7 @@ const FIELDS = [
     placeholder: 'Enter Your Password...',
     img: mdiPassword,
     authOptions: true,
+    type: 'password',
   },
 ]
 
