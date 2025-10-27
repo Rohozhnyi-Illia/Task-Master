@@ -2,11 +2,11 @@
 @use '@styles/mixins.scss' as m;
 
 .taskList {
-  position: relative;
-  padding-top: 4rem;
+  padding-top: 5rem;
   width: 100%;
   display: flex;
   flex-direction: column;
+  align-items: center;
 
   &__tableWrapper {
     width: 100%;
@@ -60,6 +60,7 @@
   &__empty {
     width: 100%;
     height: 100%;
+    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;

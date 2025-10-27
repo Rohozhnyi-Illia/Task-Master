@@ -8,7 +8,7 @@ import passwordVerifySchema from '@utils/validation/passwordVerify-validation'
 import { useNavigate } from 'react-router-dom'
 import AuthService from '@services/authService'
 import { Loader } from '@components'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 const VerifyPassword = () => {
   const [data, setData] = useState({
@@ -94,7 +94,7 @@ const VerifyPassword = () => {
       <div className={styles.auth__container}>
         <div className={styles.auth__container_wrapper}>
           <div className={styles.auth__header}>
-            <h2 className={styles.auth__headerTitle}>Verify Your Code</h2>
+            <h2 className={styles.auth__headerTitle}>Verify Your Password</h2>
             <p className={styles.auth__headerSubtitle}>
               Enter the 6-digit code we sent to your email
             </p>

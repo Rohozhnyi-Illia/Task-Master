@@ -1,26 +1,30 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import * as styles from './Auth.module.scss'
-import fields from '@utils/fields/signUpFields'
+import fields from '@utils/fields/verifyEmailFields'
 import { Input, AuthButton } from '@components'
 import { bg } from '@assets'
-import signUpSchema from '@utils/validation/sign-up-validation'
-import { ErrorModal } from '@components'
+import verifyEmailSchema from '@utils/validation/emailVerify-validation'
+import { ErrorModal, AccessModal } from '@components'
+import { setAuth } from '@store/authSlice'
+import { useDispatch } from 'react-redux'
 import AuthService from '@services/authService'
 import { useNavigate } from 'react-router-dom'
 import { Loader } from '@components'
 
-const SignUp = () => {
-  const [data, setData] = useState({ name: '', email: '', password: '' })
+const VerifyEmail = () => {
+  const [data, setData] = useState({ email: '', verifyCode: '' })
   const [errors, setErrors] = useState({})
   const [authError, setAuthError] = useState('')
-  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [accessAction, setAccessAction] = useState(false)
 
+  const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const openModalHandler = () => {
-    setIsErrorModalOpen(!isErrorModalOpen)
+  const navigateHandler = () => {
+    setAccessAction(false)
+    navigate('/application')
   }
 
   const onChangeHandler = (e) => {
@@ -38,21 +42,31 @@ const SignUp = () => {
 
     try {
       setIsLoading(true)
-      await signUpSchema.validate(data, { abortEarly: false })
+      await verifyEmailSchema.validate(data, { abortEarly: false })
 
-      const res = await AuthService.register({
+      const res = await AuthService.verifyEmail({
         email: data.email,
-        password: data.password,
-        name: data.name,
+        verifyCode: data.verifyCode,
       })
 
       if (!res.success) {
         setAuthError(res.error)
-        setIsErrorModalOpen(true)
         return
       }
 
-      navigate('/verify-email')
+      dispatch(
+        setAuth({
+          id: res.data.id,
+          email: res.data.email,
+          name: res.data.name,
+          accessToken: res.data.accessToken,
+          isAuth: true,
+        })
+      )
+
+      if (res.success) {
+        setAccessAction(true)
+      }
     } catch (err) {
       if (err.inner) {
         const newErrors = {}
@@ -62,7 +76,6 @@ const SignUp = () => {
         setErrors(newErrors)
       } else {
         setAuthError(err.message)
-        setIsErrorModalOpen(true)
       }
     } finally {
       setIsLoading(false)
@@ -74,8 +87,11 @@ const SignUp = () => {
       <div className={styles.auth__container}>
         <div className={styles.auth__container_wrapper}>
           <div className={styles.auth__header}>
-            <h2 className={styles.auth__headerTitle}>Sign Up</h2>
-            <p className={styles.auth__headerSubtitle}>Let’s get started</p>
+            <h2 className={styles.auth__headerTitle}>Verify Your Email</h2>
+            <p className={styles.auth__headerSubtitle}>
+              {' '}
+              Enter the 6-digit code we sent to your email
+            </p>
           </div>
 
           <form className={styles.auth__form} onSubmit={onSubmitHandler}>
@@ -105,13 +121,11 @@ const SignUp = () => {
         </div>
       </div>
 
-      {isErrorModalOpen && authError && (
-        <ErrorModal error={authError} onClick={openModalHandler} />
-      )}
-
+      {authError && <ErrorModal error={authError} onClick={() => setAuthError('')} />}
       {isLoading && <Loader />}
+      {accessAction && <AccessModal onClick={navigateHandler} />}
     </div>
   )
 }
 
-export default SignUp
+export default VerifyEmail
