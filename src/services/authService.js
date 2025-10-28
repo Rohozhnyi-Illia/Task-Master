@@ -29,6 +29,20 @@ const authService = class AuthServcie {
     }
   }
 
+  async reVerifyEmail(email) {
+    try {
+      const res = await api.post('/auth/re-verify-email', { email })
+      return { success: true, data: res.data }
+    } catch (error) {
+      const message =
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        error.message ||
+        'Error'
+      return { success: false, error: message }
+    }
+  }
+
   async login({ email, password }) {
     try {
       const res = await api.post('/auth/login', { email, password })

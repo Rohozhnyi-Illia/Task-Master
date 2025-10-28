@@ -63,6 +63,12 @@
     row-gap: 3rem;
   }
 
+  &__footerWrapper {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+  }
+
   &__footer {
     width: 100%;
     display: flex;
@@ -81,6 +87,16 @@
       color: v.$color-primary-light;
       font-weight: v.$font-weight-bold;
     }
+  }
+
+  &__button {
+    border: none;
+    background-color: transparent;
+    color: v.$color-primary-light;
+    @include m.text-style(v.$font-size-sm, v.$font-weight-bold, v.$line-height-default);
+    letter-spacing: 0.1rem;
+
+    cursor: pointer;
   }
 }
 

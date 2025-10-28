@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
 import * as styles from './Auth.module.scss'
 import fields from '@utils/fields/verifyEmailFields'
 import { Input, AuthButton } from '@components'
@@ -7,7 +6,7 @@ import { bg } from '@assets'
 import verifyEmailSchema from '@utils/validation/emailVerify-validation'
 import { ErrorModal, AccessModal } from '@components'
 import { setAuth } from '@store/authSlice'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import AuthService from '@services/authService'
 import { useNavigate } from 'react-router-dom'
 import { Loader } from '@components'
@@ -16,11 +15,22 @@ const VerifyEmail = () => {
   const [data, setData] = useState({ email: '', verifyCode: '' })
   const [errors, setErrors] = useState({})
   const [authError, setAuthError] = useState('')
+  const [successMessage, setSuccessMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [accessAction, setAccessAction] = useState(false)
+  const email = useSelector((state) => state.auth.email)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!email) {
+      navigate('/login')
+      return
+    } else {
+      setData((prev) => ({ ...prev, email }))
+    }
+  }, [email, navigate])
 
   const navigateHandler = () => {
     setAccessAction(false)
@@ -35,14 +45,45 @@ const VerifyEmail = () => {
     }))
   }
 
+  const resendHandler = async () => {
+    setErrors({})
+    setAuthError('')
+    setSuccessMessage('')
+    setIsLoading(true)
+
+    try {
+      if (!data.email) {
+        setAuthError('Enter your email address')
+        return
+      }
+
+      const res = await AuthService.reVerifyEmail(data.email)
+
+      if (res.success) {
+        setSuccessMessage('A new verification code has been sent to your email.')
+      } else {
+        setAuthError(res.error || 'Something went wrong')
+      }
+    } catch (error) {
+      setAuthError(error.message || 'Something went wrong')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const onSubmitHandler = async (e) => {
     e.preventDefault()
     setErrors({})
     setAuthError('')
+    setIsLoading(true)
 
     try {
-      setIsLoading(true)
       await verifyEmailSchema.validate(data, { abortEarly: false })
+
+      if (!data.verifyCode) {
+        setAuthError('Enter verification code')
+        return
+      }
 
       const res = await AuthService.verifyEmail({
         email: data.email,
@@ -51,6 +92,7 @@ const VerifyEmail = () => {
 
       if (!res.success) {
         setAuthError(res.error)
+        setData((prev) => ({ ...prev, verifyCode: '' }))
         return
       }
 
@@ -64,9 +106,7 @@ const VerifyEmail = () => {
         })
       )
 
-      if (res.success) {
-        setAccessAction(true)
-      }
+      setAccessAction(true)
     } catch (err) {
       if (err.inner) {
         const newErrors = {}
@@ -89,7 +129,6 @@ const VerifyEmail = () => {
           <div className={styles.auth__header}>
             <h2 className={styles.auth__headerTitle}>Verify Your Email</h2>
             <p className={styles.auth__headerSubtitle}>
-              {' '}
               Enter the 6-digit code we sent to your email
             </p>
           </div>
@@ -112,16 +151,27 @@ const VerifyEmail = () => {
 
             <div className={styles.auth__footer}>
               <p className={styles.auth__signupLink}>
-                Already have an account? <Link to={'/login'}>Log In</Link>
+                Code expired?{' '}
+                <button
+                  disabled={isLoading}
+                  type="button"
+                  className={styles.auth__button}
+                  onClick={resendHandler}
+                >
+                  Resend
+                </button>
               </p>
             </div>
 
-            <AuthButton text="Sign Up" />
+            <AuthButton text="Confirm" disabled={isLoading} />
           </form>
         </div>
       </div>
 
       {authError && <ErrorModal error={authError} onClick={() => setAuthError('')} />}
+      {successMessage && (
+        <AccessModal onClick={() => setSuccessMessage('')} text={successMessage} />
+      )}
       {isLoading && <Loader />}
       {accessAction && <AccessModal onClick={navigateHandler} />}
     </div>

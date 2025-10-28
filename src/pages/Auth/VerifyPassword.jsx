@@ -21,17 +21,20 @@ const VerifyPassword = () => {
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [accessAction, setAccessAction] = useState(false)
+
   const navigate = useNavigate()
 
   const email = useSelector((state) => state.auth.email)
 
   const openModalHandler = () => {
     setIsErrorModalOpen(!isErrorModalOpen)
+    return
   }
 
   const navigateHandler = () => {
     setAccessAction(false)
-    navigate('/login')
+    navigate('/login', { replace: true })
+    return
   }
 
   useEffect(() => {
@@ -66,7 +69,12 @@ const VerifyPassword = () => {
 
       if (!res.success) {
         setAuthError(res.error)
-        setIsErrorModalOpen(true)
+        openModalHandler()
+        setAccessAction(false)
+
+        setTimeout(() => {
+          navigate('/update-password', { replace: true })
+        }, 3000)
         return
       }
 
@@ -94,7 +102,7 @@ const VerifyPassword = () => {
       <div className={styles.auth__container}>
         <div className={styles.auth__container_wrapper}>
           <div className={styles.auth__header}>
-            <h2 className={styles.auth__headerTitle}>Verify Your Password</h2>
+            <h2 className={styles.auth__headerTitle}>Verify Password</h2>
             <p className={styles.auth__headerSubtitle}>
               Enter the 6-digit code we sent to your email
             </p>
@@ -129,7 +137,9 @@ const VerifyPassword = () => {
 
       {isErrorModalOpen && <ErrorModal error={authError} onClick={openModalHandler} />}
       {isLoading && <Loader />}
-      {accessAction && <AccessModal onClick={navigateHandler} />}
+      {accessAction && (
+        <AccessModal onClick={navigateHandler} text={'Password successfully changed'} />
+      )}
     </div>
   )
 }

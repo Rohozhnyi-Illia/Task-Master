@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import * as styles from './Auth.module.scss'
-import fields from '../../utils/fields/loginFields'
+import fields from '@utils/fields/loginFields'
 import { Input, AuthButton, Loader, ErrorModal } from '@components'
-import { bg } from '../../assets'
-import loginSchema from '../../utils/validation/login-validation'
+import { bg } from '@assets'
+import loginSchema from '@utils/validation/login-validation'
 import { useDispatch } from 'react-redux'
-import AuthService from '../../services/authService'
-import { setAuth } from '../../store/authSlice'
+import AuthService from '@services/authService'
+import { setAuth, updateEmail } from '@store/authSlice'
 
 const Login = () => {
   const [data, setData] = useState({
@@ -48,6 +48,36 @@ const Login = () => {
     }
   }, [dispatch, navigate])
 
+  const activateHandler = async () => {
+    setErrors({})
+    setAuthError('')
+    setIsLoading(true)
+
+    try {
+      if (!data.email) {
+        setAuthError('Email must be entered')
+        openModalHandler()
+        return
+      }
+
+      const res = await AuthService.reVerifyEmail(data.email)
+
+      if (!res.success) {
+        setAuthError(res.error)
+        openModalHandler()
+        return
+      }
+
+      dispatch(updateEmail(data.email))
+      navigate('/verify-email')
+    } catch (error) {
+      setAuthError(error.message || 'Something went wrong')
+      setIsErrorModalOpen(true)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const onSubmitHandler = async (e) => {
     e.preventDefault()
     setErrors({})
@@ -65,6 +95,17 @@ const Login = () => {
       if (!res.success) {
         setAuthError(res.error)
         setIsErrorModalOpen(true)
+        return
+      }
+
+      if (res.data && res.data.emailActivated !== true) {
+        setAuthError('Your email is not verified. Please check your inbox.')
+        openModalHandler()
+        dispatch(updateEmail(res.data.email))
+
+        setTimeout(() => {
+          navigate('/verify-email')
+        }, 3000)
         return
       }
 
@@ -128,13 +169,29 @@ const Login = () => {
               />
             ))}
 
-            <div className={styles.auth__footer}>
-              <p className={styles.auth__signupLink}>
-                Don’t have an account? <Link to={'/sign-up'}>Sign up</Link>
-              </p>
-            </div>
+            <div className={styles.auth__footerWrapper}>
+              <div className={styles.auth__footer}>
+                <p className={styles.auth__signupLink}>
+                  Don’t have an account? <Link to={'/sign-up'}>Sign up</Link>
+                </p>
+              </div>
 
-            <AuthButton text="Log In" />
+              <div className={styles.auth__footer}>
+                <p className={styles.auth__signupLink}>
+                  Account not activated?
+                  <button
+                    disabled={isLoading}
+                    type="button"
+                    className={styles.auth__button}
+                    onClick={activateHandler}
+                  >
+                    Activate
+                  </button>
+                </p>
+              </div>
+
+              <AuthButton text="Log In" disabled={isLoading} />
+            </div>
           </form>
         </div>
       </div>

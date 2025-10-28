@@ -9,6 +9,8 @@ import { ErrorModal } from '@components'
 import AuthService from '@services/authService'
 import { useNavigate } from 'react-router-dom'
 import { Loader } from '@components'
+import { useDispatch } from 'react-redux'
+import { updateEmail } from '@store/authSlice'
 
 const SignUp = () => {
   const [data, setData] = useState({ name: '', email: '', password: '' })
@@ -18,6 +20,7 @@ const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const openModalHandler = () => {
     setIsErrorModalOpen(!isErrorModalOpen)
@@ -48,10 +51,11 @@ const SignUp = () => {
 
       if (!res.success) {
         setAuthError(res.error)
-        setIsErrorModalOpen(true)
+        openModalHandler()
         return
       }
 
+      dispatch(updateEmail(res.data.email))
       navigate('/verify-email')
     } catch (err) {
       if (err.inner) {
@@ -62,7 +66,7 @@ const SignUp = () => {
         setErrors(newErrors)
       } else {
         setAuthError(err.message)
-        setIsErrorModalOpen(true)
+        openModalHandler()
       }
     } finally {
       setIsLoading(false)
@@ -100,7 +104,7 @@ const SignUp = () => {
               </p>
             </div>
 
-            <AuthButton text="Sign Up" />
+            <AuthButton text="Sign Up" disabled={isLoading} />
           </form>
         </div>
       </div>

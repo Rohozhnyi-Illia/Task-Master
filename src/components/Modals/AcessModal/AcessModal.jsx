@@ -4,7 +4,7 @@ import AuthButton from '../../AuthButton/AuthButton'
 import { done } from '@assets'
 import * as styles from './AcessModal.module.scss'
 
-const AccessModal = ({ error, onClick }) => {
+const AccessModal = ({ onClick, text }) => {
   return (
     <ModalBase onClose={onClick} modifier="access">
       <header className={styles.header}>
@@ -12,7 +12,7 @@ const AccessModal = ({ error, onClick }) => {
         <h4 className={styles.title}>Success</h4>
       </header>
 
-      <p className={styles.text}>Action completed</p>
+      <p className={styles.text}>{text || 'Action completed'}</p>
 
       <div className={styles.buttonWrapper}>
         <AuthButton text="Continue" type="button" onClick={onClick} />
