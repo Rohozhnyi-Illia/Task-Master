@@ -6,6 +6,7 @@ const api = axios.create({
   // baseURL: 'http://localhost:9000/api',
   baseURL: 'https://taskmaster-backend-e940.onrender.com/api',
   withCredentials: true,
+  timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
