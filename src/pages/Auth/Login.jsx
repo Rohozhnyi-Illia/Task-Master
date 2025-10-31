@@ -103,7 +103,13 @@ const Login = () => {
         email: data.email,
         password: data.password,
       })
-      console.log('Login response:', res.data)
+
+      if (!res.success) {
+        setAuthError(res.error)
+        openModalHandler()
+        return
+      }
+
       if (!res?.data?.emailActivated) {
         setAuthError('Your email is not verified. Please check your inbox.')
         openModalHandler()
