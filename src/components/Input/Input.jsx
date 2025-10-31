@@ -41,7 +41,7 @@ const Input = (props) => {
           onChange={onChange}
           value={value}
           name={name}
-          className={styles.input__input}
+          className={`${styles.input__input} ${err ? styles.error : ''}`}
         />
 
         {isPasswordField && (

@@ -4,8 +4,8 @@ import * as styles from './Auth.module.scss'
 import fields from '@utils/fields/signUpFields'
 import { Input, AuthButton } from '@components'
 import { bg } from '@assets'
-import signUpSchema from '@utils/validation/sign-up-validation'
-import { ErrorModal } from '@components'
+import signUpSchema from '@utils/validation/signUp-validation'
+import { ErrorModal, AccessModal } from '@components'
 import AuthService from '@services/authService'
 import { useNavigate } from 'react-router-dom'
 import { Loader } from '@components'
@@ -18,12 +18,19 @@ const SignUp = () => {
   const [authError, setAuthError] = useState('')
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [accessAction, setAccessAction] = useState(false)
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
   const openModalHandler = () => {
     setIsErrorModalOpen(!isErrorModalOpen)
+  }
+
+  const navigateHandler = () => {
+    navigate('/verify-email')
+    setAccessAction(false)
+    return
   }
 
   const onChangeHandler = (e) => {
@@ -56,7 +63,7 @@ const SignUp = () => {
       }
 
       dispatch(updateEmail(res.data.email))
-      navigate('/verify-email')
+      setAccessAction(true)
     } catch (err) {
       if (err.inner) {
         const newErrors = {}
@@ -111,6 +118,13 @@ const SignUp = () => {
 
       {isErrorModalOpen && authError && (
         <ErrorModal error={authError} onClick={openModalHandler} />
+      )}
+
+      {accessAction && (
+        <AccessModal
+          text={'An email activation code has been sent to your email address.'}
+          onClick={navigateHandler}
+        />
       )}
 
       {isLoading && <Loader />}

@@ -49,18 +49,17 @@
       -webkit-text-fill-color: #fff !important;
       background-color: transparent !important;
       transition: background-color 9999s ease-in-out 0s;
-      border: 1px solid #c20f70 !important;
+      border: 1px solid #fff !important;
+    }
+
+    &.error {
+      border-color: v.$color-primary-light;
     }
 
     &::placeholder {
       padding-right: 1rem;
       @include m.text-style(v.$font-size-md, v.$font-weight-regular, v.$line-height-default);
       color: #fff;
-    }
-
-    &:focus {
-      outline: none;
-      border-color: var(--accent-color);
     }
   }
 

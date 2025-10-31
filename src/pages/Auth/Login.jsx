@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import * as styles from './Auth.module.scss'
 import fields from '@utils/fields/loginFields'
-import { Input, AuthButton, Loader, ErrorModal } from '@components'
 import { bg } from '@assets'
 import loginSchema from '@utils/validation/login-validation'
+import emailSchema from '@utils/validation/email-validation'
+import { Input, AuthButton, Loader, ErrorModal } from '@components'
 import { useDispatch } from 'react-redux'
-import AuthService from '@services/authService'
 import { setAuth, updateEmail } from '@store/authSlice'
+import AuthService from '@services/authService'
 
 const Login = () => {
   const [data, setData] = useState({
@@ -19,6 +20,8 @@ const Login = () => {
   const [authError, setAuthError] = useState('')
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [emailError, setEmailError] = useState('')
+  const [isAccountActivated, setIsAccountActivated] = useState(true)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -31,6 +34,12 @@ const Login = () => {
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
     }))
+  }
+
+  const navigateHandler = () => {
+    navigate('/verify-email')
+    setIsAccountActivated(true)
+    return
   }
 
   useEffect(() => {
@@ -51,14 +60,11 @@ const Login = () => {
   const activateHandler = async () => {
     setErrors({})
     setAuthError('')
+    setEmailError('')
     setIsLoading(true)
 
     try {
-      if (!data.email) {
-        setAuthError('Email must be entered')
-        openModalHandler()
-        return
-      }
+      await emailSchema.validate({ email: data.email }, { abortEarly: false })
 
       const res = await AuthService.reVerifyEmail(data.email)
 
@@ -70,9 +76,15 @@ const Login = () => {
 
       dispatch(updateEmail(data.email))
       navigate('/verify-email')
-    } catch (error) {
-      setAuthError(error.message || 'Something went wrong')
-      setIsErrorModalOpen(true)
+    } catch (err) {
+      if (err.inner) {
+        err.inner.forEach((e) => {
+          if (e.path === 'email') setEmailError(e.message)
+        })
+      } else {
+        setAuthError(err.message)
+        setIsErrorModalOpen(true)
+      }
     } finally {
       setIsLoading(false)
     }
@@ -91,21 +103,13 @@ const Login = () => {
         email: data.email,
         password: data.password,
       })
-
-      if (!res.success) {
-        setAuthError(res.error)
-        setIsErrorModalOpen(true)
-        return
-      }
-
-      if (res.data && res.data.emailActivated !== true) {
+      console.log('Login response:', res.data)
+      if (!res?.data?.emailActivated) {
         setAuthError('Your email is not verified. Please check your inbox.')
         openModalHandler()
+        setIsAccountActivated(false)
         dispatch(updateEmail(res.data.email))
 
-        setTimeout(() => {
-          navigate('/verify-email')
-        }, 3000)
         return
       }
 
@@ -163,7 +167,11 @@ const Login = () => {
                 onChange={onChangeHandler}
                 img={field.img}
                 authOptions={field.authOptions}
-                err={errors[field.name]}
+                err={
+                  field.name === 'email'
+                    ? emailError || errors[field.name]
+                    : errors[field.name]
+                }
                 checkValue={data.keepLogged}
                 type={field.type !== 'password' ? 'text' : 'password'}
               />
@@ -197,7 +205,10 @@ const Login = () => {
       </div>
 
       {authError && isErrorModalOpen && (
-        <ErrorModal error={authError} onClick={openModalHandler} />
+        <ErrorModal
+          error={authError}
+          onClick={isAccountActivated ? openModalHandler : navigateHandler}
+        />
       )}
       {isLoading && <Loader />}
     </div>

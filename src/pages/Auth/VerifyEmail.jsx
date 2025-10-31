@@ -35,6 +35,7 @@ const VerifyEmail = () => {
   const navigateHandler = () => {
     setAccessAction(false)
     navigate('/application')
+    return
   }
 
   const onChangeHandler = (e) => {

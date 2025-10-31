@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import * as styles from './Auth.module.scss'
-import fields from '@utils/fields/verifyPasswordFields'
-import { Input, AuthButton, ErrorModal, AccessModal } from '@components'
 import { bg } from '@assets'
+import fields from '@utils/fields/verifyPasswordFields'
 import passwordVerifySchema from '@utils/validation/passwordVerify-validation'
-import { useNavigate } from 'react-router-dom'
-import AuthService from '@services/authService'
+import { Input, AuthButton, ErrorModal, AccessModal } from '@components'
 import { Loader } from '@components'
+import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import AuthService from '@services/authService'
 
 const VerifyPassword = () => {
   const [data, setData] = useState({
@@ -72,9 +72,6 @@ const VerifyPassword = () => {
         openModalHandler()
         setAccessAction(false)
 
-        setTimeout(() => {
-          navigate('/update-password', { replace: true })
-        }, 3000)
         return
       }
 
@@ -135,7 +132,7 @@ const VerifyPassword = () => {
         </div>
       </div>
 
-      {isErrorModalOpen && <ErrorModal error={authError} onClick={openModalHandler} />}
+      {isErrorModalOpen && <ErrorModal error={authError} onClick={navigateHandler} />}
       {isLoading && <Loader />}
       {accessAction && (
         <AccessModal onClick={navigateHandler} text={'Password successfully changed'} />

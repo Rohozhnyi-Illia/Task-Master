@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import * as styles from './Auth.module.scss'
 import fields from '@utils/fields/updatePasswordFields'
-import { Input, AuthButton, ErrorModal } from '@components'
+import { Input, AuthButton, ErrorModal, AccessModal } from '@components'
 import { bg } from '../../assets'
 import passwordUpdateSchema from '@utils/validation/passwordUpdate-validation'
 import { useNavigate } from 'react-router-dom'
@@ -17,12 +17,19 @@ const UpdatePassword = () => {
   const [authError, setAuthError] = useState('')
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [accessAction, setAccessAction] = useState(false)
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
   const openModalHandler = () => {
     setIsErrorModalOpen(!isErrorModalOpen)
+  }
+
+  const navigateHandler = () => {
+    navigate('/verify-password')
+    setAccessAction(false)
+    return
   }
 
   const onChangeHandler = (e) => {
@@ -52,10 +59,8 @@ const UpdatePassword = () => {
         return
       }
 
-      if (res.success) {
-        dispatch(updateEmail(data.email))
-        navigate('/verify-password')
-      }
+      dispatch(updateEmail(data.email))
+      setAccessAction(true)
     } catch (err) {
       if (err.inner) {
         const newErrors = {}
@@ -110,6 +115,12 @@ const UpdatePassword = () => {
 
       {isErrorModalOpen && <ErrorModal error={authError} onClick={openModalHandler} />}
       {isLoading && <Loader />}
+      {accessAction && (
+        <AccessModal
+          text={'The code to change your password has been sent to your email address.'}
+          onClick={navigateHandler}
+        />
+      )}
     </div>
   )
 }
