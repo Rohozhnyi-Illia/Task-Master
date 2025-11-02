@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { home, notification, stats, sun } from '../../assets'
-import { moon, exit, notificationLg, closeModal } from '../../assets'
+import { moon, exit } from '../../assets'
 import * as styles from './Header.module.scss'
 import useTheme from '../../hooks/useTheme'
-import Notification from '@pages/Application/components/Notification/Notification'
 import { logout } from '@store/authSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import AuthService from '@services/authService'
@@ -16,20 +15,14 @@ const Header = () => {
   const notificationsList = useSelector((state) => state.notification) || []
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [isNotificationOpen, setIsNotificationOpen] = useState(false)
   const [fetchError, setFetchError] = useState('')
   const { theme, setTheme } = useTheme()
   const isDark = theme === 'dark'
 
   const dispatch = useDispatch()
 
-  const notificationOpenHandler = () => setIsNotificationOpen(!isNotificationOpen)
-
   const modalOpenHandler = () => {
     setIsModalOpen(!isModalOpen)
-    if (isNotificationOpen) {
-      notificationOpenHandler()
-    }
   }
   const toggleTheme = () => setTheme(isDark ? 'light' : 'dark')
 
@@ -68,6 +61,7 @@ const Header = () => {
         }
 
         dispatch(getNotifications(res.data))
+        console.log(res.data)
       } catch (error) {
         setFetchError(error.message || 'Something went wrong')
       }
@@ -75,7 +69,7 @@ const Header = () => {
 
     fetchData()
 
-    intervalId = setInterval(fetchData, 30 * 60 * 1000)
+    intervalId = setInterval(fetchData, 5 * 60 * 1000)
 
     return () => clearInterval(intervalId)
   }, [dispatch])
@@ -99,19 +93,21 @@ const Header = () => {
               </li>
 
               <li className={styles.header__notification}>
-                <div className={styles.header__icon_wrapper} onClick={notificationOpenHandler}>
-                  <img
-                    src={notification}
-                    alt="notifications"
-                    className={styles.header__icon}
-                  />
+                <Link to={'/notifications'}>
+                  <div className={styles.header__icon_wrapper}>
+                    <img
+                      src={notification}
+                      alt="notifications"
+                      className={styles.header__icon}
+                    />
 
-                  {notificationsList.length > 0 && (
-                    <div className={styles.header__notification_quantity}>
-                      {notificationsList.length}
-                    </div>
-                  )}
-                </div>
+                    {notificationsList.length > 0 && (
+                      <div className={styles.header__notification_quantity}>
+                        {notificationsList.length}
+                      </div>
+                    )}
+                  </div>
+                </Link>
               </li>
 
               <li>
@@ -153,45 +149,6 @@ const Header = () => {
             <span></span>
             <span></span>
             <span></span>
-          </div>
-
-          <div
-            className={`${styles.header__notificationList} ${
-              isNotificationOpen ? styles.header__notificationList_open : ''
-            }`}
-          >
-            <button
-              type="button"
-              className={styles.header__notificationList_button}
-              onClick={notificationOpenHandler}
-            >
-              <img src={closeModal} alt="close button" />
-            </button>
-
-            {notificationsList.length === 0 ? (
-              <div className={styles.header__notificationList_empty}>
-                <img
-                  src={notificationLg}
-                  alt="notification"
-                  className={styles.header__notificationList_img}
-                />
-
-                <p className={styles.header__notificationList_text}>
-                  You don't have any notifications yet
-                </p>
-              </div>
-            ) : (
-              <div className={styles.header__notificationList_notifications}>
-                {notificationsList.map((item) => (
-                  <Notification
-                    key={item._id}
-                    notification={item.message}
-                    id={item._id}
-                    isRead={item.isRead}
-                  />
-                ))}
-              </div>
-            )}
           </div>
 
           {fetchError && <ErrorModal error={fetchError} onClick={() => setFetchError('')} />}

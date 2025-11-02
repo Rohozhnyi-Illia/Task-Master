@@ -1,0 +1,38 @@
+@use '@styles/variables.scss' as v;
+@use '@styles/mixins.scss' as m;
+
+.notificationList {
+  padding: 4rem 5rem 1rem 1rem;
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  row-gap: 2rem;
+  align-items: end;
+
+  &.empty {
+    padding: 0;
+  }
+
+  &__empty {
+    width: 100%;
+    height: 100%;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    img {
+      max-width: 50rem;
+      max-height: 50rem;
+    }
+
+    h2 {
+      text-align: center;
+      @include m.text-style(v.$font-size-xl, v.$font-weight-bold, v.$line-height-default);
+      letter-spacing: 0.01rem;
+      color: var(--accent-color);
+    }
+  }
+}

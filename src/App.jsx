@@ -1,6 +1,5 @@
 import React, { Suspense, lazy } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-
 import { Provider } from 'react-redux'
 import store from './store/store'
 import ProtectedPath from './services/ProtectedPath'
@@ -14,6 +13,7 @@ const HeaderLayout = lazy(() => import('./layout/HeaderLayout'))
 const Application = lazy(() => import('./pages/Application/Application'))
 const VerifyPassword = lazy(() => import('./pages/Auth/VerifyPassword'))
 const VerifyEmail = lazy(() => import('./pages/Auth/VerifyEmail'))
+const Notifications = lazy(() => import('./pages/Notifications/NotificationsPage'))
 
 function App() {
   return (
@@ -37,6 +37,7 @@ function App() {
             >
               <Route path="/statistics" element={<Statistics />} />
               <Route path="/application" element={<Application />} />
+              <Route path="/notifications" element={<Notifications />} />
             </Route>
           </Routes>
         </Router>

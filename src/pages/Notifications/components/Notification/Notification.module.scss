@@ -1,0 +1,113 @@
+@use '@styles/variables.scss' as v;
+@use '@styles/mixins.scss' as m;
+
+.notification {
+  position: relative;
+  width: 100%;
+  max-width: 70rem;
+  padding: 2rem;
+  border-radius: v.$radius-xl;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+  animation: fadeInUp 0.4s ease forwards;
+
+  &.reminder {
+    background-color: #4c9aff;
+
+    &::after {
+      border-color: transparent #4c9aff transparent transparent;
+    }
+  }
+
+  &.overdue {
+    background-color: #ffa500;
+
+    &::after {
+      border-color: transparent #ffa500 transparent transparent;
+    }
+  }
+
+  &.warning {
+    background-color: #ff4c4c;
+
+    &::after {
+      border-color: transparent #ff4c4c transparent transparent;
+    }
+  }
+
+  &.read {
+    background-color: rgb(156, 156, 156);
+    transition: background-color 0.3s ease;
+
+    &::after {
+      border-color: transparent rgb(156, 156, 156) transparent transparent;
+      transition: border-color 0.3s ease;
+    }
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    right: -25px;
+    transform: translateY(-50%);
+    border-style: solid;
+    transition: border-color 0.3s ease;
+    border-width: 10px 30px 10px 0;
+    rotate: 225deg;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    button {
+      border: none;
+      background-color: transparent;
+      cursor: pointer;
+
+      svg {
+        color: #fff;
+        width: 2.3rem;
+        height: 2.2rem;
+      }
+    }
+  }
+
+  &__title {
+    @include m.text-style(v.$font-size-md, v.$font-weight-bold, v.$line-height-default);
+    color: #fff;
+    margin-bottom: 1rem;
+  }
+
+  &__text {
+    @include m.text-style(v.$font-size-sm, v.$font-weight-semibold, v.$line-height-default);
+    color: #fff;
+    margin-bottom: 1rem;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(3rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media screen and (max-width: 768.1px) {
+  .notification {
+    width: 100%;
+  }
+}

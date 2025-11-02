@@ -1,11 +1,9 @@
 import api from './api'
 
-
-
 const notificationService = class notificationService {
   async getUserNotifications() {
     try {
-      const { data } = await api.get('/notification') 
+      const { data } = await api.get('/notification')
       return { success: true, data }
     } catch (error) {
       const message =

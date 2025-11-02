@@ -15,6 +15,10 @@ _Login Page_
 _Adding Data Modal Window_
 ![Adding Data](./src/assets/preview/Add-modal.jpg)
 
+_Pagination_
+![Pagination](./src/assets/preview/Pagination.jpg)
+![Pagination](./src/assets/preview/Pagination2.jpg)
+
 Frontend application for **TaskMaster** — a task management platform with deadlines, notifications, and user authentication. Built with React, Redux Toolkit, SCSS, and Webpack.
 
 ## Links
@@ -24,16 +28,22 @@ Frontend application for **TaskMaster** — a task management platform with dead
 
 ## Features
 
-- User registration, login, and password update
-- JWT-based authentication with access and refresh tokens
+- User registration and login with JWT authentication
+- **Email verification after registration**
+- **Password recovery with email verification**
+- JWT-based access and refresh tokens
 - Task management: create, update, complete, and delete tasks
+- Pagination on the main dashboard for large task lists
 - Task notifications: reminders, deadlines, and overdue alerts
+- **Notifications page with messages about deadlines**
 - Dark/light theme toggle
 - Responsive design for mobile and desktop
 - Automatic token refresh and optimistic UI updates
 - Error handling with modals and loaders
 - Validation of forms, deadlines, and data
 - Custom favicon and app branding
+
+---
 
 ## Technologies
 
@@ -44,6 +54,8 @@ Frontend application for **TaskMaster** — a task management platform with dead
 - SCSS for styling
 - Webpack for bundling
 - Yup for validating all forms
+
+---
 
 ## Installation
 
@@ -66,9 +78,12 @@ Default frontend URL: http://localhost:3000
 
 - **Login** — user authentication
 - **SignUp** — create a new account
-- **UpdatePassword** — change password
+- **VerifyEmail** — enter verification code sent to email after registration
+- **UpdatePassword** — request password reset (only email required)
+- **VerifyPassword** — confirm code and set a new password
 - **Application** — main dashboard with tasks and notifications
 - **StatsPage** — overview of completed tasks
+- **NotificationsPage** — shows messages about upcoming deadlines and overdue tasks
 
 ## API Services
 
@@ -79,14 +94,16 @@ Frontend communicates with TaskMaster-Backend through Axios services:
 - register({ email, password, name }) — register a new user
 - login({ email, password }) — login
 - logout() — logout
-- updatePassword({ email, newPassword, repeatPassword }) — change password
+- updatePassword({ email }) — request password reset (sends verification code)
+- verifyEmail({ email, verifyCode }) — verify email after registration
+- reVerifyEmail(email) — resend verification email
+- verifyPassword({ email, newPassword, repeatPassword, verifyCode }) — confirm new password with code
 
 ## TaskService
 
 - getAllTasks() — get all tasks
 - createTask({ task, status, category, deadline, remainingTime }) — create a new task
 - deleteTasks(id) — delete a task
-- completeTask(id) — mark a task as completed
 - updateStatus(id, status) — update task status
 
 ## NotificationService
@@ -97,8 +114,9 @@ Frontend communicates with TaskMaster-Backend through Axios services:
 
 ## Notes
 
-- First version of the project; no email integration yet
+- Added email verification for registration and password recovery
 - Backend must be running for frontend to function correctly
+- Pagination improves performance on task-heavy dashboards
 
 ## Author
 

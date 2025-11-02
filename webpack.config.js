@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 module.exports = (env, argv) => {
   const isProduction = argv.mode === 'production'
@@ -30,6 +31,10 @@ module.exports = (env, argv) => {
         filename: 'css/styles.[contenthash].css',
       })
     )
+  }
+
+  if (env && env.analyze) {
+    plugins.push(new BundleAnalyzerPlugin())
   }
 
   return {
@@ -70,7 +75,7 @@ module.exports = (env, argv) => {
           ],
         },
         {
-          test: /\.(png|jpe?g|gif|svg)$/i,
+          test: /\.(png|jpe?g|gif|svg|webp)$/i,
           type: 'asset/resource',
           generator: { filename: 'images/[name].[contenthash][ext]' },
         },

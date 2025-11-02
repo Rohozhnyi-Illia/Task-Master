@@ -1,77 +1,74 @@
-import React from 'react'
-import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+import React, { useEffect, useState } from 'react'
+import { Doughnut } from 'react-chartjs-2'
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title } from 'chart.js'
+import ChartDataLabels from 'chartjs-plugin-datalabels'
+import * as styles from './CircleChart.module.scss'
 
-const CircleChart = ({ data }) => {
-  const [ready, setReady] = React.useState(false)
+ChartJS.register(ArcElement, Tooltip, Legend, Title)
 
-  React.useEffect(() => {
-    setReady(true)
-  }, [])
+const CircleChart = ({ data, title }) => {
+  const [chartData, setChartData] = useState({
+    labels: [],
+    datasets: [{ data: [], backgroundColor: [], borderWidth: 1 }],
+  })
 
-  const COLORS = ['#FF4C4C', '#FFA500', '#4C9AFF']
+  useEffect(() => {
+    const COLORS = ['#FF4C4C', '#FFA500', '#4C9AFF']
+    const timer = setTimeout(() => {
+      setChartData({
+        labels: data.map((item) => item.category),
+        datasets: [
+          {
+            data: data.map((item) => item.value),
+            backgroundColor: COLORS,
+            borderWidth: 1,
+          },
+        ],
+      })
+    }, 50)
 
-  const CustomLegend = ({ payload }) => (
-    <div
-      style={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'center',
-        gap: '0.5rem',
-        marginTop: '1rem',
-        fontSize: '0.9rem',
-      }}
-    >
-      {payload.map((entry, index) => (
-        <div key={index} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-          <div
-            style={{
-              width: '12px',
-              height: '12px',
-              backgroundColor: entry.color,
-              borderRadius: '2px',
-            }}
-          />
-          <span style={{ color: 'var(--text-color)' }}>{entry.value}</span>
-        </div>
-      ))}
+    return () => clearTimeout(timer)
+  }, [data])
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: {
+      duration: 1000,
+      easing: 'easeOutCubic',
+      animateRotate: true,
+      animateScale: true,
+    },
+    cutout: '20%',
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          color: '#000',
+          boxWidth: 12,
+          padding: 15,
+          font: { size: 14 },
+        },
+      },
+      title: {
+        display: !!title,
+        text: title,
+        color: '#000',
+        font: { size: 18, weight: 'bold' },
+      },
+      datalabels: {
+        color: '#000',
+        font: { weight: 'bold', size: 18 },
+        formatter: (value) => value,
+      },
+    },
+  }
+
+  return (
+    <div style={{ position: 'relative' }} className={styles.circle}>
+      <Doughnut data={chartData} options={options} plugins={[ChartDataLabels]} />
     </div>
   )
-
-  return ready ? (
-    <div style={{ width: '100%', maxWidth: 380, position: 'relative', paddingBottom: '100%' }}>
-      <ResponsiveContainer width="100%" aspect={1}>
-        <PieChart>
-          <Pie
-            data={data}
-            dataKey="value"
-            nameKey="category"
-            cx="50%"
-            cy="50%"
-            outerRadius="80%"
-            label={({ x, y, value }) => (
-              <text
-                x={x}
-                y={y}
-                fill="var(--text-color)"
-                fontSize={14}
-                fontWeight="bold"
-                textAnchor="middle"
-                dominantBaseline="central"
-              >
-                {value}
-              </text>
-            )}
-          >
-            {data.map((entry, index) => (
-              <Cell key={index} fill={COLORS[index % COLORS.length]} />
-            ))}
-          </Pie>
-          <Tooltip />
-          <Legend content={<CustomLegend />} />
-        </PieChart>
-      </ResponsiveContainer>
-    </div>
-  ) : null
 }
 
 export default CircleChart

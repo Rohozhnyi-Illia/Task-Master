@@ -6,6 +6,12 @@ const ScaleChart = (props) => {
   const completedPercent =
     totalQuantity > 0 ? Math.round((completedQuantity / totalQuantity) * 100) : 0
 
+  const getColor = (category) => {
+    if (category === 'High') return '#FF4C4C'
+    if (category === 'Middle') return '#FFA500'
+    return '#4C9AFF'
+  }
+
   return (
     <div className={styles.scaleWrapper}>
       <div className={styles.scaleWrapper__numbers}>
@@ -15,12 +21,18 @@ const ScaleChart = (props) => {
         <p className={styles.scaleWrapper__completed}>Completed: {completedQuantity}</p>
       </div>
 
-      <div className={styles.scaleWrapper__scale}>
-        <div
-          className={styles.scaleWrapper__scaleFill}
-          style={{ width: `${completedPercent}%` }}
-        ></div>
-        <p className={styles.scaleWrapper__scaleParcent}>{completedPercent}%</p>
+      <div className={styles.scaleWrapper__scaleContainer}>
+        <div className={styles.scaleWrapper__scale}>
+          <div
+            className={styles.scaleWrapper__scaleFill}
+            style={{
+              width: `${completedPercent}%`,
+              backgroundColor: getColor(category),
+            }}
+          ></div>
+        </div>
+
+        <p className={styles.scaleWrapper__scaleParcent}>({completedPercent}%)</p>
       </div>
     </div>
   )

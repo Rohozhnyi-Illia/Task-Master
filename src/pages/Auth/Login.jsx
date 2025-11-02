@@ -104,13 +104,18 @@ const Login = () => {
         password: data.password,
       })
 
-      if (!res.success && res.error === 'Email not activated') {
-        await AuthService.reVerifyEmail(data.email)
-        setAuthError('Your email is not verified. Please check your inbox.')
-        openModalHandler()
-        setIsAccountActivated(false)
-        dispatch(updateEmail(data.email))
+      if (!res.success) {
+        if (res.error === 'Email not activated') {
+          await AuthService.reVerifyEmail(data.email)
+          setAuthError('Your email is not verified. Please check your inbox.')
+          openModalHandler()
+          setIsAccountActivated(false)
+          dispatch(updateEmail(data.email))
+          return
+        }
 
+        setAuthError(res.error || 'Login failed')
+        setIsErrorModalOpen(true)
         return
       }
 

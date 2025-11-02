@@ -1,0 +1,37 @@
+@use '@styles/variables.scss' as v;
+@use '@styles/mixins.scss' as m;
+
+.notifications {
+  padding: 0 1rem;
+  position: relative;
+
+  width: 100vw;
+  background-color: var(--bg-color);
+  transition: background-color 0.3s ease;
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 8rem);
+  }
+
+  &__title {
+    padding-top: 2rem;
+    @include m.text-style(v.$font-title, v.$font-weight-bold, v.$line-height-default);
+    color: var(--text-color);
+    letter-spacing: 0.05rem;
+    transition: color 0.4s ease;
+  }
+
+  &__subtitle {
+    margin-top: 1rem;
+    @include m.text-style(v.$font-size-md, v.$font-weight-medium, v.$line-height-default);
+    color: var(--text-color);
+    transition: color 0.3s ease;
+  }
+
+  &__category {
+    padding-top: 4rem;
+    max-width: 20rem;
+  }
+}

@@ -1,9 +1,13 @@
-import React, { useMemo, Suspense, lazy } from 'react'
+import React, { useMemo, lazy, Suspense } from 'react'
 import { useSelector } from 'react-redux'
 import * as styles from './StatsPage.module.scss'
 import ScaleChart from './components/ScaleChart/ScaleChart'
 import categories from '@utils/fields/taskCategories'
+import { Loader } from '@components'
+
 const CircleChart = lazy(() => import('./components/CircleChart/CircleChart'))
+const BarChart = lazy(() => import('./components/BarChart/BarChart'))
+const StackedBarChart = lazy(() => import('./components/StackedBarChart/StackedBarChart'))
 
 const StatsPage = () => {
   const name = useSelector((state) => state.auth.name)
@@ -28,14 +32,14 @@ const StatsPage = () => {
   }))
 
   return (
-    <Suspense>
+    <Suspense fallback={<Loader />}>
       <div className={styles.stats}>
         <div className="container">
           <h2 className={styles.stats__title}>Hello, {name}</h2>
           <h4 className={styles.stats__subtitle}>Here’s a snapshot of your productivity.</h4>
 
           <div className={styles.stats__container}>
-            <div className={styles.stats__scales}>
+            <div className={styles.stats__scalesWrapper}>
               <h5 className={styles.stats__total}>Total Tasks: {tasks.length}</h5>
 
               {statsData.map(({ category, totalQuantity, completedQuantity }) => (
@@ -48,8 +52,18 @@ const StatsPage = () => {
               ))}
             </div>
 
-            <div className={styles.stats__chart}>
-              <CircleChart data={circleData} />
+            <div className={styles.stats__circleWrapper}>
+              <CircleChart data={circleData} title={'Tasks By Category'} key={Math.random()} />
+            </div>
+          </div>
+
+          <div className={styles.stats__container}>
+            <div className={styles.stats__stackedBarWrapper}>
+              <StackedBarChart tasks={tasks} />
+            </div>
+
+            <div className={styles.stats__barWrapper}>
+              <BarChart tasks={tasks} />
             </div>
           </div>
         </div>
