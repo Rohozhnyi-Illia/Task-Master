@@ -67,6 +67,7 @@ api.interceptors.response.use(
       } catch (err) {
         processQueue(err, null)
         store.dispatch(logout())
+        store.dispatch(setAuth({ ...store.getState().auth, isAuth: false }))
         return Promise.reject(err)
       } finally {
         isRefreshing = false

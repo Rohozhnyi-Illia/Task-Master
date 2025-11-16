@@ -16,7 +16,6 @@
   }
 
   &__title {
-    padding-top: 2rem;
     @include m.text-style(v.$font-title, v.$font-weight-bold, v.$line-height-default);
     color: var(--text-color);
     letter-spacing: 0.05rem;

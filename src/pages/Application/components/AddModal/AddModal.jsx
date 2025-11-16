@@ -109,7 +109,14 @@ const AddModal = ({ openModalHandler }) => {
   }
 
   return (
-    <div className={styles.addModal}>
+    <div
+      className={styles.addModal}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          openModalHandler()
+        }
+      }}
+    >
       <form className={styles.addModal__content} onSubmit={onSubmitHandler}>
         <button className={styles.addModal__button} onClick={openModalHandler} type="button">
           <img src={closeModal} alt="close" />

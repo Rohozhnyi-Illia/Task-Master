@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react'
+import React, { Suspense, lazy, useEffect } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import store from './store/store'
@@ -16,6 +16,14 @@ const VerifyEmail = lazy(() => import('./pages/Auth/VerifyEmail'))
 const Notifications = lazy(() => import('./pages/Notifications/NotificationsPage'))
 
 function App() {
+  useEffect(() => {
+    const fetchPingServer = async () => {
+      await fetch('https://taskmaster-backend-e940.onrender.com/ping')
+    }
+
+    fetchPingServer()
+  }, [])
+
   return (
     <Provider store={store}>
       <Suspense fallback={<Loader />}>
