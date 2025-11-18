@@ -40,7 +40,7 @@ const BarChart = ({ tasks }) => {
     datasets: [
       {
         data: counts,
-        backgroundColor: '#4C9AFF',
+        backgroundColor: '#4386dfff',
         borderRadius: 5,
       },
     ],

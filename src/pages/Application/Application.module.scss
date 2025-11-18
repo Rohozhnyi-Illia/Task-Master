@@ -7,10 +7,10 @@
   transition: background-color 0.3s ease;
 
   &__wrapper {
-    min-height: calc(100vh - 8rem);
-    flex: 1;
+    min-height: calc(var(--app-height) - var(--header-height));
     display: flex;
     flex-direction: column;
+    flex: 1;
   }
 
   &__header {
@@ -100,6 +100,13 @@
     @include m.hover-effect();
   }
 
+  .application__taskListWrapper {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
   @media screen and (min-width: 1024px) {
     &__header {
       flex-wrap: nowrap;
@@ -123,6 +130,14 @@
 
     &__newTaskBtn {
       flex: 0 0 auto;
+    }
+  }
+
+  @media screen and (max-width: 768.1px) {
+    &__wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
     }
   }
 

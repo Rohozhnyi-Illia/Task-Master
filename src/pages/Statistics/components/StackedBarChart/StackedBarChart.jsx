@@ -29,12 +29,12 @@ const StackedBarChart = ({ tasks }) => {
       {
         label: 'Active',
         data: activeCounts,
-        backgroundColor: '#FFA500',
+        backgroundColor: '#e79805',
       },
       {
         label: 'Done',
         data: doneCounts,
-        backgroundColor: '#4C9AFF',
+        backgroundColor: '#4386dfff',
       },
     ],
   }

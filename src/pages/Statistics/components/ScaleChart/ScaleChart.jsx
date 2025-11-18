@@ -7,9 +7,9 @@ const ScaleChart = (props) => {
     totalQuantity > 0 ? Math.round((completedQuantity / totalQuantity) * 100) : 0
 
   const getColor = (category) => {
-    if (category === 'High') return '#FF4C4C'
-    if (category === 'Middle') return '#FFA500'
-    return '#4C9AFF'
+    if (category === 'High') return '#b32929'
+    if (category === 'Middle') return '#e79805'
+    return '#4386dfff'
   }
 
   return (

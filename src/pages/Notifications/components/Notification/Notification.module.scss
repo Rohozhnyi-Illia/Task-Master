@@ -2,37 +2,38 @@
 @use '@styles/mixins.scss' as m;
 
 .notification {
+  padding: 2rem;
   position: relative;
   width: 100%;
   max-width: 70rem;
-  padding: 2rem;
-  border-radius: v.$radius-xl;
+
   display: flex;
   flex-direction: column;
-  row-gap: 1rem;
+  row-gap: 3rem;
+  border-radius: v.$radius-xl;
   animation: fadeInUp 0.4s ease forwards;
 
   &.reminder {
-    background-color: #4c9aff;
+    background-color: #4386dfff;
 
     &::after {
-      border-color: transparent #4c9aff transparent transparent;
+      border-color: transparent #4386dfff transparent transparent;
     }
   }
 
   &.overdue {
-    background-color: #ffa500;
+    background-color: #e79805;
 
     &::after {
-      border-color: transparent #ffa500 transparent transparent;
+      border-color: transparent #e79805 transparent transparent;
     }
   }
 
   &.warning {
-    background-color: #ff4c4c;
+    background-color: #b32929;
 
     &::after {
-      border-color: transparent #ff4c4c transparent transparent;
+      border-color: transparent #b32929 transparent transparent;
     }
   }
 
@@ -49,12 +50,12 @@
   &::after {
     content: '';
     position: absolute;
-    bottom: -5px;
-    right: -25px;
+    bottom: -1px;
+    right: -15px;
     transform: translateY(-50%);
     border-style: solid;
     transition: border-color 0.3s ease;
-    border-width: 10px 30px 10px 0;
+    border-width: 10px 20px 10px 0;
     rotate: 225deg;
   }
 
@@ -68,16 +69,32 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    column-gap: 1rem;
 
     button {
-      border: none;
+      padding: 0 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      column-gap: 0.5rem;
+      border: 1px solid #fff;
+      border-radius: v.$radius-lg;
       background-color: transparent;
+      color: #fff;
       cursor: pointer;
+      @include m.hover-effect();
 
       svg {
-        color: #fff;
-        width: 2.3rem;
-        height: 2.2rem;
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+
+      p {
+        @include m.text-style(
+          v.$font-size-sm,
+          v.$font-weight-semibold,
+          v.$line-height-default
+        );
       }
     }
   }
@@ -85,13 +102,11 @@
   &__title {
     @include m.text-style(v.$font-size-md, v.$font-weight-bold, v.$line-height-default);
     color: #fff;
-    margin-bottom: 1rem;
   }
 
   &__text {
-    @include m.text-style(v.$font-size-sm, v.$font-weight-semibold, v.$line-height-default);
+    @include m.text-style(v.$font-size-sm, v.$font-weight-semibold, 160%);
     color: #fff;
-    margin-bottom: 1rem;
   }
 }
 

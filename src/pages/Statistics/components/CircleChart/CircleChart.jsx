@@ -13,7 +13,7 @@ const CircleChart = ({ data, title }) => {
   })
 
   useEffect(() => {
-    const COLORS = ['#FF4C4C', '#FFA500', '#4C9AFF']
+    const COLORS = ['#b32929', '#e79805', '#4386dfff']
     const timer = setTimeout(() => {
       setChartData({
         labels: data.map((item) => item.category),

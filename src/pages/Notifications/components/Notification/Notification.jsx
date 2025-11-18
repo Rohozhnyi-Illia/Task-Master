@@ -61,11 +61,16 @@ const Notification = ({ type, id, message, isRead }) => {
           <h4 className={styles.notification__title}>{firstLetterToUpperCase(type)}</h4>
 
           <div className={styles.notification__buttons}>
-            <button type="button" onClick={readHandler}>
-              <FaCheckCircle />
-            </button>
+            {!isRead && (
+              <button type="button" onClick={readHandler}>
+                <FaCheckCircle />
+                <p>Read</p>
+              </button>
+            )}
+
             <button type="button" onClick={deleteHandler}>
               <FaTrash />
+              <p>Delete</p>
             </button>
           </div>
         </div>

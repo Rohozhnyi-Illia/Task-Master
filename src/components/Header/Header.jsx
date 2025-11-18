@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { home, notification, stats, sun } from '../../assets'
 import { moon, exit } from '../../assets'
@@ -18,6 +18,8 @@ const Header = () => {
   const [fetchError, setFetchError] = useState('')
   const { theme, setTheme } = useTheme()
   const isDark = theme === 'dark'
+
+  const headerRef = useRef(null)
 
   const dispatch = useDispatch()
 
@@ -69,13 +71,28 @@ const Header = () => {
 
     fetchData()
 
-    intervalId = setInterval(fetchData, 5 * 60 * 1000)
+    intervalId = setInterval(fetchData, 15 * 60 * 1000)
 
     return () => clearInterval(intervalId)
   }, [dispatch])
 
+  useEffect(() => {
+    const setHeaderHeight = () => {
+      if (headerRef.current) {
+        const height = headerRef.current.offsetHeight
+
+        document.documentElement.style.setProperty('--header-height', `${height}px`)
+      }
+    }
+
+    setHeaderHeight()
+    window.addEventListener('resize', setHeaderHeight)
+
+    return () => window.removeEventListener('resize', setHeaderHeight)
+  }, [])
+
   return (
-    <header className={styles.header}>
+    <header className={styles.header} ref={headerRef}>
       <div className="container">
         <div className={styles.header__wrapper}>
           <h2 className={styles.header__title}>TaskMaster</h2>

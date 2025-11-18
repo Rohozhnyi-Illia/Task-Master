@@ -2,9 +2,10 @@
 @use '@styles/mixins.scss' as m;
 
 .addModal {
+  padding: 8rem 1rem;
   position: fixed;
   left: 0;
-  top: 0;
+  top: 8rem;
   width: 100vw;
   height: 100vh;
 
@@ -15,22 +16,28 @@
   background: rgba(20, 20, 20, 0.4);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border-radius: 1rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
 
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+
   &__content {
     position: relative;
+
     padding: 2rem 1rem;
     width: 100%;
     max-width: 36rem;
     min-height: 40rem;
+    max-height: 95vh;
     background-color: #fff;
     border-radius: 2rem;
 
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
+    overflow-y: auto;
 
     > div {
       display: flex;
