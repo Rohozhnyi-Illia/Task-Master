@@ -24,6 +24,17 @@ function App() {
     fetchPingServer()
   }, [])
 
+  useEffect(() => {
+    const setAppHeight = () => {
+      document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`)
+    }
+
+    setAppHeight()
+    window.addEventListener('resize', setAppHeight)
+
+    return () => window.removeEventListener('resize', setAppHeight)
+  }, [])
+
   return (
     <Provider store={store}>
       <Suspense fallback={<Loader />}>
