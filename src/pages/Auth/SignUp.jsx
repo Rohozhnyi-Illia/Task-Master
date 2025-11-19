@@ -28,7 +28,7 @@ const SignUp = () => {
   }
 
   const navigateHandler = () => {
-    navigate('/verify-email')
+    navigate('/verify-email', { replace: true })
     setAccessAction(false)
     return
   }

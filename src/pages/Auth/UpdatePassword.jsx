@@ -27,7 +27,7 @@ const UpdatePassword = () => {
   }
 
   const navigateHandler = () => {
-    navigate('/verify-password')
+    navigate('/verify-password', { replace: true })
     setAccessAction(false)
     return
   }

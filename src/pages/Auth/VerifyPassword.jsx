@@ -38,10 +38,10 @@ const VerifyPassword = () => {
   }
 
   useEffect(() => {
-    if (!email && !accessAction) {
+    if (!email) {
       navigate('/update-password', { replace: true })
     }
-  }, [email, accessAction, navigate])
+  }, [email, navigate])
 
   const onChangeHandler = (e) => {
     const { name, value } = e.target

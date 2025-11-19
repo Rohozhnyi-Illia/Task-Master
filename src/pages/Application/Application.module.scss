@@ -7,7 +7,11 @@
   transition: background-color 0.3s ease;
 
   @media screen and (max-width: 768.1px) {
-    padding: var(--header-height) 1rem 1rem 1rem;
+    padding: calc(var(--header-height) + 0.2rem) 1rem 1rem 1rem;
+  }
+
+  @media screen and (max-width: 280.1px) {
+    padding: calc(var(--header-height) + 4rem) 1rem 1rem 1rem;
   }
 
   &__wrapper {
@@ -165,6 +169,12 @@
       flex: 0 1 auto;
       width: 100%;
       max-width: 100%;
+    }
+  }
+
+  @media screen and (max-width: 280.1px) {
+    &__header {
+      bottom: 7rem;
     }
   }
 }

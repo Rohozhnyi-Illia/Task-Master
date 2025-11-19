@@ -25,7 +25,7 @@ const VerifyEmail = () => {
 
   useEffect(() => {
     if (!email) {
-      navigate('/login')
+      navigate('/login', { replace: true })
       return
     } else {
       setData((prev) => ({ ...prev, email }))
@@ -34,7 +34,7 @@ const VerifyEmail = () => {
 
   const navigateHandler = () => {
     setAccessAction(false)
-    navigate('/application')
+    navigate('/application', { replace: true })
     return
   }
 
