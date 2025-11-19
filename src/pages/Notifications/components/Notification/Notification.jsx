@@ -1,16 +1,21 @@
 import React, { useState } from 'react'
 import * as styles from './Notification.module.scss'
-import { FaCheckCircle } from 'react-icons/fa'
-import { FaTrash } from 'react-icons/fa'
+import { FaCheckCircle, FaTrash } from 'react-icons/fa'
 import firstLetterToUpperCase from '@utils/helpers/firstLetterToUpperCase'
 import NotificationService from '@services/notificationService'
-import { readNotification, deleteNotification } from '@store/notificationSlice'
-import { useDispatch } from 'react-redux'
+import {
+  readNotification,
+  deleteNotification,
+  restoreNotification,
+} from '@store/notificationSlice'
+import { useDispatch, useSelector } from 'react-redux'
 import { ErrorModal } from '@components'
 
-const Notification = ({ type, id, message, isRead }) => {
+const Notification = ({ type, id, message }) => {
   const [fetchError, setFetchError] = useState('')
-  const dispatch = useDispatch('')
+  const dispatch = useDispatch()
+  const notification = useSelector((state) => state.notification.find((n) => n._id === id))
+  const isRead = notification?.isRead
 
   const getModifier = (type) => {
     if (type === 'warning') return 'warning'
@@ -19,34 +24,36 @@ const Notification = ({ type, id, message, isRead }) => {
   }
 
   const readHandler = async () => {
+    dispatch(readNotification({ id, markAsRead: true }))
+
     try {
       const res = await NotificationService.markAsRead(id)
-
       if (!res.success) {
         setFetchError(res.error)
-        return
-      }
 
-      dispatch(readNotification(res.data._id))
+        dispatch(readNotification({ id, markAsRead: false }))
+      }
     } catch (error) {
       setFetchError(error)
+      dispatch(readNotification({ id, markAsRead: false }))
     }
   }
 
   const deleteHandler = async () => {
+    const notificationToDelete = notification
+
+    dispatch(deleteNotification(id))
+
     try {
       const res = await NotificationService.deleteNotification(id)
-
       if (!res.success) {
         setFetchError(res.error)
-        return
+
+        dispatch(restoreNotification(notificationToDelete))
       }
-
-      console.log(res.data)
-
-      dispatch(deleteNotification(id))
     } catch (error) {
       setFetchError(error)
+      dispatch(restoreNotification(notificationToDelete))
     }
   }
 
@@ -59,7 +66,6 @@ const Notification = ({ type, id, message, isRead }) => {
       >
         <div className={styles.notification__header}>
           <h4 className={styles.notification__title}>{firstLetterToUpperCase(type)}</h4>
-
           <div className={styles.notification__buttons}>
             {!isRead && (
               <button type="button" onClick={readHandler}>
@@ -67,7 +73,6 @@ const Notification = ({ type, id, message, isRead }) => {
                 <p>Read</p>
               </button>
             )}
-
             <button type="button" onClick={deleteHandler}>
               <FaTrash />
               <p>Delete</p>
