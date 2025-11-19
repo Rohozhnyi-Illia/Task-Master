@@ -59,6 +59,7 @@ const UpdatePassword = () => {
         return
       }
 
+      sessionStorage.setItem('resetEmail', data.email)
       dispatch(updateEmail(data.email))
       setAccessAction(true)
     } catch (err) {

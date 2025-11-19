@@ -9,8 +9,7 @@
   &__container {
     width: 100%;
     max-width: 65rem;
-    min-height: 100%;
-    height: var(--app-height);
+    min-height: var(--app-height, 100vh);
     box-sizing: border-box;
 
     display: flex;
@@ -101,15 +100,8 @@
 }
 
 @media screen and (max-width: 425px) {
-  html,
-  body {
-    overflow-x: hidden;
-    height: 100%;
-  }
-
   .auth__container {
     max-width: 100%;
-    padding: 0.5rem;
-    height: var(--app-height);
+    row-gap: 2rem;
   }
 }

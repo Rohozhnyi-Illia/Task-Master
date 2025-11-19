@@ -62,6 +62,7 @@ const SignUp = () => {
         return
       }
 
+      sessionStorage.setItem('signUpEmail', res.data.email)
       dispatch(updateEmail(res.data.email))
       setAccessAction(true)
     } catch (err) {

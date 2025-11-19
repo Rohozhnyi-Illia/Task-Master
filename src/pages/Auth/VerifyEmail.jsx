@@ -24,16 +24,17 @@ const VerifyEmail = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (!email) {
+    const emailFromSession = sessionStorage.getItem('signUpEmail')
+    if (!email && !emailFromSession) {
       navigate('/login', { replace: true })
-      return
-    } else {
-      setData((prev) => ({ ...prev, email }))
+    } else if (emailFromSession) {
+      setData((prev) => ({ ...prev, email: emailFromSession }))
     }
   }, [email, navigate])
 
   const navigateHandler = () => {
     setAccessAction(false)
+    sessionStorage.removeItem('signUpEmail')
     navigate('/application', { replace: true })
     return
   }

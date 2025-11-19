@@ -26,7 +26,8 @@ function App() {
 
   useEffect(() => {
     const setAppHeight = () => {
-      document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`)
+      const vh = window.innerHeight * 0.01
+      document.documentElement.style.setProperty('--app-height', `${vh * 100}px`)
     }
 
     setAppHeight()

@@ -7,7 +7,6 @@ import passwordVerifySchema from '@utils/validation/passwordVerify-validation'
 import { Input, AuthButton, ErrorModal, AccessModal } from '@components'
 import { Loader } from '@components'
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
 import AuthService from '@services/authService'
 
 const VerifyPassword = () => {
@@ -24,8 +23,6 @@ const VerifyPassword = () => {
 
   const navigate = useNavigate()
 
-  const email = useSelector((state) => state.auth.email)
-
   const openModalHandler = () => {
     setIsErrorModalOpen(!isErrorModalOpen)
     return
@@ -33,15 +30,17 @@ const VerifyPassword = () => {
 
   const navigateHandler = () => {
     setAccessAction(false)
+    sessionStorage.removeItem('resetEmail')
     navigate('/login', { replace: true })
     return
   }
 
   useEffect(() => {
-    if (!email) {
+    const emailFromSession = sessionStorage.getItem('resetEmail')
+    if (!emailFromSession) {
       navigate('/update-password', { replace: true })
     }
-  }, [email, navigate])
+  }, [navigate])
 
   const onChangeHandler = (e) => {
     const { name, value } = e.target
@@ -61,7 +60,7 @@ const VerifyPassword = () => {
       await passwordVerifySchema.validate(data, { abortEarly: false })
 
       const res = await AuthService.verifyPassword({
-        email,
+        email: sessionStorage.getItem('resetEmail'),
         newPassword: data.newPassword,
         repeatPassword: data.repeatPassword,
         verifyCode: data.verifyCode,
