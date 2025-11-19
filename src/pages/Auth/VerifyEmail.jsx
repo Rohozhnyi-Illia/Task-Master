@@ -4,6 +4,7 @@ import fields from '@utils/fields/verifyEmailFields'
 import { Input, AuthButton } from '@components'
 import { bg } from '@assets'
 import verifyEmailSchema from '@utils/validation/emailVerify-validation'
+import emailSchema from '@utils/validation/email-validation'
 import { ErrorModal, AccessModal } from '@components'
 import { setAuth } from '@store/authSlice'
 import { useDispatch, useSelector } from 'react-redux'
@@ -18,6 +19,7 @@ const VerifyEmail = () => {
   const [successMessage, setSuccessMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [accessAction, setAccessAction] = useState(false)
+  const [emailError, setEmailError] = useState('')
   const email = useSelector((state) => state.auth.email)
 
   const dispatch = useDispatch()
@@ -27,6 +29,7 @@ const VerifyEmail = () => {
     const emailFromSession = sessionStorage.getItem('signUpEmail')
     if (!email && !emailFromSession) {
       navigate('/login', { replace: true })
+      return
     } else if (emailFromSession) {
       setData((prev) => ({ ...prev, email: emailFromSession }))
     }
@@ -54,6 +57,8 @@ const VerifyEmail = () => {
     setIsLoading(true)
 
     try {
+      await emailSchema.validate({ email: data.email }, { abortEarly: false })
+
       if (!data.email) {
         setAuthError('Enter your email address')
         return
@@ -66,8 +71,14 @@ const VerifyEmail = () => {
       } else {
         setAuthError(res.error || 'Something went wrong')
       }
-    } catch (error) {
-      setAuthError(error.message || 'Something went wrong')
+    } catch (err) {
+      if (err.inner) {
+        err.inner.forEach((e) => {
+          if (e.path === 'email') setEmailError(e.message)
+        })
+      } else {
+        setAuthError(err.message || 'Something went wrong')
+      }
     } finally {
       setIsLoading(false)
     }
@@ -146,7 +157,11 @@ const VerifyEmail = () => {
                 onChange={onChangeHandler}
                 img={field.img}
                 authOptions={field.authOptions}
-                err={errors[field.name]}
+                err={
+                  field.name === 'email'
+                    ? emailError || errors[field.name]
+                    : errors[field.name]
+                }
                 type={field.type !== 'password' ? 'text' : 'password'}
               />
             ))}
