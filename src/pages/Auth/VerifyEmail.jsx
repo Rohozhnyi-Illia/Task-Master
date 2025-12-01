@@ -22,6 +22,8 @@ const VerifyEmail = () => {
   const [emailError, setEmailError] = useState('')
   const email = useSelector((state) => state.auth.email)
 
+  const formId = 'verifyEmail'
+
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -150,6 +152,7 @@ const VerifyEmail = () => {
             {fields.map((field) => (
               <Input
                 key={field.name}
+                formId={formId}
                 label={field.label}
                 placeholder={field.placeholder}
                 name={field.name}

@@ -3,13 +3,15 @@ html[data-theme='light'] {
   --accent-color: #140e56;
   --nav-color: #fcfff0;
   --bg-color: #ffffff;
+  --header-shadow: rgba(0, 0, 0, 0.15);
 }
 
 html[data-theme='dark'] {
   --text-color: #e0e0e0;
   --accent-color: #c20f70;
-  --bg-color: #2c2c2c;
-  --nav-color: #2c2c2c;
+  --bg-color: #2b2b2b;
+  --nav-color: #292929;
+  --header-shadow: rgba(194, 194, 194, 0.1);
 }
 
 $color-accent: #851150;

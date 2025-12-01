@@ -23,6 +23,8 @@ const Login = () => {
   const [emailError, setEmailError] = useState('')
   const [isAccountActivated, setIsAccountActivated] = useState(true)
 
+  const formId = 'login'
+
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -166,6 +168,7 @@ const Login = () => {
             {fields.map((field) => (
               <Input
                 key={field.name}
+                formId={formId}
                 label={field.label}
                 placeholder={field.placeholder}
                 name={field.name}

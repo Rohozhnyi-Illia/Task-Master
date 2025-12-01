@@ -20,6 +20,8 @@ const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [accessAction, setAccessAction] = useState(false)
 
+  const formId = 'signUp'
+
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -94,6 +96,7 @@ const SignUp = () => {
             {fields.map((field) => (
               <Input
                 key={field.name}
+                formId={formId}
                 label={field.label}
                 placeholder={field.placeholder}
                 name={field.name}

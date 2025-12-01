@@ -2,8 +2,8 @@
 @use '@styles/mixins.scss' as m;
 
 .task {
-  // opacity: 0;
-  // animation: fadeSlideIn 0.1s ease-out forwards;
+  opacity: 0;
+  animation: fadeSlideIn 0.3s ease-out forwards;
 
   th,
   td {
@@ -78,6 +78,13 @@
     }
   }
 
+  .task__textCell {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
   .deleteBtn {
     padding: 0.4rem 0.8rem;
     background-color: transparent;
@@ -116,14 +123,5 @@
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
-  }
-}
-
-@media screen and (max-width: 1024.1px) {
-  .task__textCell {
-    display: block;
-    max-width: 100%;
-    overflow-x: auto;
-    white-space: nowrap;
   }
 }

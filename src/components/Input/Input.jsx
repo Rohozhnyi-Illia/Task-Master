@@ -16,10 +16,13 @@ const Input = (props) => {
     err,
     checkValue,
     type = 'text',
+    formId,
   } = props
 
   const [showPassword, setShowPassword] = useState(false)
   const isPasswordField = type === 'password'
+
+  const inputId = `${formId}-${name}`
 
   const changePasswordTypeHandler = () => {
     setShowPassword(!showPassword)
@@ -27,7 +30,7 @@ const Input = (props) => {
 
   return (
     <div className={styles.input}>
-      <label htmlFor={name} className={styles.input__label}>
+      <label htmlFor={inputId} className={styles.input__label}>
         {label}
       </label>
 
@@ -35,7 +38,7 @@ const Input = (props) => {
         {img && <img src={img} alt={`${name} icon`} className={styles.input__img} />}
 
         <input
-          id={name}
+          id={inputId}
           type={isPasswordField && showPassword ? 'text' : type}
           placeholder={placeholder}
           onChange={onChange}

@@ -19,6 +19,8 @@ const UpdatePassword = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [accessAction, setAccessAction] = useState(false)
 
+  const formId = 'updatePassword'
+
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -91,6 +93,7 @@ const UpdatePassword = () => {
             {fields.map((field) => (
               <Input
                 key={field.label}
+                formId={formId}
                 label={field.label}
                 placeholder={field.placeholder}
                 name={field.name}

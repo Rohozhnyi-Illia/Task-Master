@@ -2,10 +2,11 @@
 @use '@styles/mixins.scss' as m;
 
 .taskList {
-  margin-top: 4rem;
+  margin-top: 3rem;
+  flex: 1 1 auto;
   display: flex;
+  overflow: hidden;
   flex-direction: column;
-  flex: 1;
   min-height: 0;
 
   &__content {
@@ -16,15 +17,14 @@
   }
 
   &__tableWrapper,
-  &__cardWrapper,
   &__empty {
     flex: 1 1 auto;
     min-height: 0;
-    overflow-y: auto;
   }
 
   &__cardWrapper {
     display: none;
+    min-height: auto;
   }
 
   &__table {
@@ -33,7 +33,8 @@
     table-layout: fixed;
     border-collapse: separate;
     border-radius: v.$radius-xl;
-    box-shadow: 0 3px 3px 3px rgba(0, 0, 0, 0.2);
+    border: 1px solid #d3d3d3;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #fff;
 
     th,
@@ -152,29 +153,32 @@
   }
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1024.1px) {
   .taskList__cardWrapper {
     display: grid;
     gap: 2rem;
     width: 100%;
     box-sizing: border-box;
     align-items: start;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .pagination {
+    margin-top: 2rem;
   }
 
   .taskList__tableWrapper {
     display: none;
   }
-}
 
-@media screen and (min-width: 480px) and (max-width: 767.9px) {
-  .taskList__cardWrapper {
-    grid-template-columns: repeat(2, 1fr);
+  .taskList__content {
+    flex: 0 0 auto;
+    min-height: auto;
   }
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (max-width: 500px) {
   .taskList__cardWrapper {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(1, 1fr);
   }
 }
