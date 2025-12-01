@@ -40,47 +40,49 @@ const TaskList = ({ keyword, selected }) => {
 
   return (
     <div className={styles.taskList}>
-      {tasks.length > 0 && (
-        <div className={styles.taskList__tableWrapper}>
-          <table className={styles.taskList__table}>
-            <thead>
-              <tr>
-                <th>Completed</th>
-                <th>Task Name</th>
-                <th>Status</th>
-                <th>Category</th>
-                <th>Deadline</th>
-                <th>Remaining</th>
-                <th>Delete</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentTasks.map((task) => (
-                <Task key={task._id} task={task} />
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {tasks.length < 1 && (
-        <div className={styles.taskList__empty}>
-          <div>
-            <img src={noData} alt="no tasks" />
-            <h2>No tasks for now — keep up the great work!</h2>
+      <div className={styles.taskList__content}>
+        {filteredTasks.length > 0 && (
+          <div className={styles.taskList__tableWrapper}>
+            <table className={styles.taskList__table}>
+              <thead>
+                <tr>
+                  <th>Completed</th>
+                  <th>Task Name</th>
+                  <th>Status</th>
+                  <th>Category</th>
+                  <th>Deadline</th>
+                  <th>Remaining</th>
+                  <th>Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+                {currentTasks.map((task) => (
+                  <Task key={task._id} task={task} />
+                ))}
+              </tbody>
+            </table>
           </div>
-        </div>
-      )}
+        )}
 
-      {tasks.length > 0 && (
-        <div className={styles.taskList__cardWrapper}>
-          {currentTasks.map((task) => (
-            <TaskMobile key={task._id} task={task} />
-          ))}
-        </div>
-      )}
+        {filteredTasks.length < 1 && (
+          <div className={styles.taskList__empty}>
+            <div>
+              <img src={noData} alt="no tasks" />
+              <h2>No tasks for now — keep up the great work!</h2>
+            </div>
+          </div>
+        )}
 
-      {tasks.length > 10 && (
+        {filteredTasks.length > 0 && (
+          <div className={styles.taskList__cardWrapper}>
+            {currentTasks.map((task) => (
+              <TaskMobile key={task._id} task={task} />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {filteredTasks.length > 10 && (
         <div className={styles.pagination}>
           <div className={styles.pagination__back}>
             <button onClick={backHandler} disabled={currentPage === 1}>

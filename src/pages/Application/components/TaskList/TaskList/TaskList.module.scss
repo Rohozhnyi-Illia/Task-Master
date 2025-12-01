@@ -2,21 +2,29 @@
 @use '@styles/mixins.scss' as m;
 
 .taskList {
-  margin-top: 3rem;
-  width: 100%;
-  height: 100%;
-
-  flex: 1;
+  margin-top: 4rem;
   display: flex;
   flex-direction: column;
+  flex: 1;
+  min-height: 0;
 
-  &__tableWrapper {
-    width: 100%;
+  &__content {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  &__tableWrapper,
+  &__cardWrapper,
+  &__empty {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
   }
 
   &__cardWrapper {
     display: none;
-    width: 100%;
   }
 
   &__table {
@@ -45,26 +53,20 @@
     th:first-child {
       border-top-left-radius: v.$radius-xl;
     }
-
     th:last-child {
       border-top-right-radius: v.$radius-xl;
     }
-
     tbody tr:last-child td:first-child {
       border-bottom-left-radius: v.$radius-xl;
     }
-
     tbody tr:last-child td:last-child {
       border-bottom-right-radius: v.$radius-xl;
     }
   }
 
   &__empty {
-    width: 100%;
-    height: 100%;
-
-    flex: 1;
     display: flex;
+    flex: 1 1 auto;
     align-items: center;
     justify-content: center;
 
@@ -157,7 +159,6 @@
     width: 100%;
     box-sizing: border-box;
     align-items: start;
-
     grid-template-columns: 1fr;
   }
 

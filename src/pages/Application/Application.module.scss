@@ -4,25 +4,22 @@
 .application {
   padding: 0 1rem;
   background-color: var(--bg-color);
+
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
   transition: background-color 0.3s ease;
 
-  @media screen and (max-width: 768.1px) {
-    padding: calc(var(--header-height) + 0.2rem) 1rem 1rem 1rem;
-  }
-
-  @media screen and (max-width: 280.1px) {
-    padding: calc(var(--header-height) + 4rem) 1rem 1rem 1rem;
-  }
-
   &__wrapper {
-    min-height: calc(var(--app-height) - var(--header-height));
     display: flex;
     flex-direction: column;
     flex: 1;
+    min-height: 0;
   }
 
   &__header {
-    padding-top: 4rem;
+    padding-top: 2rem;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -149,6 +146,7 @@
     }
 
     &__header {
+      padding-top: var(--header-height);
       position: relative;
       bottom: 5rem;
       gap: 2rem;

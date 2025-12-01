@@ -27,9 +27,13 @@ const tasksSlice = createSlice({
       const taskId = action.payload
       return state.map((task) => (task._id === taskId ? { ...task, status: 'Done' } : task))
     },
+
+    restoreTask(state, action) {
+      return [...state, action.payload]
+    },
   },
 })
 
-export const { getTasks, deleteTasks, updateStatus, isComplete, createTask } =
+export const { getTasks, deleteTasks, updateStatus, isComplete, createTask, restoreTask } =
   tasksSlice.actions
 export default tasksSlice.reducer

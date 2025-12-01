@@ -2,8 +2,8 @@
 @use '@styles/mixins.scss' as m;
 
 .task {
-  opacity: 0;
-  animation: fadeSlideIn 0.45s ease-out forwards;
+  // opacity: 0;
+  // animation: fadeSlideIn 0.1s ease-out forwards;
 
   th,
   td {

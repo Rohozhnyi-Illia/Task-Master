@@ -2,9 +2,11 @@ import axios from 'axios'
 import store from '../store/store'
 import { setAuth, logout } from '../store/authSlice'
 
+const URL = ['http://localhost:9000/api', 'https://taskmaster-backend-e940.onrender.com/api']
+const currentURL = 0
+
 const api = axios.create({
-  // baseURL: 'http://localhost:9000/api',
-  baseURL: 'https://taskmaster-backend-e940.onrender.com/api',
+  baseURL: URL[currentURL],
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
@@ -50,8 +52,7 @@ api.interceptors.response.use(
 
       try {
         const refreshRes = await axios.post(
-          // 'http://localhost:9000/api/auth/refresh',
-          'https://taskmaster-backend-e940.onrender.com/api/auth/refresh',
+          `${URL[currentURL]}/auth/refresh`,
           {},
           { withCredentials: true }
         )
@@ -63,11 +64,14 @@ api.interceptors.response.use(
         processQueue(null, newAccessToken)
 
         originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`
+
         return api(originalRequest)
       } catch (err) {
         processQueue(err, null)
+
         store.dispatch(logout())
-        store.dispatch(setAuth({ ...store.getState().auth, isAuth: false }))
+        window.location.replace('/login')
+
         return Promise.reject(err)
       } finally {
         isRefreshing = false
