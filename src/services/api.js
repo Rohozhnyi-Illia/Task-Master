@@ -2,7 +2,7 @@ import axios from 'axios'
 import store from '../store/store'
 import { setAuth, logout } from '../store/authSlice'
 
-const URL = ['http://localhost:9000/api', 'https://taskmaster-backend-e940.onrender.com']
+const URL = ['http://localhost:9000/api', 'https://taskmaster-backend-e940.onrender.com/api']
 const currentURL = 1
 
 const api = axios.create({
