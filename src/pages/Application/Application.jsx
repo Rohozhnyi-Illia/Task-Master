@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import * as styles from './Application.module.scss'
 import { search } from '../../assets'
 import CategorySelect from './components/CategorySelect/CategorySelect'
@@ -46,6 +46,8 @@ const Application = () => {
     fetchTasks()
   }, [dispatch])
 
+  const addButtonRef = useRef(null)
+
   return (
     <div className={styles.application}>
       <div className="container">
@@ -73,13 +75,19 @@ const Application = () => {
               />
             </div>
 
-            <AddButton className={styles.application__newTaskBtn} onClick={openModalHandler} />
+            <AddButton
+              className={styles.application__newTaskBtn}
+              onClick={openModalHandler}
+              ref={addButtonRef}
+            />
           </header>
 
           <TaskList keyword={keywordValue} selected={selected} />
         </div>
 
-        {isAddModalOpen && <AddModal openModalHandler={openModalHandler} />}
+        {isAddModalOpen && (
+          <AddModal openModalHandler={openModalHandler} isAddModalOpen={isAddModalOpen} />
+        )}
         {fetchError && <ErrorModal error={fetchError} onClick={() => setFetchError('')} />}
         {isLoading && <Loader />}
       </div>

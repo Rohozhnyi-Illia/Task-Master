@@ -18,6 +18,7 @@ const CustomSelect = ({
     setSelected(option)
     setIsOpen(false)
     onChange?.(option)
+    selectRef.current.focus()
   }
 
   useEffect(() => {
@@ -30,11 +31,40 @@ const CustomSelect = ({
     return () => document.removeEventListener('click', handleClickOutside)
   }, [])
 
+  const firstOptionRef = useRef(null)
+
+  useEffect(() => {
+    if (isOpen && firstOptionRef.current) {
+      firstOptionRef.current.focus()
+    }
+  })
+  const keyDownHandler = (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      toggleOpen()
+    }
+
+    if (e.key === 'Escape') {
+      setIsOpen(false)
+      selectRef.current?.focus()
+    }
+  }
+
+  const optionKeyDownHandler = (e, option) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      handleSelect(option)
+      selectRef.current?.focus()
+    }
+  }
+
   return (
-    <div className={styles.select} ref={selectRef} id={id}>
+    <div className={styles.select} id={id} onKeyDown={keyDownHandler}>
       <div
         className={`${styles.select__trigger} ${isOpen ? styles.open : ''}`}
         onClick={toggleOpen}
+        tabIndex={0}
+        ref={selectRef}
       >
         <span>{selected || label}</span>
         <div className={styles.select__arrow}></div>
@@ -42,11 +72,14 @@ const CustomSelect = ({
 
       {isOpen && (
         <ul className={styles.select__options}>
-          {options.map((opt) => (
+          {options.map((opt, index) => (
             <li
               key={opt}
               className={`${styles.select__option} ${opt === selected ? styles.active : ''}`}
               onClick={() => handleSelect(opt)}
+              tabIndex={0}
+              onKeyDown={(e) => optionKeyDownHandler(e, opt)}
+              ref={index === 0 ? firstOptionRef : null}
             >
               {opt}
             </li>

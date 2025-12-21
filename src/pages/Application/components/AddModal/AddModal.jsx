@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import * as styles from './AddModal.module.scss'
 import CategorySelect from '../CategorySelect/CategorySelect'
 import AddButton from '../AddButton/AddButton'
@@ -11,7 +11,7 @@ import { createTask } from '@store/tasksSlice'
 import { useDispatch } from 'react-redux'
 import firstLetterToUpperCase from '@utils/helpers/firstLetterToUpperCase'
 
-const AddModal = ({ openModalHandler }) => {
+const AddModal = ({ openModalHandler, isAddModalOpen }) => {
   const [categorySelected, setCategorySelected] = useState('')
   const [reminderSelected, setReminderSelected] = useState('')
   const [task, setTask] = useState('')
@@ -108,6 +108,42 @@ const AddModal = ({ openModalHandler }) => {
     }
   }
 
+  const modalRef = useRef(null)
+  useEffect(() => {
+    if (!isAddModalOpen) return
+
+    const focusableElements = modalRef.current.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    )
+
+    const firstElement = focusableElements[0]
+    const lastElement = focusableElements[focusableElements.length - 1]
+
+    firstElement.focus()
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Tab') {
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement) {
+            e.preventDefault()
+            lastElement.focus()
+          }
+        } else {
+          if (document.activeElement === lastElement) {
+            e.preventDefault()
+            firstElement.focus()
+          }
+        }
+      } else if (e.key === 'Escape') {
+        openModalHandler()
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [isAddModalOpen, openModalHandler])
+
   return (
     <div
       className={styles.addModal}
@@ -116,6 +152,7 @@ const AddModal = ({ openModalHandler }) => {
           openModalHandler()
         }
       }}
+      ref={modalRef}
     >
       <form className={styles.addModal__content} onSubmit={onSubmitHandler}>
         <button className={styles.addModal__button} onClick={openModalHandler} type="button">

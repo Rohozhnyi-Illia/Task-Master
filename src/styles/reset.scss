@@ -1,9 +1,16 @@
-@use './fonts.scss' as v;
+@use '@styles/variables.scss' as v;
+@use '@styles/mixins.scss' as m;
 
 *,
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+*:focus {
+  outline-color: var(--focus-color);
+  outline-width: 3px;
+  outline-offset: 2px;
 }
 
 ul[class],

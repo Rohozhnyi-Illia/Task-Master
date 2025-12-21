@@ -12,18 +12,20 @@ _Statistics Page_
 _Login Page_
 ![Login](./src/assets/preview/Login.jpg)
 
+_Sign Up Page_
+![Sign Up](./src/assets/preview/Sign-Up.jpg)
+
 _Adding Data Modal Window_
 ![Adding Data](./src/assets/preview/Add-modal.jpg)
 
 _Pagination_
 ![Pagination](./src/assets/preview/Pagination.jpg)
-![Pagination](./src/assets/preview/Pagination2.jpg)
 
 Frontend application for **TaskMaster** — a task management platform with deadlines, notifications, and user authentication. Built with React, Redux Toolkit, SCSS, and Webpack.
 
 ## Links
 
-[![Demo](https://img.shields.io/badge/demo-online-brightgreen)](https://verdant-sfogliatella-0ba40c.netlify.app/)  
+[![Demo](https://img.shields.io/badge/demo-online-brightgreen)](https://taskmaster.ink/)  
 [![API for UI](https://img.shields.io/badge/API-backend-blue)](https://github.com/Rohozhnyi-Illia/TaskMaster-backend)
 
 ## Features
@@ -33,6 +35,7 @@ Frontend application for **TaskMaster** — a task management platform with dead
 - **Password recovery with email verification**
 - JWT-based access and refresh tokens
 - Task management: create, update, complete, and delete tasks
+- Task sorting and filtering by category and keywords
 - Pagination on the main dashboard for large task lists
 - Task notifications: reminders, deadlines, and overdue alerts
 - **Notifications page with messages about deadlines**
@@ -41,7 +44,7 @@ Frontend application for **TaskMaster** — a task management platform with dead
 - Automatic token refresh and optimistic UI updates
 - Error handling with modals and loaders
 - Validation of forms, deadlines, and data
-- Custom favicon and app branding
+- Custom favicon, app branding, and custom domain setup
 
 ---
 

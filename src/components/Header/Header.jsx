@@ -102,62 +102,58 @@ const Header = () => {
           >
             <ul className={styles.header__list}>
               <li>
-                <Link to={'/application'} className={styles.header__link}>
-                  <div className={styles.header__icon_wrapper}>
-                    <img src={home} alt="home" className={styles.header__icon} />
-                  </div>
+                <Link to={'/application'} className={styles.header__icon_wrapper}>
+                  <img src={home} alt="home" className={styles.header__icon} />
                 </Link>
               </li>
 
               <li className={styles.header__notification}>
-                <Link to={'/notifications'}>
-                  <div className={styles.header__icon_wrapper}>
-                    <img
-                      src={notification}
-                      alt="notifications"
-                      className={styles.header__icon}
-                    />
+                <Link to={'/notifications'} className={styles.header__icon_wrapper}>
+                  <img
+                    src={notification}
+                    alt="notifications"
+                    className={styles.header__icon}
+                  />
 
-                    {notificationsList.length > 0 && (
-                      <div className={styles.header__notification_quantity}>
-                        {notificationsList.length}
-                      </div>
-                    )}
-                  </div>
+                  {notificationsList.length > 0 && (
+                    <div className={styles.header__notification_quantity}>
+                      {notificationsList.length}
+                    </div>
+                  )}
                 </Link>
               </li>
 
               <li>
-                <Link to={'/statistics'} className={styles.header__link}>
-                  <div className={styles.header__icon_wrapper}>
-                    <img src={stats} alt="stats" className={styles.header__icon} />
-                  </div>
+                <Link to={'/statistics'} className={styles.header__icon_wrapper}>
+                  <img src={stats} alt="stats" className={styles.header__icon} />
                 </Link>
               </li>
 
               <li>
-                <div
-                  data-testid="theme-toggle"
+                <button
                   className={`${styles.themeToggle} ${isDark ? styles.dark : ''}`}
                   onClick={toggleTheme}
+                  aria-pressed={isDark}
                 >
                   <img src={sun} alt="sun" className={styles.themeToggle__icon_sun} />
                   <img src={moon} alt="moon" className={styles.themeToggle__icon_moon} />
                   <div className={styles.themeToggle__slider}></div>
-                </div>
+                </button>
               </li>
 
-              <li onClick={!isLoading ? logoutHandler : undefined}>
-                <div className={styles.header__icon_wrapper}>
+              <li>
+                <button
+                  className={styles.header__icon_wrapper}
+                  disabled={isLoading}
+                  onClick={!isLoading ? logoutHandler : undefined}
+                >
                   <img src={exit} alt="logout" className={styles.header__icon} />
-                </div>
+                </button>
               </li>
             </ul>
           </nav>
 
           <div
-            role="button"
-            aria-label="menu toggle"
             className={`${styles.header__burger} ${
               isModalOpen ? styles.header__burger_open : ''
             }`}

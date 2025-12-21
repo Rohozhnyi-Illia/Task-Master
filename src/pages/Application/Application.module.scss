@@ -103,6 +103,10 @@
 
     cursor: pointer;
     @include m.hover-effect();
+
+    &:focus {
+      border: 1px solid var(--focus-color);
+    }
   }
 
   .application__taskListWrapper {

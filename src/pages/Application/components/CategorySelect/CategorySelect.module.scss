@@ -30,6 +30,10 @@
     cursor: pointer;
     transition: border-color 0.3s ease;
 
+    &:focus {
+      border-radius: v.$radius-xl;
+    }
+
     &:hover {
       border-color: var(--accent-color);
     }
