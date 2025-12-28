@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux'
 import TaskService from '@services/taskService'
 import { deleteTasks, updateStatus, restoreTask } from '@store/tasksSlice'
 import { ErrorModal } from '@components'
+import { FaAngleDown } from 'react-icons/fa6'
 
 const Task = ({ task }) => {
   const [fetchError, setFetchError] = useState('')
@@ -16,8 +17,8 @@ const Task = ({ task }) => {
   const completeHandler = async () => {
     setFetchError('')
 
-    const newStatus = task.status === 'Done' ? 'Active' : 'Done'
     const prevStatus = task.status
+    const newStatus = task.status === 'Done' ? 'Active' : 'Done'
 
     dispatch(updateStatus({ id: taskId, status: newStatus }))
 
@@ -60,14 +61,19 @@ const Task = ({ task }) => {
           <div className={styles.task__textCell}>{task.task}</div>
         </td>
 
-        <td>{task.status}</td>
+        <td>
+          <div className={styles.task__statusWrapper}>
+            {task.status}
+            <FaAngleDown />
+          </div>
+        </td>
         <td>{task.category}</td>
 
         <td>
           <span>{displayDate}</span>
         </td>
 
-        <td>{task.remainingTime}h</td>
+        <td>{task.remainingTime === 0 ? 'None' : task.remainingTime + 'h'}</td>
 
         <td>
           <button className={styles.deleteBtn} onClick={deleteTaskHandler}>

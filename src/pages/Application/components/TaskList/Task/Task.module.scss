@@ -78,6 +78,14 @@
     }
   }
 
+  .task__statusWrapper {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 0.5rem;
+  }
+
   .task__textCell {
     display: block;
     max-width: 100%;

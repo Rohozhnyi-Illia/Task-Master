@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
 import * as styles from './Application.module.scss'
-import { search } from '../../assets'
+import { search } from '@assets'
 import CategorySelect from './components/CategorySelect/CategorySelect'
 import AddButton from './components/AddButton/AddButton'
 import TaskList from './components/TaskList/TaskList/TaskList'
 import AddModal from './components/AddModal/AddModal'
 import { Loader, ErrorModal } from '@components'
-import TaskService from '../../services/taskService'
+import TaskService from '@services/taskService'
 import { useDispatch } from 'react-redux'
-import { getTasks } from '../../store/tasksSlice'
+import { getTasks } from '@store/tasksSlice'
 
 const Application = () => {
   const [selected, setSelected] = useState('')

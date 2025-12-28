@@ -71,7 +71,7 @@ const Header = () => {
 
     fetchData()
 
-    intervalId = setInterval(fetchData, 15 * 60 * 1000)
+    intervalId = setInterval(fetchData, 1 * 60 * 1000)
 
     return () => clearInterval(intervalId)
   }, [dispatch])

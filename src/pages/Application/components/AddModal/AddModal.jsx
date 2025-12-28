@@ -187,8 +187,8 @@ const AddModal = ({ openModalHandler, isAddModalOpen }) => {
           <label htmlFor="reminder">Remaining Time(hours)</label>
           <CategorySelect
             id="reminder"
-            options={['24', '48', '72', '96', '120']}
-            onChange={(val) => setReminderSelected(val)}
+            options={['None', '24', '48', '72', '96', '120']}
+            onChange={(val) => setReminderSelected(val === 'None' ? '0' : val)}
             selected={reminderSelected}
             setSelected={setReminderSelected}
             label="When to remind?"
