@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import * as styles from './Notification.module.scss'
 import { FaCheckCircle, FaTrash } from 'react-icons/fa'
 import firstLetterToUpperCase from '@utils/helpers/firstLetterToUpperCase'
@@ -9,10 +9,9 @@ import {
   restoreNotification,
 } from '@store/notificationSlice'
 import { useDispatch, useSelector } from 'react-redux'
-import { ErrorModal } from '@components'
+import { showError } from '@store/errorSlice'
 
 const Notification = ({ type, id, message }) => {
-  const [fetchError, setFetchError] = useState('')
   const dispatch = useDispatch()
   const notification = useSelector((state) => state.notification.find((n) => n._id === id))
   const isRead = notification?.isRead
@@ -29,13 +28,12 @@ const Notification = ({ type, id, message }) => {
     try {
       const res = await NotificationService.markAsRead(id)
       if (!res.success) {
-        setFetchError(res.error)
-
         dispatch(readNotification({ id, markAsRead: false }))
+        dispatch(showError(res.error))
       }
     } catch (error) {
-      setFetchError(error)
       dispatch(readNotification({ id, markAsRead: false }))
+      dispatch(showError(error.message || 'Something went wrong'))
     }
   }
 
@@ -47,43 +45,38 @@ const Notification = ({ type, id, message }) => {
     try {
       const res = await NotificationService.deleteNotification(id)
       if (!res.success) {
-        setFetchError(res.error)
-
         dispatch(restoreNotification(notificationToDelete))
+        dispatch(showError(res.error))
       }
     } catch (error) {
-      setFetchError(error)
       dispatch(restoreNotification(notificationToDelete))
+      dispatch(showError(error.message || 'Something went wrong'))
     }
   }
 
   return (
-    <>
-      <div
-        className={`${styles.notification} ${styles[getModifier(type)]} ${
-          isRead ? styles.read : ''
-        }`}
-      >
-        <div className={styles.notification__header}>
-          <h4 className={styles.notification__title}>{firstLetterToUpperCase(type)}</h4>
-          <div className={styles.notification__buttons}>
-            {!isRead && (
-              <button type="button" onClick={readHandler}>
-                <FaCheckCircle />
-                <p>Read</p>
-              </button>
-            )}
-            <button type="button" onClick={deleteHandler}>
-              <FaTrash />
-              <p>Delete</p>
+    <div
+      className={`${styles.notification} ${styles[getModifier(type)]} ${
+        isRead ? styles.read : ''
+      }`}
+    >
+      <div className={styles.notification__header}>
+        <h4 className={styles.notification__title}>{firstLetterToUpperCase(type)}</h4>
+        <div className={styles.notification__buttons}>
+          {!isRead && (
+            <button type="button" onClick={readHandler}>
+              <FaCheckCircle />
+              <p>Read</p>
             </button>
-          </div>
+          )}
+          <button type="button" onClick={deleteHandler}>
+            <FaTrash />
+            <p>Delete</p>
+          </button>
         </div>
-        <p className={styles.notification__text}>{message}</p>
       </div>
-
-      {fetchError && <ErrorModal error={fetchError} onClick={() => setFetchError('')} />}
-    </>
+      <p className={styles.notification__text}>{message}</p>
+    </div>
   )
 }
 

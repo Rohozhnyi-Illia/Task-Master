@@ -1,89 +1,75 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { trash } from '@assets'
 import * as styles from './Task.module.scss'
 import { useDispatch } from 'react-redux'
 import TaskService from '@services/taskService'
 import { deleteTasks, updateStatus, restoreTask } from '@store/tasksSlice'
-import { ErrorModal } from '@components'
+import { showError } from '@store/errorSlice'
 import { FaAngleDown } from 'react-icons/fa6'
 
 const Task = ({ task }) => {
-  const [fetchError, setFetchError] = useState('')
   const displayDate = task.deadline.split('T')[0]
   const taskId = task._id
   const dispatch = useDispatch()
   const isCompleted = task.status === 'Done'
 
   const completeHandler = async () => {
-    setFetchError('')
-
     const prevStatus = task.status
     const newStatus = task.status === 'Done' ? 'Active' : 'Done'
 
     dispatch(updateStatus({ id: taskId, status: newStatus }))
 
-    try {
-      await TaskService.updateStatus(taskId, newStatus)
-    } catch (error) {
+    const res = await TaskService.updateStatus(taskId, newStatus)
+
+    if (!res.success) {
       dispatch(updateStatus({ id: taskId, status: prevStatus }))
-      setFetchError(error?.response?.data?.error || error?.message || 'Error updating task')
+      dispatch(showError(res.error))
     }
   }
 
   const deleteTaskHandler = async () => {
-    setFetchError('')
-
     const deleted = task
 
     dispatch(deleteTasks(taskId))
 
-    try {
-      const res = await TaskService.deleteTasks(taskId)
+    const res = await TaskService.deleteTasks(taskId)
 
-      if (!res.success) {
-        dispatch(restoreTask(deleted))
-        setFetchError(res.error)
-      }
-    } catch (error) {
+    if (!res.success) {
       dispatch(restoreTask(deleted))
-      setFetchError(error?.response?.data?.error || error?.message || 'Error deleting task')
+      dispatch(showError(res.error))
     }
   }
 
   return (
-    <>
-      <tr className={isCompleted ? `${styles.task} ${styles.done}` : styles.task}>
-        <td>
-          <input type="checkbox" checked={task.status === 'Done'} onChange={completeHandler} />
-        </td>
+    <tr className={isCompleted ? `${styles.task} ${styles.done}` : styles.task}>
+      <td>
+        <input type="checkbox" checked={isCompleted} onChange={completeHandler} />
+      </td>
 
-        <td>
-          <div className={styles.task__textCell}>{task.task}</div>
-        </td>
+      <td>
+        <div className={styles.task__textCell}>{task.task}</div>
+      </td>
 
-        <td>
-          <div className={styles.task__statusWrapper}>
-            {task.status}
-            <FaAngleDown />
-          </div>
-        </td>
-        <td>{task.category}</td>
+      <td>
+        <div className={styles.task__statusWrapper}>
+          {task.status}
+          <FaAngleDown />
+        </div>
+      </td>
+      <td>{task.category}</td>
 
-        <td>
-          <span>{displayDate}</span>
-        </td>
+      <td>
+        <span>{displayDate}</span>
+      </td>
 
-        <td>{task.remainingTime === 0 ? 'None' : task.remainingTime + 'h'}</td>
+      <td>{task.remainingTime === 0 ? 'None' : task.remainingTime + 'h'}</td>
 
-        <td>
-          <button className={styles.deleteBtn} onClick={deleteTaskHandler}>
-            <img src={trash} alt="delete" />
-          </button>
-        </td>
-      </tr>
-
-      {fetchError && <ErrorModal error={fetchError} onClick={() => setFetchError('')} />}
-    </>
+      <td>
+        <button className={styles.deleteBtn} onClick={deleteTaskHandler}>
+          <img src={trash} alt="delete" />
+        </button>
+      </td>
+    </tr>
   )
 }
 

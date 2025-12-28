@@ -5,48 +5,42 @@ import CategorySelect from './components/CategorySelect/CategorySelect'
 import AddButton from './components/AddButton/AddButton'
 import TaskList from './components/TaskList/TaskList/TaskList'
 import AddModal from './components/AddModal/AddModal'
-import { Loader, ErrorModal } from '@components'
+import { Loader } from '@components'
 import TaskService from '@services/taskService'
 import { useDispatch } from 'react-redux'
 import { getTasks } from '@store/tasksSlice'
+import { showError } from '@store/errorSlice'
 
 const Application = () => {
   const [selected, setSelected] = useState('')
   const [keywordValue, setKeyWordValue] = useState('')
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
-  const [fetchError, setFetchError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const dispatch = useDispatch()
 
-  const keywordValueHandler = (e) => {
-    setKeyWordValue(e.target.value)
-  }
-
+  const keywordValueHandler = (e) => setKeyWordValue(e.target.value)
   const openModalHandler = () => setIsAddModalOpen(!isAddModalOpen)
+  const addButtonRef = useRef(null)
 
   useEffect(() => {
-    setIsLoading(true)
-
     const fetchTasks = async () => {
+      setIsLoading(true)
       try {
         const res = await TaskService.getAllTasks()
-
-        if (!res.success) {
-          setFetchError(res.error)
-          return
+        if (res.success) {
+          dispatch(getTasks(res.data))
+        } else {
+          dispatch(showError(res.error)) // глобальная модалка
         }
-
-        dispatch(getTasks(res.data))
-      } catch (err) {
-        console.error(err)
+      } catch (error) {
+        dispatch(showError(error.message || 'Something went wrong'))
       } finally {
         setIsLoading(false)
       }
     }
+
     fetchTasks()
   }, [dispatch])
-
-  const addButtonRef = useRef(null)
 
   return (
     <div className={styles.application}>
@@ -88,7 +82,6 @@ const Application = () => {
         {isAddModalOpen && (
           <AddModal openModalHandler={openModalHandler} isAddModalOpen={isAddModalOpen} />
         )}
-        {fetchError && <ErrorModal error={fetchError} onClick={() => setFetchError('')} />}
         {isLoading && <Loader />}
       </div>
     </div>

@@ -7,72 +7,47 @@ import useTheme from '../../hooks/useTheme'
 import { logout } from '@store/authSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import AuthService from '@services/authService'
-import { ErrorModal } from '@components'
 import NotificationService from '../../services/notificationService'
 import { getNotifications } from '../../store/notificationSlice'
+import { showError } from '@store/errorSlice'
 
 const Header = () => {
   const notificationsList = useSelector((state) => state.notification) || []
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [fetchError, setFetchError] = useState('')
   const { theme, setTheme } = useTheme()
   const isDark = theme === 'dark'
-
   const headerRef = useRef(null)
-
   const dispatch = useDispatch()
 
-  const modalOpenHandler = () => {
-    setIsModalOpen(!isModalOpen)
-  }
+  const modalOpenHandler = () => setIsModalOpen(!isModalOpen)
   const toggleTheme = () => setTheme(isDark ? 'light' : 'dark')
 
   const logoutHandler = async () => {
-    setFetchError('')
     setIsLoading(true)
+    const res = await AuthService.logout()
 
-    try {
-      const res = await AuthService.logout()
-
-      if (!res.success) {
-        setFetchError(res.error || 'Something went wrong')
-        return
-      }
-
+    if (res.success) {
       dispatch(logout())
-    } catch (error) {
-      setFetchError(error.message || 'Network error')
-    } finally {
-      setIsLoading(false)
+    } else {
+      dispatch(showError(res.error))
     }
+
+    setIsLoading(false)
   }
 
   useEffect(() => {
-    let intervalId
-
-    const fetchData = async () => {
-      setFetchError('')
-
-      try {
-        const res = await NotificationService.getUserNotifications()
-
-        if (!res.success) {
-          setFetchError(res.error || 'Something went wrong')
-          return
-        }
-
+    const fetchNotifications = async () => {
+      const res = await NotificationService.getUserNotifications()
+      if (res.success) {
         dispatch(getNotifications(res.data))
-        console.log(res.data)
-      } catch (error) {
-        setFetchError(error.message || 'Something went wrong')
+      } else {
+        dispatch(showError(res.error))
       }
     }
 
-    fetchData()
-
-    intervalId = setInterval(fetchData, 1 * 60 * 1000)
-
+    fetchNotifications()
+    const intervalId = setInterval(fetchNotifications, 1 * 60 * 1000)
     return () => clearInterval(intervalId)
   }, [dispatch])
 
@@ -80,14 +55,12 @@ const Header = () => {
     const setHeaderHeight = () => {
       if (headerRef.current) {
         const height = headerRef.current.offsetHeight
-
         document.documentElement.style.setProperty('--header-height', `${height}px`)
       }
     }
 
     setHeaderHeight()
     window.addEventListener('resize', setHeaderHeight)
-
     return () => window.removeEventListener('resize', setHeaderHeight)
   }, [])
 
@@ -114,7 +87,6 @@ const Header = () => {
                     alt="notifications"
                     className={styles.header__icon}
                   />
-
                   {notificationsList.length > 0 && (
                     <div className={styles.header__notification_quantity}>
                       {notificationsList.length}
@@ -163,8 +135,6 @@ const Header = () => {
             <span></span>
             <span></span>
           </div>
-
-          {fetchError && <ErrorModal error={fetchError} onClick={() => setFetchError('')} />}
         </div>
       </div>
     </header>

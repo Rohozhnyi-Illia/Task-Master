@@ -1,4 +1,5 @@
 import api from './api'
+import parseError from '@utils/helpers/parseError'
 
 const authService = class AuthServcie {
   async register({ email, password, name }) {
@@ -6,11 +7,7 @@ const authService = class AuthServcie {
       const res = await api.post('/auth/register', { email, password, name })
       return { success: true, data: res.data }
     } catch (error) {
-      const message =
-        error.response?.data?.error ||
-        error.response?.data?.message ||
-        error.message ||
-        'Error'
+      const message = parseError(error)
       return { success: false, error: message }
     }
   }
@@ -20,11 +17,7 @@ const authService = class AuthServcie {
       const res = await api.post('/auth/verify-email', { email, verifyCode })
       return { success: true, data: res.data }
     } catch (error) {
-      const message =
-        error.response?.data?.error ||
-        error.response?.data?.message ||
-        error.message ||
-        'Error'
+      const message = parseError(error)
       return { success: false, error: message }
     }
   }
@@ -34,11 +27,7 @@ const authService = class AuthServcie {
       const res = await api.post('/auth/re-verify-email', { email })
       return { success: true, data: res.data }
     } catch (error) {
-      const message =
-        error.response?.data?.error ||
-        error.response?.data?.message ||
-        error.message ||
-        'Error'
+      const message = parseError(error)
       return { success: false, error: message }
     }
   }
@@ -48,11 +37,7 @@ const authService = class AuthServcie {
       const res = await api.post('/auth/login', { email, password })
       return { success: true, data: res.data }
     } catch (error) {
-      const message =
-        error.response?.data?.error ||
-        error.response?.data?.message ||
-        error.message ||
-        'Error'
+      const message = parseError(error)
       return { success: false, error: message }
     }
   }
@@ -62,11 +47,7 @@ const authService = class AuthServcie {
       const res = await api.post('/auth/logout')
       return { success: true, data: res.data }
     } catch (error) {
-      const message =
-        error.response?.data?.error ||
-        error.response?.data?.message ||
-        error.message ||
-        'Error'
+      const message = parseError(error)
       return { success: false, error: message }
     }
   }
@@ -76,11 +57,7 @@ const authService = class AuthServcie {
       const res = await api.post('/auth/update-password', { email })
       return { success: true, data: res.data }
     } catch (error) {
-      const message =
-        error.response?.data?.error ||
-        error.response?.data?.message ||
-        error.message ||
-        'Error'
+      const message = parseError(error)
       return { success: false, error: message }
     }
   }
@@ -96,11 +73,7 @@ const authService = class AuthServcie {
 
       return { success: true, data: res.data }
     } catch (error) {
-      const message =
-        error.response?.data?.error ||
-        error.response?.data?.message ||
-        error.message ||
-        'Error'
+      const message = parseError(error)
       return { success: false, error: message }
     }
   }

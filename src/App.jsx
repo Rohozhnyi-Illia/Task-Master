@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import store from './store/store'
 import ProtectedPath from './services/ProtectedPath'
-import { Loader } from './components'
+import { Loader, GlobalErrorModal } from './components'
 
 const Login = lazy(() => import('./pages/Auth/Login'))
 const UpdatePassword = lazy(() => import('./pages/Auth/UpdatePassword'))
@@ -60,6 +60,7 @@ function App() {
               <Route path="/notifications" element={<Notifications />} />
             </Route>
           </Routes>
+          <GlobalErrorModal />
         </Router>
       </Suspense>
     </Provider>

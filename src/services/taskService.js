@@ -1,13 +1,14 @@
 import api from './api'
+import parseError from '@utils/helpers/parseError'
 
 const taskService = class taskService {
   async getAllTasks() {
     try {
-      const { data } = await api.get('/tasks') // относительный путь
+      const { data } = await api.get('/tasks')
       return { success: true, data: data.tasks || data }
-    } catch (err) {
-      console.error('Get All Tasks Error:', err)
-      throw err
+    } catch (error) {
+      const message = parseError(error)
+      return { success: false, error: message }
     }
   }
 
@@ -22,11 +23,7 @@ const taskService = class taskService {
       })
       return { success: true, data }
     } catch (error) {
-      const message =
-        error.response?.data?.error ||
-        error.response?.data?.message ||
-        error.message ||
-        'Error'
+      const message = parseError(error)
       return { success: false, error: message }
     }
   }
@@ -36,11 +33,7 @@ const taskService = class taskService {
       const { data } = await api.delete(`/tasks/${id}`)
       return { success: true, data }
     } catch (error) {
-      const message =
-        error.response?.data?.error ||
-        error.response?.data?.message ||
-        error.message ||
-        'Error'
+      const message = parseError(error)
       return { success: false, error: message }
     }
   }
@@ -50,11 +43,7 @@ const taskService = class taskService {
       const { data } = await api.patch(`/tasks/${id}/complete`)
       return { success: true, data }
     } catch (error) {
-      const message =
-        error.response?.data?.error ||
-        error.response?.data?.message ||
-        error.message ||
-        'Error'
+      const message = parseError(error)
       return { success: false, error: message }
     }
   }
@@ -64,11 +53,7 @@ const taskService = class taskService {
       const { data } = await api.patch(`/tasks/${id}/status`, { status })
       return { success: true, data }
     } catch (error) {
-      const message =
-        error.response?.data?.error ||
-        error.response?.data?.message ||
-        error.message ||
-        'Error'
+      const message = parseError(error)
       return { success: false, error: message }
     }
   }

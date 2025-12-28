@@ -1,4 +1,5 @@
 import api from './api'
+import parseError from '@utils/helpers/parseError'
 
 const notificationService = class notificationService {
   async getUserNotifications() {
@@ -6,11 +7,7 @@ const notificationService = class notificationService {
       const { data } = await api.get('/notification')
       return { success: true, data }
     } catch (error) {
-      const message =
-        error.response?.data?.error ||
-        error.response?.data?.message ||
-        error.message ||
-        'Error fetching notifications'
+      const message = parseError(error)
       return { success: false, error: message }
     }
   }
@@ -20,11 +17,7 @@ const notificationService = class notificationService {
       const { data } = await api.patch(`/notification/${id}/read`)
       return { success: true, data }
     } catch (error) {
-      const message =
-        error.response?.data?.error ||
-        error.response?.data?.message ||
-        error.message ||
-        'Error marking notification as read'
+      const message = parseError(error)
       return { success: false, error: message }
     }
   }
@@ -34,11 +27,7 @@ const notificationService = class notificationService {
       const { data } = await api.delete(`/notification/${id}`)
       return { success: true, data }
     } catch (error) {
-      const message =
-        error.response?.data?.error ||
-        error.response?.data?.message ||
-        error.message ||
-        'Error deleting notification'
+      const message = parseError(error)
       return { success: false, error: message }
     }
   }

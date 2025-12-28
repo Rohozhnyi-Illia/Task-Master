@@ -4,6 +4,7 @@ import { calendar, trash } from '@assets'
 import { useDispatch } from 'react-redux'
 import TaskService from '@services/taskService'
 import { deleteTasks, updateStatus, restoreTask } from '@store/tasksSlice'
+import { showError } from '@store/errorSlice'
 import { ErrorModal } from '@components'
 
 const TaskMobile = ({ task }) => {
@@ -14,38 +15,29 @@ const TaskMobile = ({ task }) => {
   const isCompleted = task.status === 'Done'
 
   const deleteTaskHandler = async () => {
-    setFetchError('')
-
     const deleted = task
 
     dispatch(deleteTasks(taskId))
 
-    try {
-      const res = await TaskService.deleteTasks(taskId)
+    const res = await TaskService.deleteTasks(taskId)
 
-      if (!res.success) {
-        dispatch(restoreTask(deleted))
-        setFetchError(res.error)
-      }
-    } catch (error) {
+    if (!res.success) {
       dispatch(restoreTask(deleted))
-      setFetchError(error?.response?.data?.error || error?.message || 'Error deleting task')
+      dispatch(showError(res.error))
     }
   }
 
   const completeHandler = async () => {
-    setFetchError('')
-
-    const newStatus = task.status === 'Done' ? 'Active' : 'Done'
     const prevStatus = task.status
+    const newStatus = task.status === 'Done' ? 'Active' : 'Done'
 
     dispatch(updateStatus({ id: taskId, status: newStatus }))
 
-    try {
-      await TaskService.updateStatus(taskId, newStatus)
-    } catch (error) {
+    const res = await TaskService.updateStatus(taskId, newStatus)
+
+    if (!res.success) {
       dispatch(updateStatus({ id: taskId, status: prevStatus }))
-      setFetchError(error?.response?.data?.error || error?.message || 'Error updating task')
+      dispatch(showError(res.error))
     }
   }
 

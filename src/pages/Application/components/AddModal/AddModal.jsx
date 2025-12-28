@@ -5,11 +5,11 @@ import AddButton from '../AddButton/AddButton'
 import { closeModal } from '@assets'
 import addTaskSchema from '@utils/validation/addTask-validation'
 import { ErrorMessage } from '@components'
-import { ErrorModal, Loader } from '@components'
 import TaskService from '@services/taskService'
 import { createTask } from '@store/tasksSlice'
 import { useDispatch } from 'react-redux'
 import firstLetterToUpperCase from '@utils/helpers/firstLetterToUpperCase'
+import { showError } from '@store/errorSlice'
 
 const AddModal = ({ openModalHandler, isAddModalOpen }) => {
   const [categorySelected, setCategorySelected] = useState('')
@@ -17,9 +17,6 @@ const AddModal = ({ openModalHandler, isAddModalOpen }) => {
   const [task, setTask] = useState('')
   const [deadline, setDeadline] = useState({ day: '', month: '', year: '' })
   const [errors, setErrors] = useState({})
-  const [fetchError, setFetchError] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
   const dispatch = useDispatch()
 
   const onChangeHandler = (e) => {
@@ -34,7 +31,6 @@ const AddModal = ({ openModalHandler, isAddModalOpen }) => {
   }
 
   const closeModalHandler = () => {
-    setIsErrorModalOpen(false)
     openModalHandler()
   }
 
@@ -63,11 +59,7 @@ const AddModal = ({ openModalHandler, isAddModalOpen }) => {
       now.setHours(0, 0, 0)
 
       if (formattedDate < now) {
-        setErrors((prev) => ({
-          ...prev,
-          date: 'Deadline must be in the future',
-        }))
-
+        setErrors((prev) => ({ ...prev, date: 'Deadline must be in the future' }))
         return
       }
 
@@ -80,7 +72,7 @@ const AddModal = ({ openModalHandler, isAddModalOpen }) => {
       })
 
       if (!res.success) {
-        setFetchError(res.error)
+        dispatch(showError(res.error))
         return
       }
 
@@ -100,11 +92,8 @@ const AddModal = ({ openModalHandler, isAddModalOpen }) => {
         })
         setErrors(newErrors)
       } else {
-        setFetchError(err.message || 'Something went wrong')
-        setIsErrorModalOpen(true)
+        dispatch(showError(err.message || 'Something went wrong'))
       }
-    } finally {
-      setIsLoading(false)
     }
   }
 
@@ -255,9 +244,6 @@ const AddModal = ({ openModalHandler, isAddModalOpen }) => {
           <AddButton type="submit" />
         </div>
       </form>
-
-      {isLoading && <Loader />}
-      {isErrorModalOpen && <ErrorModal error={fetchError} onClick={closeModalHandler} />}
     </div>
   )
 }
