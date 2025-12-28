@@ -110,6 +110,18 @@
   }
 }
 
+.task__dateWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 1rem;
+
+  span {
+    text-align: center;
+    min-width: 100px;
+  }
+}
+
 .task.done {
   th,
   td {

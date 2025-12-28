@@ -1,5 +1,5 @@
 import React from 'react'
-import { trash } from '@assets'
+import { trash, calendar } from '@assets'
 import * as styles from './Task.module.scss'
 import { useDispatch } from 'react-redux'
 import TaskService from '@services/taskService'
@@ -59,7 +59,10 @@ const Task = ({ task }) => {
       <td>{task.category}</td>
 
       <td>
-        <span>{displayDate}</span>
+        <div className={styles.task__dateWrapper}>
+          <span>{displayDate}</span>
+          <img src={calendar} alt="calendar" />
+        </div>
       </td>
 
       <td>{task.remainingTime === 0 ? 'None' : task.remainingTime + 'h'}</td>

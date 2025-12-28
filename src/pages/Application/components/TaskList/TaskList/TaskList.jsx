@@ -44,6 +44,15 @@ const TaskList = ({ keyword, selected }) => {
         {filteredTasks.length > 0 && (
           <div className={styles.taskList__tableWrapper}>
             <table className={styles.taskList__table}>
+              <colgroup>
+                <col style={{ width: '100px' }} />
+                <col style={{ width: '300px' }} />
+                <col style={{ width: '120px' }} />
+                <col style={{ width: '120px' }} />
+                <col style={{ width: '180px' }} />
+                <col style={{ width: '120px' }} />
+                <col style={{ width: '100px' }} />
+              </colgroup>
               <thead>
                 <tr>
                   <th>Completed</th>
