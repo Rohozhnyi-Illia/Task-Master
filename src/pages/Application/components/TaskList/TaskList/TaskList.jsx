@@ -12,8 +12,11 @@ const TaskList = ({ keyword, selected }) => {
 
   const filteredTasks = tasks.filter((task) => {
     const matchesKeyword = !keyword || task.task.toLowerCase().includes(keyword.toLowerCase())
-    const matchesCategory = !selected || selected === 'All' || task.category === selected
-    return matchesKeyword && matchesCategory
+
+    const matchesCategoryOrStatus =
+      !selected || selected === 'All' || task.category === selected || task.status === selected
+
+    return matchesKeyword && matchesCategoryOrStatus
   })
 
   const totalPages = Math.ceil(filteredTasks.length / taskPerPage)
@@ -46,12 +49,12 @@ const TaskList = ({ keyword, selected }) => {
             <table className={styles.taskList__table}>
               <colgroup>
                 <col style={{ width: '100px' }} />
-                <col style={{ width: '300px' }} />
+                <col style={{ width: '220px' }} />
                 <col style={{ width: '120px' }} />
                 <col style={{ width: '120px' }} />
                 <col style={{ width: '180px' }} />
                 <col style={{ width: '120px' }} />
-                <col style={{ width: '100px' }} />
+                <col style={{ width: '80px' }} />
               </colgroup>
               <thead>
                 <tr>

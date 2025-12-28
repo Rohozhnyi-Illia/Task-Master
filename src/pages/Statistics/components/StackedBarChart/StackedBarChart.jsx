@@ -23,6 +23,15 @@ const StackedBarChart = ({ tasks }) => {
     (cat) => tasks.filter((task) => task.category === cat && task.status === 'Done').length
   )
 
+  const inProgressCounts = categories.map(
+    (cat) =>
+      tasks.filter((task) => task.category === cat && task.status === 'InProgress').length
+  )
+
+  const archivedCounts = categories.map(
+    (cat) => tasks.filter((task) => task.category === cat && task.status === 'Archived').length
+  )
+
   const data = {
     labels: categories,
     datasets: [
@@ -35,6 +44,16 @@ const StackedBarChart = ({ tasks }) => {
         label: 'Done',
         data: doneCounts,
         backgroundColor: '#4386dfff',
+      },
+      {
+        label: 'InProgress',
+        data: inProgressCounts,
+        backgroundColor: '#b32929',
+      },
+      {
+        label: 'Archived',
+        data: archivedCounts,
+        backgroundColor: '#999999',
       },
     ],
   }

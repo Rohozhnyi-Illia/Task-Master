@@ -116,6 +116,10 @@
     flex-direction: column;
   }
 
+  .statusBar__title {
+    font-size: 50px;
+  }
+
   @media screen and (min-width: 1024px) {
     &__header {
       flex-wrap: nowrap;

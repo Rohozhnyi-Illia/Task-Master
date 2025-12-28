@@ -11,11 +11,23 @@ import { useDispatch } from 'react-redux'
 import { getTasks } from '@store/tasksSlice'
 import { showError } from '@store/errorSlice'
 
+const FILTER_OPTIONS = [
+  'All',
+  'High',
+  'Middle',
+  'Low',
+  'Active',
+  'Done',
+  'InProgress',
+  'Archived',
+]
+
 const Application = () => {
   const [selected, setSelected] = useState('')
   const [keywordValue, setKeyWordValue] = useState('')
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+
   const dispatch = useDispatch()
 
   const keywordValueHandler = (e) => setKeyWordValue(e.target.value)
@@ -30,7 +42,7 @@ const Application = () => {
         if (res.success) {
           dispatch(getTasks(res.data))
         } else {
-          dispatch(showError(res.error)) // глобальная модалка
+          dispatch(showError(res.error))
         }
       } catch (error) {
         dispatch(showError(error.message || 'Something went wrong'))
@@ -62,7 +74,7 @@ const Application = () => {
 
             <div className={styles.application__categories}>
               <CategorySelect
-                options={['All', 'High', 'Middle', 'Low']}
+                options={FILTER_OPTIONS}
                 onChange={(val) => setSelected(val)}
                 selected={selected}
                 setSelected={setSelected}
@@ -82,6 +94,7 @@ const Application = () => {
         {isAddModalOpen && (
           <AddModal openModalHandler={openModalHandler} isAddModalOpen={isAddModalOpen} />
         )}
+
         {isLoading && <Loader />}
       </div>
     </div>
