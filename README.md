@@ -66,8 +66,8 @@ npm start # development mode
 npm run build # production build
 ```
 
-“Edit this file to switch between local and deployed backend.”
 Open src/services/api.js and set the backend URL
+Edit this file to switch between local and deployed backend.
 
 ```js
 // Use deployed backend
