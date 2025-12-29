@@ -15,8 +15,10 @@
   }
 
   td {
-    @include m.text-style(v.$font-size-sm, v.$font-weight-medium, v.$line-height-default);
+    padding: 1rem;
+    @include m.text-style(v.$font-size-sm, v.$font-weight-medium, 1.2);
     color: #b3b3b3;
+    line-height: 1.1;
   }
 
   & > td:first-child {
@@ -55,34 +57,34 @@
   }
 
   input[type='checkbox'] {
-    width: 2rem;
-    height: 2rem;
+    width: 1.6rem;
+    height: 1.6rem;
     cursor: pointer;
   }
 
   &.done {
-    background-color: #e0ffe0; // светло-зеленый для Done
+    background-color: #e0ffe0;
     color: #333;
   }
 
   &.inprogress {
-    background-color: #fff4e0; // светло-оранжевый
+    background-color: #fff4e0;
     color: #333;
   }
 
   &.active {
-    background-color: #e0f0ff; // светло-голубой
+    background-color: #e0f0ff;
     color: #333;
   }
 
   &.archived {
-    background-color: #f5f5f5; // серый
+    background-color: #f5f5f5;
     color: #999;
-    font-style: italic; // чтобы сразу визуально выделялось
+    font-style: italic;
   }
 
   &__dateWrapper {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     column-gap: 1rem;
@@ -90,6 +92,11 @@
     span {
       text-align: center;
       min-width: 95px;
+    }
+
+    img {
+      width: 1.8rem;
+      height: 1.8rem;
     }
   }
 
@@ -100,6 +107,10 @@
     align-items: center;
     justify-content: center;
     column-gap: 0.5rem;
+  }
+
+  &__dropdown {
+    height: 14.4rem;
   }
 
   &__dropdownList {
@@ -142,8 +153,8 @@
     justify-content: center;
 
     img {
-      max-width: 2.5rem;
-      max-height: 2.5rem;
+      max-width: 2rem;
+      max-height: 2rem;
     }
   }
 }

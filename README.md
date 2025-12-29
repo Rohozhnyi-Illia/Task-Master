@@ -9,17 +9,8 @@ _Dark Theme_
 _Statistics Page_
 ![Statistics](./src/assets/preview/Statistics.jpg)
 
-_Login Page_
-![Login](./src/assets/preview/Login.jpg)
-
-_Sign Up Page_
-![Sign Up](./src/assets/preview/Sign-Up.jpg)
-
-_Adding Data Modal Window_
-![Adding Data](./src/assets/preview/Add-modal.jpg)
-
-_Pagination_
-![Pagination](./src/assets/preview/Pagination.jpg)
+_Notifications Page_
+![Notifications](./src/assets/preview/Notifications.jpg)
 
 Frontend application for **TaskMaster** — a task management platform with deadlines, notifications, and user authentication. Built with React, Redux Toolkit, SCSS, and Webpack.
 
@@ -71,8 +62,19 @@ npm install
 ## Running
 
 ```bash
-- npm start # development mode
-- npm run build # production build
+npm start # development mode
+npm run build # production build
+```
+
+“Edit this file to switch between local and deployed backend.”
+Open src/services/api.js and set the backend URL
+
+```js
+// Use deployed backend
+const currentURL = 1
+
+// To use a local backend, change to:
+const currentURL = 0
 ```
 
 Default frontend URL: http://localhost:3000

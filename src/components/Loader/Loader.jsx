@@ -1,11 +1,13 @@
 import React from 'react'
+import { createPortal } from 'react-dom'
 import * as styles from './Loader.module.scss'
 
 const Loader = () => {
-  return (
+  return createPortal(
     <div className={styles.loader__container}>
       <div className={styles.loader}></div>
-    </div>
+    </div>,
+    document.body
   )
 }
 

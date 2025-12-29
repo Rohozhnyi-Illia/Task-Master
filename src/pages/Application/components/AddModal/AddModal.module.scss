@@ -22,6 +22,10 @@
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 
+  fieldset {
+    border: none;
+  }
+
   &__content {
     position: relative;
 

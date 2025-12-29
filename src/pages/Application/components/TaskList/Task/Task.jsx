@@ -28,7 +28,7 @@ const Task = ({ task }) => {
     if (wrapperRef.current) {
       const rect = wrapperRef.current.getBoundingClientRect()
       setDropdownPos({
-        top: rect.bottom + window.scrollY,
+        top: rect.top + window.scrollY - 144 - 6,
         left: rect.left + window.scrollX,
         width: rect.width,
       })
@@ -151,6 +151,7 @@ const Task = ({ task }) => {
         {isDropdownOpen &&
           createPortal(
             <div
+              className={styles.task__dropdown}
               ref={dropdownRef}
               style={{
                 top: dropdownPos.top,
@@ -193,11 +194,7 @@ const Task = ({ task }) => {
       <td>{task.remainingTime === 0 ? 'None' : task.remainingTime + 'h'}</td>
 
       <td>
-        <div
-          ref={deleteWrapperRef}
-          style={{ display: 'inline-block' }}
-          className={styles.task__deleteWrapper}
-        >
+        <div ref={deleteWrapperRef} className={styles.task__deleteWrapper}>
           <button className={styles.deleteBtn} onClick={openDeleteMenu}>
             <img src={trash} alt="delete" />
           </button>

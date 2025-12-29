@@ -4,7 +4,7 @@ import CategorySelect from '../CategorySelect/CategorySelect'
 import AddButton from '../AddButton/AddButton'
 import { closeModal } from '@assets'
 import addTaskSchema from '@utils/validation/addTask-validation'
-import { ErrorMessage } from '@components'
+import { ErrorMessage, Loader } from '@components'
 import TaskService from '@services/taskService'
 import { createTask } from '@store/tasksSlice'
 import { useDispatch } from 'react-redux'
@@ -14,10 +14,13 @@ import { showError } from '@store/errorSlice'
 const AddModal = ({ openModalHandler, isAddModalOpen }) => {
   const [categorySelected, setCategorySelected] = useState('')
   const [reminderSelected, setReminderSelected] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
   const [task, setTask] = useState('')
   const [deadline, setDeadline] = useState({ day: '', month: '', year: '' })
   const [errors, setErrors] = useState({})
   const dispatch = useDispatch()
+  const isSubmittingRef = useRef(false)
+  const modalRef = useRef(null)
 
   const onChangeHandler = (e) => {
     const { value } = e.target
@@ -36,6 +39,9 @@ const AddModal = ({ openModalHandler, isAddModalOpen }) => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault()
+    if (isSubmittingRef.current) return
+    isSubmittingRef.current = true
+    setIsLoading(true)
 
     const formData = {
       task: firstLetterToUpperCase(task.trim()),
@@ -94,10 +100,12 @@ const AddModal = ({ openModalHandler, isAddModalOpen }) => {
       } else {
         dispatch(showError(err.message || 'Something went wrong'))
       }
+    } finally {
+      isSubmittingRef.current = false
+      setIsLoading(false)
     }
   }
 
-  const modalRef = useRef(null)
   useEffect(() => {
     if (!isAddModalOpen) return
 
@@ -134,117 +142,130 @@ const AddModal = ({ openModalHandler, isAddModalOpen }) => {
   }, [isAddModalOpen, openModalHandler])
 
   return (
-    <div
-      className={styles.addModal}
-      onClick={(e) => {
-        if (e.target === e.currentTarget) {
-          openModalHandler()
-        }
-      }}
-      ref={modalRef}
-    >
-      <form className={styles.addModal__content} onSubmit={onSubmitHandler}>
-        <button className={styles.addModal__button} onClick={openModalHandler} type="button">
-          <img src={closeModal} alt="close" />
-        </button>
+    <>
+      <div
+        className={styles.addModal}
+        onClick={(e) => {
+          if (e.target === e.currentTarget) {
+            openModalHandler()
+          }
+        }}
+        ref={modalRef}
+      >
+        <fieldset disabled={isLoading}>
+          <form className={styles.addModal__content} onSubmit={onSubmitHandler}>
+            <button
+              className={styles.addModal__button}
+              onClick={openModalHandler}
+              type="button"
+            >
+              <img src={closeModal} alt="close" />
+            </button>
 
-        <div>
-          <label htmlFor="task">Task Name</label>
-          <textarea
-            name="task"
-            id="task"
-            className={styles.addModal__textarea}
-            placeholder="Write text..."
-            onChange={onChangeHandler}
-            value={task}
-          />
-          <p
-            className={
-              task.length < 25
-                ? styles.addModal__length
-                : `${styles.addModal__length} ${styles.warning}`
-            }
-          >
-            {task.length}/25
-          </p>
-          {errors.task && (
-            <ErrorMessage error={errors.task} className={styles.addModal__error} />
-          )}
-        </div>
+            <div>
+              <label htmlFor="task">Task Name</label>
+              <textarea
+                name="task"
+                id="task"
+                className={styles.addModal__textarea}
+                placeholder="Write text..."
+                onChange={onChangeHandler}
+                value={task}
+              />
+              <p
+                className={
+                  task.length < 25
+                    ? styles.addModal__length
+                    : `${styles.addModal__length} ${styles.warning}`
+                }
+              >
+                {task.length}/25
+              </p>
+              {errors.task && (
+                <ErrorMessage error={errors.task} className={styles.addModal__error} />
+              )}
+            </div>
 
-        <div>
-          <label htmlFor="reminder">When to remind?</label>
-          <CategorySelect
-            id="reminder"
-            options={['None', '24', '48', '72', '96', '120']}
-            onChange={(val) => setReminderSelected(val === 'None' ? '0' : val)}
-            selected={reminderSelected}
-            setSelected={setReminderSelected}
-            label="Hours before task deadline"
-          />
-        </div>
+            <div>
+              <label htmlFor="reminder">When to remind?</label>
+              <CategorySelect
+                id="reminder"
+                options={['None', '24', '48', '72', '96', '120']}
+                onChange={(val) => setReminderSelected(val === 'None' ? '0' : val)}
+                selected={reminderSelected}
+                setSelected={setReminderSelected}
+                label="Hours before task deadline"
+              />
+            </div>
 
-        <div>
-          <label htmlFor="category">Category</label>
-          <CategorySelect
-            id="category"
-            options={['High', 'Middle', 'Low']}
-            onChange={(val) => setCategorySelected(val)}
-            selected={categorySelected}
-            setSelected={setCategorySelected}
-          />
-          {errors.category && (
-            <ErrorMessage error={errors.category} className={styles.addModal__error} />
-          )}
-        </div>
+            <div>
+              <label htmlFor="category">Category</label>
+              <CategorySelect
+                id="category"
+                options={['High', 'Middle', 'Low']}
+                onChange={(val) => setCategorySelected(val)}
+                selected={categorySelected}
+                setSelected={setCategorySelected}
+              />
+              {errors.category && (
+                <ErrorMessage error={errors.category} className={styles.addModal__error} />
+              )}
+            </div>
 
-        <div>
-          <label htmlFor="deadline">Task Deadline</label>
-          <div className={styles.addModal__deadline} id="deadline">
-            <input
-              type="number"
-              name="day"
-              id="day"
-              placeholder="Day"
-              onChange={deadlineHandler}
-              value={deadline.day}
-            />
-            <input
-              type="number"
-              name="month"
-              id="month"
-              placeholder="Month"
-              onChange={deadlineHandler}
-              value={deadline.month}
-            />
-            <input
-              type="number"
-              name="year"
-              id="year"
-              placeholder="Year"
-              onChange={deadlineHandler}
-              value={deadline.year}
-            />
-          </div>
-          {errors.day && (
-            <ErrorMessage error={errors.day} className={styles.addModal__error} />
-          )}
-          {errors.month && (
-            <ErrorMessage error={errors.month} className={styles.addModal__error} />
-          )}
-          {errors.year && (
-            <ErrorMessage error={errors.year} className={styles.addModal__error} />
-          )}
-          {errors.date && (
-            <ErrorMessage error={errors.date} className={styles.addModal__error} />
-          )}
-        </div>
+            <div>
+              <label htmlFor="deadline">Task Deadline</label>
+              <div className={styles.addModal__deadline} id="deadline">
+                <input
+                  type="number"
+                  name="day"
+                  id="day"
+                  placeholder="Day"
+                  onChange={deadlineHandler}
+                  value={deadline.day}
+                  autoComplete="bday-day"
+                />
+                <input
+                  type="number"
+                  name="month"
+                  id="month"
+                  placeholder="Month"
+                  onChange={deadlineHandler}
+                  value={deadline.month}
+                  autoComplete="bday-month"
+                />
+                <input
+                  type="number"
+                  name="year"
+                  id="year"
+                  placeholder="Year"
+                  onChange={deadlineHandler}
+                  value={deadline.year}
+                  autoComplete="bday-year"
+                />
+              </div>
+              {errors.day && (
+                <ErrorMessage error={errors.day} className={styles.addModal__error} />
+              )}
+              {errors.month && (
+                <ErrorMessage error={errors.month} className={styles.addModal__error} />
+              )}
+              {errors.year && (
+                <ErrorMessage error={errors.year} className={styles.addModal__error} />
+              )}
+              {errors.date && (
+                <ErrorMessage error={errors.date} className={styles.addModal__error} />
+              )}
+            </div>
 
-        <div>
-          <AddButton type="submit" />
-        </div>
-      </form>
-    </div>
+            <div>
+              <AddButton type="submit" disabled={isLoading} />
+            </div>
+          </form>
+        </fieldset>
+      </div>
+
+      {isLoading && <Loader />}
+    </>
   )
 }
 
