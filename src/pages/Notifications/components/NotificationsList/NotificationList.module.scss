@@ -2,13 +2,13 @@
 @use '@styles/mixins.scss' as m;
 
 .notificationList {
-  padding: 4rem 1.5rem;
+  padding: 4rem 0;
   width: 100%;
   flex: 1;
   display: flex;
   flex-direction: column;
   row-gap: 2rem;
-  align-items: end;
+  align-items: center;
 
   &.empty {
     padding: 0;

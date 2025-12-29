@@ -47,7 +47,7 @@ const Header = () => {
     }
 
     fetchNotifications()
-    const intervalId = setInterval(fetchNotifications, 1 * 60 * 1000)
+    const intervalId = setInterval(fetchNotifications, 20 * 60 * 1000)
     return () => clearInterval(intervalId)
   }, [dispatch])
 

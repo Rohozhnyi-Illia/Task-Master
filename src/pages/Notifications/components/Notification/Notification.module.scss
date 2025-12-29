@@ -2,127 +2,145 @@
 @use '@styles/mixins.scss' as m;
 
 .notification {
-  padding: 2rem;
-  position: relative;
-  width: 100%;
-  max-width: 70rem;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  column-gap: 1rem;
 
+  width: 100%;
+  max-width: 55rem;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-left: 2px solid transparent;
+  border-radius: v.$radius-lg;
+
+  cursor: pointer;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    background: #f9fafb;
+
+    .actions {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+}
+
+.icon {
+  font-size: 1.4rem;
+}
+
+.content {
   display: flex;
   flex-direction: column;
-  row-gap: 3rem;
-  border-radius: v.$radius-xl;
-  animation: fadeInUp 0.4s ease forwards;
+  row-gap: 1rem;
+}
 
-  &.reminder {
-    background-color: #4386dfff;
+.label {
+  font-size: 1.3rem;
+  font-weight: v.$font-weight-semibold;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #616670;
+}
 
-    &::after {
-      border-color: transparent #4386dfff transparent transparent;
+.text {
+  font-size: 1.3rem;
+  color: #111827;
+}
+
+.task {
+  font-weight: v.$font-weight-semibold;
+  color: #111827;
+}
+
+.actions {
+  display: flex;
+  column-gap: 0.4rem;
+  margin-left: auto;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+
+  button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #9ca3af;
+
+    svg {
+      width: 1.1rem;
+      height: 1.1rem;
     }
-  }
 
-  &.overdue {
-    background-color: #e79805;
-
-    &::after {
-      border-color: transparent #e79805 transparent transparent;
+    &:hover {
+      color: #111827;
     }
-  }
-
-  &.warning {
-    background-color: #b32929;
-
-    &::after {
-      border-color: transparent #b32929 transparent transparent;
-    }
-  }
-
-  &.read {
-    background-color: rgb(156, 156, 156);
-    transition: background-color 0.3s ease;
-
-    &::after {
-      border-color: transparent rgb(156, 156, 156) transparent transparent;
-      transition: border-color 0.3s ease;
-    }
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    right: -15px;
-    transform: translateY(-50%);
-    border-style: solid;
-    transition: border-color 0.3s ease;
-    border-width: 10px 20px 10px 0;
-    rotate: 225deg;
-  }
-
-  &__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  &__buttons {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    column-gap: 1rem;
-
-    button {
-      padding: 0 0.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      column-gap: 0.5rem;
-      border: 1px solid #fff;
-      border-radius: v.$radius-lg;
-      background-color: transparent;
-      color: #fff;
-      cursor: pointer;
-      @include m.hover-effect();
-
-      svg {
-        width: 1.5rem;
-        height: 1.5rem;
-      }
-
-      p {
-        @include m.text-style(
-          v.$font-size-sm,
-          v.$font-weight-semibold,
-          v.$line-height-default
-        );
-      }
-    }
-  }
-
-  &__title {
-    @include m.text-style(v.$font-size-md, v.$font-weight-bold, v.$line-height-default);
-    color: #fff;
-  }
-
-  &__text {
-    @include m.text-style(v.$font-size-sm, v.$font-weight-semibold, 160%);
-    color: #fff;
   }
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(3rem);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+.overdue {
+  border-left: 3px solid #dc2626;
+
+  .icon {
+    color: #dc2626;
   }
 }
 
-@media screen and (max-width: 768.1px) {
+.warning {
+  border-left: 3px solid #f59e0b;
+
+  .icon {
+    color: #f59e0b;
+  }
+}
+
+.reminder {
+  border-left: 3px solid #2563eb;
+
+  .icon {
+    color: #2563eb;
+  }
+}
+
+.unread {
+  .text {
+    font-weight: v.$font-weight-medium;
+  }
+}
+
+.read {
+  border-left: 3px solid #7a7a7a;
+  opacity: 0.7;
+
+  .text {
+    font-weight: v.$font-weight-regular;
+    color: #4b5563;
+  }
+
+  .icon {
+    color: #d1d5db;
+  }
+
+  .task {
+    font-weight: 600;
+  }
+}
+
+@media (max-width: 768.1px) {
   .notification {
-    width: 100%;
+    padding: 1rem;
+  }
+
+  .actions {
+    opacity: 1;
+
+    button svg {
+      width: 1.3rem;
+      height: 1.3rem;
+    }
   }
 }
