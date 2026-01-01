@@ -1,5 +1,8 @@
 # TaskMaster Frontend
 
+_Login Page_
+![Login](./src/assets/preview/Login.jpg)
+
 _Main Dashboard_
 ![Application](./src/assets/preview/Application.jpg)
 
@@ -41,13 +44,9 @@ Frontend application for **TaskMaster** — a task management platform with dead
 
 ## Technologies
 
-- React 18 / Hooks
-- Redux Toolkit for state management
-- React Router for navigation
-- Axios with interceptors for API calls
-- SCSS for styling
-- Webpack for bundling
-- Yup for validating all forms
+- **Frontend:** React 18, Redux Toolkit, React Router, SCSS, Webpack
+- **HTTP / API:** Axios with interceptors
+- **Validation:** Yup
 
 ---
 
@@ -66,18 +65,19 @@ npm start # development mode
 npm run build # production build
 ```
 
-Open src/services/api.js and set the backend URL
-Edit this file to switch between local and deployed backend.
+Default frontend URL: http://localhost:3000
+
+> By default, frontend uses the deployed backend at: https://taskmaster-backend-e940.onrender.com/api
+> To use a local backend instead, run your backend on http://localhost:9000 and edit src/services/api.js:
 
 ```js
-// Use deployed backend
-const currentURL = 1
-
-// To use a local backend, change to:
-const currentURL = 0
+const currentURL = 0 // use local backend at http://localhost:9000/api
 ```
 
-Default frontend URL: http://localhost:3000
+> CORS is already configured on the backend to allow requests from:
+>
+> - http://localhost:3000 (local frontend)
+> - https://taskmaster.ink (deployed frontend)
 
 ## Pages
 
