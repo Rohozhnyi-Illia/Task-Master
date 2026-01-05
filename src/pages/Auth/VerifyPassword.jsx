@@ -5,9 +5,10 @@ import { bg } from '@assets'
 import fields from '@utils/fields/verifyPasswordFields'
 import passwordVerifySchema from '@utils/validation/passwordVerify-validation'
 import { Input, AuthButton, ErrorModal, AccessModal } from '@components'
-import { Loader } from '@components'
 import { useNavigate } from 'react-router-dom'
 import AuthService from '@services/authService'
+import { showLoader, closeLoader } from '@store/loaderSlice'
+import { useDispatch, useSelector } from 'react-redux'
 
 const VerifyPassword = () => {
   const [data, setData] = useState({
@@ -18,12 +19,13 @@ const VerifyPassword = () => {
   const [errors, setErrors] = useState({})
   const [authError, setAuthError] = useState()
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
   const [accessAction, setAccessAction] = useState(false)
+  const isLoaderShown = useSelector((state) => state.loader.isLoaderShown)
 
   const formId = 'verifyPassword'
 
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const openModalHandler = () => {
     setIsErrorModalOpen(!isErrorModalOpen)
@@ -56,7 +58,7 @@ const VerifyPassword = () => {
     e.preventDefault()
     setAuthError('')
     setErrors({})
-    setIsLoading(true)
+    dispatch(showLoader())
 
     try {
       await passwordVerifySchema.validate(data, { abortEarly: false })
@@ -91,7 +93,7 @@ const VerifyPassword = () => {
         setIsErrorModalOpen(true)
       }
     } finally {
-      setIsLoading(false)
+      dispatch(closeLoader())
     }
   }
 
@@ -129,13 +131,13 @@ const VerifyPassword = () => {
               </p>
             </div>
 
-            <AuthButton text="Update" />
+            <AuthButton text="Update" disabled={isLoaderShown} />
           </form>
         </div>
       </div>
 
       {isErrorModalOpen && <ErrorModal error={authError} onClick={navigateHandler} />}
-      {isLoading && <Loader />}
+
       {accessAction && (
         <AccessModal onClick={navigateHandler} text={'Password successfully changed'} />
       )}

@@ -1,7 +1,6 @@
 import React, { Suspense, lazy, useEffect } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import { Provider } from 'react-redux'
-import store from './store/store'
+import { useSelector } from 'react-redux'
 import ProtectedPath from './services/ProtectedPath'
 import { Loader, GlobalErrorModal } from './components'
 
@@ -16,6 +15,8 @@ const VerifyEmail = lazy(() => import('./pages/Auth/VerifyEmail'))
 const Notifications = lazy(() => import('./pages/Notifications/NotificationsPage'))
 
 function App() {
+  const isLoaderShown = useSelector((state) => state.loader.isLoaderShown)
+
   useEffect(() => {
     const fetchPingServer = async () => {
       await fetch('https://taskmaster-backend-e940.onrender.com/ping')
@@ -37,33 +38,32 @@ function App() {
   }, [])
 
   return (
-    <Provider store={store}>
-      <Suspense fallback={<Loader />}>
-        <Router>
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/sign-up" element={<SignUp />} />
-            <Route path="/update-password" element={<UpdatePassword />} />
-            <Route path="/verify-password" element={<VerifyPassword />} />
-            <Route path="/verify-email" element={<VerifyEmail />} />
+    <Suspense fallback={<Loader />}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/update-password" element={<UpdatePassword />} />
+          <Route path="/verify-password" element={<VerifyPassword />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
 
-            <Route
-              element={
-                <ProtectedPath>
-                  <HeaderLayout />
-                </ProtectedPath>
-              }
-            >
-              <Route path="/statistics" element={<Statistics />} />
-              <Route path="/application" element={<Application />} />
-              <Route path="/notifications" element={<Notifications />} />
-            </Route>
-          </Routes>
-          <GlobalErrorModal />
-        </Router>
-      </Suspense>
-    </Provider>
+          <Route
+            element={
+              <ProtectedPath>
+                <HeaderLayout />
+              </ProtectedPath>
+            }
+          >
+            <Route path="/statistics" element={<Statistics />} />
+            <Route path="/application" element={<Application />} />
+            <Route path="/notifications" element={<Notifications />} />
+          </Route>
+        </Routes>
+        <GlobalErrorModal />
+        {isLoaderShown && <Loader />}
+      </Router>
+    </Suspense>
   )
 }
 

@@ -19,6 +19,10 @@
     @include m.text-style(v.$font-size-sm, v.$font-weight-medium, 1.2);
     color: #b3b3b3;
     line-height: 1.1;
+
+    @media screen and (max-height: 800px) {
+      padding: 0.7rem;
+    }
   }
 
   & > td:first-child {
@@ -198,7 +202,8 @@
     @include m.text-style(v.$font-size-xs, v.$font-weight-medium, v.$line-height-default);
 
     &:first-child {
-      background-color: #e0e0e0;
+      background-color: var(--accent-color);
+      color: #fff;
     }
 
     &:last-child {

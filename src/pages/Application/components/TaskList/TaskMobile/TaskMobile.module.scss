@@ -97,6 +97,18 @@
   &__remaining {
     @include m.text-style(v.$font-size-xs, v.$font-weight-medium, v.$line-height-default);
     color: #999;
+    display: flex;
+    align-items: center;
+    column-gap: 1rem;
+  }
+
+  &__remainingHighlight {
+    padding: 1rem 1.5rem;
+    border-radius: v.$radius-lg;
+    background-color: var(--accent-color);
+    color: #fff;
+    display: flex;
+    align-items: center;
   }
 
   &__deleteBtn {
@@ -106,15 +118,15 @@
     padding: 0.4rem;
 
     img {
-      width: 2rem;
-      height: 2rem;
+      width: 2.3rem;
+      height: 2.3rem;
       display: block;
     }
   }
 
   &__deleteIcon {
-    width: 2.1rem;
-    height: 2.1rem;
+    width: 2.3rem;
+    height: 2.3rem;
   }
 
   &.done {
@@ -135,25 +147,16 @@
       background-color: #999;
       transition: background-color 0.3s ease;
     }
+
+    .taskMobile__remainingHighlight {
+      background-color: #999;
+      transition: background-color 0.3s ease;
+    }
   }
 
   &.inprogress {
     background-color: #fff4e0;
     color: #333;
-
-    .taskMobile__name {
-      transition: color 0.3s ease;
-    }
-
-    .taskMobile__category {
-      background-color: #999;
-      transition: background-color 0.3s ease;
-    }
-
-    .taskMobile__status {
-      background-color: #999;
-      transition: background-color 0.3s ease;
-    }
   }
 
   &.archived {
@@ -174,6 +177,11 @@
       background-color: #999;
       transition: background-color 0.3s ease;
     }
+
+    .taskMobile__remainingHighlight {
+      background-color: #999;
+      transition: background-color 0.3s ease;
+    }
   }
 }
 
@@ -191,21 +199,18 @@
     position: absolute;
     bottom: calc(100% + 6px);
     left: 0;
-    min-width: 100%;
-    background: #fff;
-    border-radius: 10px;
+    width: 150%;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: v.$radius-xl;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
     padding: 0.4rem 0;
     z-index: 5;
 
     li {
       padding: 0.6rem 1rem;
-      font-size: 1.4rem;
-      cursor: pointer;
-
-      &:hover {
-        background: #f2f2f2;
-      }
+      @include m.text-style(v.$font-size-xs, v.$font-weight-medium, v.$line-height-default);
+      color: #b3b3b3;
     }
   }
 
@@ -230,7 +235,7 @@
 
     p {
       @include m.text-style(v.$font-size-md, v.$font-weight-medium, v.$line-height-default);
-      color: #b3b3b3;
+      color: #999;
       margin: 0;
       text-align: center;
     }
@@ -248,11 +253,13 @@
         cursor: pointer;
 
         &:first-child {
-          background-color: #e0e0e0;
+          background-color: var(--accent-color);
+          color: #fff;
         }
 
         &:last-child {
           background-color: #e0e0e0;
+          color: #000;
         }
       }
     }

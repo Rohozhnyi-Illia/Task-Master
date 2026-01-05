@@ -8,17 +8,17 @@ import signUpSchema from '@utils/validation/signUp-validation'
 import { ErrorModal, AccessModal } from '@components'
 import AuthService from '@services/authService'
 import { useNavigate } from 'react-router-dom'
-import { Loader } from '@components'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { updateEmail } from '@store/authSlice'
+import { showLoader, closeLoader } from '@store/loaderSlice'
 
 const SignUp = () => {
   const [data, setData] = useState({ name: '', email: '', password: '' })
   const [errors, setErrors] = useState({})
   const [authError, setAuthError] = useState('')
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
   const [accessAction, setAccessAction] = useState(false)
+  const isLoaderShown = useSelector((state) => state.loader.isLoaderShown)
 
   const formId = 'signUp'
 
@@ -47,9 +47,9 @@ const SignUp = () => {
     e.preventDefault()
     setErrors({})
     setAuthError('')
+    dispatch(showLoader())
 
     try {
-      setIsLoading(true)
       await signUpSchema.validate(data, { abortEarly: false })
 
       const res = await AuthService.register({
@@ -79,7 +79,7 @@ const SignUp = () => {
         openModalHandler()
       }
     } finally {
-      setIsLoading(false)
+      dispatch(closeLoader())
     }
   }
 
@@ -115,7 +115,7 @@ const SignUp = () => {
               </p>
             </div>
 
-            <AuthButton text="Sign Up" disabled={isLoading} />
+            <AuthButton text="Sign Up" disabled={isLoaderShown} />
           </form>
         </div>
       </div>
@@ -130,8 +130,6 @@ const SignUp = () => {
           onClick={navigateHandler}
         />
       )}
-
-      {isLoading && <Loader />}
     </div>
   )
 }

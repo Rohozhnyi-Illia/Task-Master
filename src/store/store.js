@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import authReducer from './authSlice'
 import tasksReducer from './tasksSlice'
 import errorSlice from './errorSlice'
+import loaderSlice from './loaderSlice'
 import notificationReducer from './notificationSlice'
 import { loadState, saveState } from './localStorage'
 
@@ -13,6 +14,7 @@ const store = configureStore({
     tasks: tasksReducer,
     notification: notificationReducer,
     error: errorSlice,
+    loader: loaderSlice,
   },
   preloadedState: persistedState,
 })

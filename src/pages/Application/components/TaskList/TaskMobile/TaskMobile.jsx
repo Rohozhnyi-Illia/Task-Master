@@ -5,15 +5,13 @@ import { useDispatch } from 'react-redux'
 import TaskService from '@services/taskService'
 import { deleteTasks, updateStatus, restoreTask } from '@store/tasksSlice'
 import { showError } from '@store/errorSlice'
-import { ErrorModal } from '@components'
 import { FaAngleDown } from 'react-icons/fa6'
 
 const STATUS_OPTIONS = ['Active', 'InProgress', 'Done', 'Archived']
 
 const TaskMobile = ({ task }) => {
-  const [fetchError, setFetchError] = useState('')
-  const [isStatusOpen, setIsStatusOpen] = useState(false)
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const [isDeleteMenuOpen, setIsDeleteMenuOpen] = useState(false)
 
   const statusRef = useRef(null)
   const deleteRef = useRef(null)
@@ -26,10 +24,10 @@ const TaskMobile = ({ task }) => {
   useEffect(() => {
     const handler = (e) => {
       if (statusRef.current && !statusRef.current.contains(e.target)) {
-        setIsStatusOpen(false)
+        setIsDropdownOpen(false)
       }
       if (deleteRef.current && !deleteRef.current.contains(e.target)) {
-        setIsDeleteOpen(false)
+        setIsDeleteMenuOpen(false)
       }
     }
 
@@ -39,8 +37,8 @@ const TaskMobile = ({ task }) => {
 
   const changeStatusHandler = async (status) => {
     const prevStatus = task.status
+
     dispatch(updateStatus({ id: taskId, status }))
-    setIsStatusOpen(false)
 
     const res = await TaskService.updateStatus(taskId, status)
     if (!res.success) {
@@ -48,13 +46,13 @@ const TaskMobile = ({ task }) => {
       dispatch(showError(res.error))
     }
 
-    setIsStatusOpen(false)
+    setIsDropdownOpen(false)
   }
 
   const deleteTaskHandler = async () => {
     const deleted = task
     dispatch(deleteTasks(taskId))
-    setIsDeleteOpen(false)
+    setIsDeleteMenuOpen(false)
 
     const res = await TaskService.deleteTasks(taskId)
     if (!res.success) {
@@ -94,24 +92,24 @@ const TaskMobile = ({ task }) => {
         <h5 className={styles.taskMobile__name}>{task.task}</h5>
 
         <div className={styles.taskMobile__deadline}>
-          <img src={calendar} alt="deadline" />
-          <p>{displayDate}</p>
+          <img src={calendar} alt="" />
+          <p className={styles.taskMobile__deadlineText}>{displayDate}</p>
         </div>
       </div>
 
       <footer className={styles.taskMobile__footer}>
         <div
           ref={statusRef}
-          className={`${styles.taskMobile__status} ${isStatusOpen ? styles.open : ''}`}
+          className={`${styles.taskMobile__status} ${isDropdownOpen ? styles.open : ''}`}
           onClick={() => {
-            setIsStatusOpen((p) => !p)
-            setIsDeleteOpen(false)
+            setIsDropdownOpen((p) => !p)
+            setIsDeleteMenuOpen(false)
           }}
         >
           <p className={styles.taskMobile__statusText}>{task.status}</p>
           <FaAngleDown />
 
-          {isStatusOpen && (
+          {isDropdownOpen && (
             <ul className={styles.taskMobile__statusList}>
               {STATUS_OPTIONS.map((status) => (
                 <li key={status} onClick={() => changeStatusHandler(status)}>
@@ -124,32 +122,33 @@ const TaskMobile = ({ task }) => {
 
         <div ref={deleteRef} className={styles.taskMobile__actions}>
           <p className={styles.taskMobile__remaining}>
-            Remaining: {task.remainingTime === 0 ? 'None' : `${task.remainingTime}h`}
+            Remaining:{' '}
+            <span className={styles.taskMobile__remainingHighlight}>
+              {task.remainingTime === 0 ? 'None' : `${task.remainingTime}h`}
+            </span>
           </p>
 
           <button
             className={styles.taskMobile__deleteBtn}
             onClick={() => {
-              setIsDeleteOpen((prev) => !prev)
-              setIsStatusOpen(false)
+              setIsDeleteMenuOpen((prev) => !prev)
+              setIsDropdownOpen(false)
             }}
           >
             <img src={trash} alt="delete" />
           </button>
 
-          {isDeleteOpen && (
+          {isDeleteMenuOpen && (
             <div className={styles.taskMobile__deleteMenu}>
               <p>Delete task?</p>
               <div>
                 <button onClick={deleteTaskHandler}>Yes</button>
-                <button onClick={() => setIsDeleteOpen(false)}>No</button>
+                <button onClick={() => setIsDeleteMenuOpen(false)}>No</button>
               </div>
             </div>
           )}
         </div>
       </footer>
-
-      {fetchError && <ErrorModal error={fetchError} onClick={() => setFetchError('')} />}
     </div>
   )
 }

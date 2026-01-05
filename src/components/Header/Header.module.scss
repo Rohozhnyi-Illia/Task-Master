@@ -79,11 +79,15 @@
     align-items: center;
     justify-content: center;
 
-    @include m.text-style(v.$font-size-xs, v.$font-weight-medium, v.$line-height-default);
+    @include m.text-style(1.2rem, v.$font-weight-medium, v.$line-height-default);
     background-color: var(--accent-color);
     transition: background-color 0.3s ease;
     color: #fff;
     border-radius: 50%;
+
+    @media screen and (max-width: 768.1px) {
+      @include m.text-style(v.$font-size-xs, v.$font-weight-medium, v.$line-height-default);
+    }
   }
 
   &__notificationList_open {

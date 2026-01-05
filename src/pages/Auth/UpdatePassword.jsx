@@ -7,17 +7,17 @@ import { bg } from '../../assets'
 import passwordUpdateSchema from '@utils/validation/passwordUpdate-validation'
 import { useNavigate } from 'react-router-dom'
 import AuthService from '@services/authService'
-import { Loader } from '@components'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { updateEmail } from '@store/authSlice'
+import { showLoader, closeLoader } from '@store/loaderSlice'
 
 const UpdatePassword = () => {
   const [data, setData] = useState({ email: '' })
   const [errors, setErrors] = useState({})
   const [authError, setAuthError] = useState('')
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
   const [accessAction, setAccessAction] = useState(false)
+  const isLoaderShown = useSelector((state) => state.loader.isLoaderShown)
 
   const formId = 'updatePassword'
 
@@ -46,7 +46,7 @@ const UpdatePassword = () => {
     e.preventDefault()
     setAuthError('')
     setErrors({})
-    setIsLoading(true)
+    dispatch(showLoader())
 
     try {
       await passwordUpdateSchema.validate(data, { abortEarly: false })
@@ -76,7 +76,7 @@ const UpdatePassword = () => {
         setIsErrorModalOpen(true)
       }
     } finally {
-      setIsLoading(false)
+      dispatch(closeLoader())
     }
   }
 
@@ -112,13 +112,12 @@ const UpdatePassword = () => {
               </p>
             </div>
 
-            <AuthButton text="Update" />
+            <AuthButton text="Update" disabled={isLoaderShown} />
           </form>
         </div>
       </div>
 
       {isErrorModalOpen && <ErrorModal error={authError} onClick={openModalHandler} />}
-      {isLoading && <Loader />}
       {accessAction && (
         <AccessModal
           text={'The code to change your password has been sent to your email address.'}

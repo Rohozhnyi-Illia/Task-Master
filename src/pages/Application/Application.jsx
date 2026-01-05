@@ -5,11 +5,11 @@ import CategorySelect from './components/CategorySelect/CategorySelect'
 import AddButton from './components/AddButton/AddButton'
 import TaskList from './components/TaskList/TaskList/TaskList'
 import AddModal from './components/AddModal/AddModal'
-import { Loader } from '@components'
 import TaskService from '@services/taskService'
 import { useDispatch } from 'react-redux'
 import { getTasks } from '@store/tasksSlice'
 import { showError } from '@store/errorSlice'
+import { showLoader, closeLoader } from '@store/loaderSlice'
 
 const FILTER_OPTIONS = [
   'All',
@@ -26,7 +26,6 @@ const Application = () => {
   const [selected, setSelected] = useState('')
   const [keywordValue, setKeyWordValue] = useState('')
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
 
   const dispatch = useDispatch()
 
@@ -36,7 +35,7 @@ const Application = () => {
 
   useEffect(() => {
     const fetchTasks = async () => {
-      setIsLoading(true)
+      dispatch(showLoader())
       try {
         const res = await TaskService.getAllTasks()
         if (res.success) {
@@ -47,7 +46,7 @@ const Application = () => {
       } catch (error) {
         dispatch(showError(error.message || 'Something went wrong'))
       } finally {
-        setIsLoading(false)
+        dispatch(closeLoader())
       }
     }
 
@@ -94,8 +93,6 @@ const Application = () => {
         {isAddModalOpen && (
           <AddModal openModalHandler={openModalHandler} isAddModalOpen={isAddModalOpen} />
         )}
-
-        {isLoading && <Loader />}
       </div>
     </div>
   )

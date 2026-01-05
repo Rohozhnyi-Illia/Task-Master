@@ -10,17 +10,17 @@ import { setAuth } from '@store/authSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import AuthService from '@services/authService'
 import { useNavigate } from 'react-router-dom'
-import { Loader } from '@components'
+import { showLoader, closeLoader } from '@store/loaderSlice'
 
 const VerifyEmail = () => {
   const [data, setData] = useState({ email: '', verifyCode: '' })
   const [errors, setErrors] = useState({})
   const [authError, setAuthError] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
   const [accessAction, setAccessAction] = useState(false)
   const [emailError, setEmailError] = useState('')
   const email = useSelector((state) => state.auth.email)
+  const isLoaderShown = useSelector((state) => state.loader.isLoaderShown)
 
   const formId = 'verifyEmail'
 
@@ -56,7 +56,7 @@ const VerifyEmail = () => {
     setErrors({})
     setAuthError('')
     setSuccessMessage('')
-    setIsLoading(true)
+    dispatch(showLoader())
 
     try {
       await emailSchema.validate({ email: data.email }, { abortEarly: false })
@@ -82,7 +82,7 @@ const VerifyEmail = () => {
         setAuthError(err.message || 'Something went wrong')
       }
     } finally {
-      setIsLoading(false)
+      dispatch(closeLoader())
     }
   }
 
@@ -90,7 +90,7 @@ const VerifyEmail = () => {
     e.preventDefault()
     setErrors({})
     setAuthError('')
-    setIsLoading(true)
+    dispatch(showLoader())
 
     try {
       await verifyEmailSchema.validate(data, { abortEarly: false })
@@ -133,7 +133,7 @@ const VerifyEmail = () => {
         setAuthError(err.message)
       }
     } finally {
-      setIsLoading(false)
+      dispatch(closeLoader())
     }
   }
 
@@ -173,7 +173,7 @@ const VerifyEmail = () => {
               <p className={styles.auth__signupLink}>
                 Code expired?{' '}
                 <button
-                  disabled={isLoading}
+                  disabled={isLoaderShown}
                   type="button"
                   className={styles.auth__button}
                   onClick={resendHandler}
@@ -183,7 +183,7 @@ const VerifyEmail = () => {
               </p>
             </div>
 
-            <AuthButton text="Confirm" disabled={isLoading} />
+            <AuthButton text="Confirm" disabled={isLoaderShown} />
           </form>
         </div>
       </div>
@@ -192,7 +192,6 @@ const VerifyEmail = () => {
       {successMessage && (
         <AccessModal onClick={() => setSuccessMessage('')} text={successMessage} />
       )}
-      {isLoading && <Loader />}
       {accessAction && <AccessModal onClick={navigateHandler} />}
     </div>
   )

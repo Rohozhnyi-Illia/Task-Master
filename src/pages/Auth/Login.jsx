@@ -5,10 +5,11 @@ import fields from '@utils/fields/loginFields'
 import { bg } from '@assets'
 import loginSchema from '@utils/validation/login-validation'
 import emailSchema from '@utils/validation/email-validation'
-import { Input, AuthButton, Loader, ErrorModal } from '@components'
-import { useDispatch } from 'react-redux'
+import { Input, AuthButton, ErrorModal } from '@components'
+import { useDispatch, useSelector } from 'react-redux'
 import { setAuth, updateEmail } from '@store/authSlice'
 import AuthService from '@services/authService'
+import { showLoader, closeLoader } from '@store/loaderSlice'
 
 const Login = () => {
   const [data, setData] = useState({
@@ -19,9 +20,9 @@ const Login = () => {
   const [errors, setErrors] = useState({})
   const [authError, setAuthError] = useState('')
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
   const [emailError, setEmailError] = useState('')
   const [isAccountActivated, setIsAccountActivated] = useState(true)
+  const isLoaderShown = useSelector((state) => state.loader.isLoaderShown)
 
   const formId = 'login'
 
@@ -63,7 +64,7 @@ const Login = () => {
     setErrors({})
     setAuthError('')
     setEmailError('')
-    setIsLoading(true)
+    dispatch(showLoader())
 
     try {
       await emailSchema.validate({ email: data.email }, { abortEarly: false })
@@ -88,7 +89,7 @@ const Login = () => {
         setIsErrorModalOpen(true)
       }
     } finally {
-      setIsLoading(false)
+      dispatch(closeLoader())
     }
   }
 
@@ -96,7 +97,7 @@ const Login = () => {
     e.preventDefault()
     setErrors({})
     setAuthError('')
-    setIsLoading(true)
+    dispatch(showLoader())
 
     try {
       await loginSchema.validate(data, { abortEarly: false })
@@ -149,7 +150,7 @@ const Login = () => {
         setIsErrorModalOpen(true)
       }
     } finally {
-      setIsLoading(false)
+      dispatch(closeLoader())
     }
   }
 
@@ -197,7 +198,7 @@ const Login = () => {
                 <p className={styles.auth__signupLink}>
                   Account not activated?
                   <button
-                    disabled={isLoading}
+                    disabled={isLoaderShown}
                     type="button"
                     className={styles.auth__button}
                     onClick={activateHandler}
@@ -207,7 +208,7 @@ const Login = () => {
                 </p>
               </div>
 
-              <AuthButton text="Log In" disabled={isLoading} />
+              <AuthButton text="Log In" disabled={isLoaderShown} />
             </div>
           </form>
         </div>
@@ -219,7 +220,6 @@ const Login = () => {
           onClick={isAccountActivated ? openModalHandler : navigateHandler}
         />
       )}
-      {isLoading && <Loader />}
     </div>
   )
 }

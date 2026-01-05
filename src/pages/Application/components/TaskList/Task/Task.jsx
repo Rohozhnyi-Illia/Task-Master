@@ -37,14 +37,18 @@ const Task = ({ task }) => {
   }
   const closeDropdownHandler = () => setIsDropdownOpen(false)
 
-  const changeStatusHandler = async (status) => {
-    dispatch(updateStatus({ id: taskId, status }))
-    const res = await TaskService.updateStatus(taskId, status)
+  const changeStatusHandler = async (newStatus) => {
+    const prevStatus = task.status
+
+    closeDropdownHandler()
+    dispatch(updateStatus({ id: taskId, status: newStatus }))
+
+    const res = await TaskService.updateStatus(taskId, newStatus)
+
     if (!res.success) {
-      dispatch(updateStatus({ id: taskId, status: task.status }))
+      dispatch(updateStatus({ id: taskId, status: prevStatus }))
       dispatch(showError(res.error))
     }
-    closeDropdownHandler()
   }
 
   const completeHandler = async () => {

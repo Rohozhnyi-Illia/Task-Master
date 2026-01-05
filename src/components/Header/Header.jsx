@@ -10,13 +10,15 @@ import AuthService from '@services/authService'
 import NotificationService from '../../services/notificationService'
 import { getNotifications } from '../../store/notificationSlice'
 import { showError } from '@store/errorSlice'
+import { showLoader, closeLoader } from '@store/loaderSlice'
 
 const Header = () => {
-  const notificationsList = useSelector((state) => state.notification) || []
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
   const { theme, setTheme } = useTheme()
   const isDark = theme === 'dark'
+  const notificationsList = useSelector((state) => state.notification) || []
+  const isLoaderShown = useSelector((state) => state.loader.isLoaderShown)
+
   const headerRef = useRef(null)
   const dispatch = useDispatch()
 
@@ -24,7 +26,7 @@ const Header = () => {
   const toggleTheme = () => setTheme(isDark ? 'light' : 'dark')
 
   const logoutHandler = async () => {
-    setIsLoading(true)
+    dispatch(showLoader())
     const res = await AuthService.logout()
 
     if (res.success) {
@@ -33,7 +35,7 @@ const Header = () => {
       dispatch(showError(res.error))
     }
 
-    setIsLoading(false)
+    dispatch(closeLoader())
   }
 
   useEffect(() => {
@@ -89,7 +91,7 @@ const Header = () => {
                   />
                   {notificationsList.length > 0 && (
                     <div className={styles.header__notification_quantity}>
-                      {notificationsList.length}
+                      <p>{notificationsList.length}</p>
                     </div>
                   )}
                 </Link>
@@ -116,8 +118,8 @@ const Header = () => {
               <li>
                 <button
                   className={styles.header__icon_wrapper}
-                  disabled={isLoading}
-                  onClick={!isLoading ? logoutHandler : undefined}
+                  disabled={isLoaderShown}
+                  onClick={!isLoaderShown ? logoutHandler : undefined}
                 >
                   <img src={exit} alt="logout" className={styles.header__icon} />
                 </button>
