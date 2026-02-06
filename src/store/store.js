@@ -4,6 +4,7 @@ import tasksReducer from './tasksSlice'
 import errorSlice from './errorSlice'
 import loaderSlice from './loaderSlice'
 import notificationReducer from './notificationSlice'
+import successSlice from './successSlice'
 import { loadState, saveState } from './localStorage'
 
 const persistedState = loadState()
@@ -15,6 +16,7 @@ const store = configureStore({
     notification: notificationReducer,
     error: errorSlice,
     loader: loaderSlice,
+    success: successSlice,
   },
   preloadedState: persistedState,
 })

@@ -31,6 +31,26 @@ const notificationService = class notificationService {
       return { success: false, error: message }
     }
   }
+
+  async deleteReadNotifications() {
+    try {
+      const { data } = await api.delete('/notification/readAll')
+      return { success: true, data }
+    } catch (error) {
+      const message = parseError(error)
+      return { success: false, error: message }
+    }
+  }
+
+  async deleteAllNotifications() {
+    try {
+      const { data } = await api.delete('/notification/deleteAll')
+      return { success: true, data }
+    } catch (error) {
+      const message = parseError(error)
+      return { success: false, error: message }
+    }
+  }
 }
 
 const NotificationService = new notificationService()

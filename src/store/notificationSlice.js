@@ -11,7 +11,7 @@ const notificationSlice = createSlice({
     readNotification(state, action) {
       const { id, markAsRead = true } = action.payload
       return state.map((notification) =>
-        notification._id === id ? { ...notification, isRead: markAsRead } : notification
+        notification._id === id ? { ...notification, isRead: markAsRead } : notification,
       )
     },
 
@@ -23,9 +23,23 @@ const notificationSlice = createSlice({
     restoreNotification(state, action) {
       return [...state, action.payload]
     },
+
+    deleteReadNotifications(state) {
+      return state.filter((notification) => !notification.isRead)
+    },
+
+    deleteAllNotifications() {
+      return []
+    },
   },
 })
 
-export const { getNotifications, readNotification, deleteNotification, restoreNotification } =
-  notificationSlice.actions
+export const {
+  getNotifications,
+  readNotification,
+  deleteNotification,
+  restoreNotification,
+  deleteReadNotifications,
+  deleteAllNotifications,
+} = notificationSlice.actions
 export default notificationSlice.reducer

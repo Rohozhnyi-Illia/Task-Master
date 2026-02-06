@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import firstLetterToUpperCase from '@utils/helpers/firstLetterToUpperCase'
 import { showError } from '@store/errorSlice'
 import { showLoader, closeLoader } from '@store/loaderSlice'
+import { showSuccess } from '@store/successSlice'
 
 const AddModal = ({ openModalHandler, isAddModalOpen }) => {
   const [categorySelected, setCategorySelected] = useState('')
@@ -59,7 +60,7 @@ const AddModal = ({ openModalHandler, isAddModalOpen }) => {
       const formattedDate = new Date(
         Number(deadline.year),
         Number(deadline.month) - 1,
-        Number(deadline.day)
+        Number(deadline.day),
       )
       const now = new Date()
       formattedDate.setHours(0, 0, 0)
@@ -91,6 +92,7 @@ const AddModal = ({ openModalHandler, isAddModalOpen }) => {
       setDeadline({ day: '', month: '', year: '' })
 
       closeModalHandler()
+      dispatch(showSuccess('The task has been added.'))
     } catch (err) {
       if (err.inner) {
         const newErrors = {}
@@ -111,7 +113,7 @@ const AddModal = ({ openModalHandler, isAddModalOpen }) => {
     if (!isAddModalOpen) return
 
     const focusableElements = modalRef.current.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
     )
 
     const firstElement = focusableElements[0]

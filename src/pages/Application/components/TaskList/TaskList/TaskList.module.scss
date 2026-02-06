@@ -177,6 +177,12 @@
   }
 }
 
+@media screen and (max-width: 768.1px) {
+  .taskList {
+    margin-top: 0;
+  }
+}
+
 @media screen and (max-width: 500px) {
   .taskList__cardWrapper {
     grid-template-columns: repeat(1, 1fr);
