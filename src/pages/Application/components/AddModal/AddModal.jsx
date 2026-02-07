@@ -19,10 +19,19 @@ const AddModal = ({ openModalHandler, isAddModalOpen }) => {
   const [task, setTask] = useState('')
   const [deadline, setDeadline] = useState({ day: '', month: '', year: '' })
   const [errors, setErrors] = useState({})
+  const [isClosing, setIsClosing] = useState(false)
   const dispatch = useDispatch()
   const isSubmittingRef = useRef(false)
   const modalRef = useRef(null)
   const isLoaderShown = useSelector((state) => state.loader.isLoaderShown)
+
+  const closeModalSmooth = () => {
+    setIsClosing(true)
+    setTimeout(() => {
+      openModalHandler()
+      setIsClosing(false)
+    }, 400)
+  }
 
   const onChangeHandler = (e) => {
     const { value } = e.target
@@ -33,10 +42,6 @@ const AddModal = ({ openModalHandler, isAddModalOpen }) => {
   const deadlineHandler = (e) => {
     const { name, value } = e.target
     setDeadline({ ...deadline, [name]: value })
-  }
-
-  const closeModalHandler = () => {
-    openModalHandler()
   }
 
   const onSubmitHandler = async (e) => {
@@ -91,7 +96,7 @@ const AddModal = ({ openModalHandler, isAddModalOpen }) => {
       setReminderSelected('')
       setDeadline({ day: '', month: '', year: '' })
 
-      closeModalHandler()
+      closeModalSmooth()
       dispatch(showSuccess('The task has been added.'))
     } catch (err) {
       if (err.inner) {
@@ -146,7 +151,7 @@ const AddModal = ({ openModalHandler, isAddModalOpen }) => {
 
   return (
     <div
-      className={styles.addModal}
+      className={`${styles.addModal} ${isClosing ? styles.closing : ''}`}
       onClick={(e) => {
         if (e.target === e.currentTarget) {
           openModalHandler()

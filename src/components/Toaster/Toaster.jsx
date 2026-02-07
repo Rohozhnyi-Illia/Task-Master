@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import ReactDOM from 'react-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { clearSuccess } from '@store/successSlice'
 import { FaCheckCircle } from 'react-icons/fa'
@@ -15,7 +16,7 @@ const GlobalSuccessModal = () => {
       const timer = setTimeout(() => {
         setVisible(false)
         setTimeout(() => dispatch(clearSuccess()), 300)
-      }, 2000)
+      }, 1500)
 
       return () => clearTimeout(timer)
     }
@@ -23,11 +24,12 @@ const GlobalSuccessModal = () => {
 
   if (!message) return null
 
-  return (
+  return ReactDOM.createPortal(
     <div className={`${styles.toaster} ${visible ? styles.show : ''}`}>
       <p className={styles.toaster__text}>{message}</p>
       <FaCheckCircle className={styles.toaster__icon} />
-    </div>
+    </div>,
+    document.body,
   )
 }
 

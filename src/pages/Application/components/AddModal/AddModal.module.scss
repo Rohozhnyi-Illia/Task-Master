@@ -19,11 +19,19 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
 
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 
   fieldset {
     border: none;
+  }
+
+  &.closing {
+    opacity: 0;
+    transform: translateY(-20px);
   }
 
   &__content {

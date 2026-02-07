@@ -6,6 +6,7 @@
   position: fixed;
   bottom: 1rem;
   left: 1rem;
+  z-index: 9999;
 
   display: flex;
   align-items: center;
@@ -14,6 +15,7 @@
   border: 1px solid #ccc;
   border-radius: v.$radius-md;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: var(--bg-color);
 
   transform: translateX(-100px) translateY(0);
   opacity: 0;
@@ -37,4 +39,13 @@
 .toaster.show {
   transform: translateX(0) translateY(0);
   opacity: 1;
+}
+
+@media screen and (max-width: 768.1px) {
+  .toaster {
+    &__text {
+      color: var(--text-color);
+      @include m.text-style(3rem, v.$font-weight-semibold, v.$line-height-tight);
+    }
+  }
 }

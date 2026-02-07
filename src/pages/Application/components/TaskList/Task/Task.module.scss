@@ -123,7 +123,7 @@
     text-align: left;
     background-color: #fff;
     border: 1px solid #ccc;
-    border-radius: v.$radius-xl;
+    border-radius: v.$radius-sm;
     cursor: pointer;
   }
 
@@ -200,6 +200,7 @@
     background-color: #f8f8f8;
     cursor: pointer;
     @include m.text-style(v.$font-size-xs, v.$font-weight-medium, v.$line-height-default);
+    @include m.hover-effect();
 
     &:first-child {
       background-color: var(--accent-color);

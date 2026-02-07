@@ -59,13 +59,13 @@ const Task = ({ task }) => {
 
     if (newStatus === prevStatus) {
       closeDropdownHandler()
-      dispatch(showError('You cannot change the status to current'))
+      dispatch(showError('This status is already active'))
       return
     }
 
     if (newStatus === 'Done') {
       closeDropdownHandler()
-      completeHandler()
+      await completeHandler()
       return
     }
 
@@ -149,8 +149,21 @@ const Task = ({ task }) => {
     }
   }, [isDeleteMenuOpen])
 
+  const getStatusClass = (status) => {
+    switch (status?.toLowerCase()) {
+      case 'done':
+        return styles.done
+      case 'inprogress':
+        return styles.inprogress
+      case 'archived':
+        return styles.archived
+      default:
+        return ''
+    }
+  }
+
   return (
-    <tr className={`${styles.task} ${styles[task.status.toLowerCase()]}`}>
+    <tr className={`${styles.task} ${getStatusClass(task.status)}`}>
       <td>
         <input type="checkbox" checked={isCompleted} onChange={completeHandler} />
       </td>

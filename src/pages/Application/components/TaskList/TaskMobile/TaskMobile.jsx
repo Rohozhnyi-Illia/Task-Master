@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux'
 import TaskService from '@services/taskService'
 import { deleteTasks, updateStatus, restoreTask } from '@store/tasksSlice'
 import { showError } from '@store/errorSlice'
+import { showSuccess } from '@store/successSlice'
 import { FaAngleDown } from 'react-icons/fa6'
 
 const STATUS_OPTIONS = ['Active', 'InProgress', 'Done', 'Archived']
@@ -35,18 +36,43 @@ const TaskMobile = ({ task }) => {
     return () => document.removeEventListener('click', handler)
   }, [])
 
-  const changeStatusHandler = async (status) => {
+  const completeHandler = async () => {
     const prevStatus = task.status
+    const newStatus = isCompleted ? 'Active' : 'Done'
+    dispatch(updateStatus({ id: taskId, status: newStatus }))
 
+    const res = await TaskService.updateStatus(taskId, newStatus)
+    if (!res.success) {
+      dispatch(updateStatus({ id: taskId, status: prevStatus }))
+      dispatch(showError(res.error))
+    } else {
+      dispatch(showSuccess(isCompleted ? 'Task is active again' : 'Task completed'))
+    }
+  }
+
+  const changeStatusHandler = async (status) => {
+    if (status === task.status) {
+      dispatch(showError('Status is already active'))
+      return
+    }
+
+    if (status === 'Done') {
+      await completeHandler()
+      setIsDropdownOpen(false)
+      return
+    }
+
+    const prevStatus = task.status
     dispatch(updateStatus({ id: taskId, status }))
 
     const res = await TaskService.updateStatus(taskId, status)
     if (!res.success) {
       dispatch(updateStatus({ id: taskId, status: prevStatus }))
       dispatch(showError(res.error))
+    } else {
+      dispatch(showSuccess('Status updated'))
+      setIsDropdownOpen(false)
     }
-
-    setIsDropdownOpen(false)
   }
 
   const deleteTaskHandler = async () => {
@@ -58,31 +84,34 @@ const TaskMobile = ({ task }) => {
     if (!res.success) {
       dispatch(restoreTask(deleted))
       dispatch(showError(res.error))
+    } else {
+      dispatch(showSuccess('Task deleted'))
     }
   }
 
-  const completeHandler = async () => {
-    const prevStatus = task.status
-    const newStatus = isCompleted ? 'Active' : 'Done'
-    dispatch(updateStatus({ id: taskId, status: newStatus }))
-
-    const res = await TaskService.updateStatus(taskId, newStatus)
-    if (!res.success) {
-      dispatch(updateStatus({ id: taskId, status: prevStatus }))
-      dispatch(showError(res.error))
+  const getStatusClass = (status) => {
+    switch (status?.toLowerCase()) {
+      case 'done':
+        return styles.done
+      case 'inprogress':
+        return styles.inprogress
+      case 'archived':
+        return styles.archived
+      default:
+        return ''
     }
   }
 
   return (
-    <div className={`${styles.taskMobile} ${styles[task.status.toLowerCase()]}`}>
+    <div className={`${styles.taskMobile} ${getStatusClass(task.status)}`}>
       <header className={styles.taskMobile__header}>
         <div className={styles.taskMobile__category}>
           <p className={styles.taskMobile__categoryText}>{task.category}</p>
         </div>
 
         <input
-          className={styles.taskMobile__checkbox}
           type="checkbox"
+          className={styles.taskMobile__checkbox}
           checked={isCompleted}
           onChange={completeHandler}
         />
@@ -90,9 +119,8 @@ const TaskMobile = ({ task }) => {
 
       <div className={styles.taskMobile__body}>
         <h5 className={styles.taskMobile__name}>{task.task}</h5>
-
         <div className={styles.taskMobile__deadline}>
-          <img src={calendar} alt="" />
+          <img src={calendar} alt="calendar" />
           <p className={styles.taskMobile__deadlineText}>{displayDate}</p>
         </div>
       </div>
@@ -108,7 +136,6 @@ const TaskMobile = ({ task }) => {
         >
           <p className={styles.taskMobile__statusText}>{task.status}</p>
           <FaAngleDown />
-
           {isDropdownOpen && (
             <ul className={styles.taskMobile__statusList}>
               {STATUS_OPTIONS.map((status) => (
@@ -127,7 +154,6 @@ const TaskMobile = ({ task }) => {
               {task.remainingTime === 0 ? 'None' : `${task.remainingTime}h`}
             </span>
           </p>
-
           <button
             className={styles.taskMobile__deleteBtn}
             onClick={() => {
