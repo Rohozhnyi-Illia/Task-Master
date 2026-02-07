@@ -7,6 +7,7 @@ import { deleteTasks, updateStatus, restoreTask } from '@store/tasksSlice'
 import { showError } from '@store/errorSlice'
 import { FaAngleDown } from 'react-icons/fa6'
 import { createPortal } from 'react-dom'
+import { showSuccess } from '../../../../../store/successSlice'
 
 const STATUS_OPTIONS = ['Active', 'InProgress', 'Done', 'Archived']
 
@@ -37,20 +38,6 @@ const Task = ({ task }) => {
   }
   const closeDropdownHandler = () => setIsDropdownOpen(false)
 
-  const changeStatusHandler = async (newStatus) => {
-    const prevStatus = task.status
-
-    closeDropdownHandler()
-    dispatch(updateStatus({ id: taskId, status: newStatus }))
-
-    const res = await TaskService.updateStatus(taskId, newStatus)
-
-    if (!res.success) {
-      dispatch(updateStatus({ id: taskId, status: prevStatus }))
-      dispatch(showError(res.error))
-    }
-  }
-
   const completeHandler = async () => {
     const prevStatus = task.status
     const newStatus = isCompleted ? 'Active' : 'Done'
@@ -61,6 +48,38 @@ const Task = ({ task }) => {
       dispatch(updateStatus({ id: taskId, status: prevStatus }))
       dispatch(showError(res.error))
     }
+
+    isCompleted
+      ? dispatch(showSuccess('The task is active again'))
+      : dispatch(showSuccess('Task completed'))
+  }
+
+  const changeStatusHandler = async (newStatus) => {
+    const prevStatus = task.status
+
+    if (newStatus === prevStatus) {
+      closeDropdownHandler()
+      dispatch(showError('You cannot change the status to current'))
+      return
+    }
+
+    if (newStatus === 'Done') {
+      closeDropdownHandler()
+      completeHandler()
+      return
+    }
+
+    closeDropdownHandler()
+    dispatch(updateStatus({ id: taskId, status: newStatus }))
+
+    const res = await TaskService.updateStatus(taskId, newStatus)
+
+    if (!res.success) {
+      dispatch(updateStatus({ id: taskId, status: prevStatus }))
+      dispatch(showError(res.error))
+    }
+
+    dispatch(showSuccess('Status has been updated'))
   }
 
   const openDeleteMenu = () => setIsDeleteMenuOpen(true)
@@ -75,6 +94,8 @@ const Task = ({ task }) => {
       dispatch(restoreTask(deleted))
       dispatch(showError(res.error))
     }
+
+    dispatch(showSuccess(`The task: "${task.task}" has been deleted`))
     closeDeleteMenu()
   }
 
@@ -182,7 +203,7 @@ const Task = ({ task }) => {
                 ))}
               </ul>
             </div>,
-            document.body
+            document.body,
           )}
       </td>
 
@@ -223,7 +244,7 @@ const Task = ({ task }) => {
                   <button onClick={closeDeleteMenu}>No</button>
                 </div>
               </div>,
-              document.body
+              document.body,
             )}
         </div>
       </td>
