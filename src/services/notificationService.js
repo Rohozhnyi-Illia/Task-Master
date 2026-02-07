@@ -34,7 +34,7 @@ const notificationService = class notificationService {
 
   async deleteReadNotifications() {
     try {
-      const { data } = await api.delete('/notification/readAll')
+      const { data } = await api.patch('/notification/readAll')
       return { success: true, data }
     } catch (error) {
       const message = parseError(error)
@@ -44,7 +44,7 @@ const notificationService = class notificationService {
 
   async deleteAllNotifications() {
     try {
-      const { data } = await api.delete('/notification/deleteAll')
+      const { data } = await api.patch('/notification/deleteAll')
       return { success: true, data }
     } catch (error) {
       const message = parseError(error)

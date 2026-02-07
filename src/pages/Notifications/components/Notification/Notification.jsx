@@ -24,6 +24,7 @@ const Notification = ({ type, id, message }) => {
 
   const readHandler = async () => {
     dispatch(readNotification({ id, markAsRead: true }))
+
     try {
       const res = await NotificationService.markAsRead(id)
       if (!res.success) throw new Error(res.error)
@@ -36,6 +37,7 @@ const Notification = ({ type, id, message }) => {
   const deleteHandler = async () => {
     const backup = notification
     dispatch(deleteNotification(id))
+
     try {
       const res = await NotificationService.deleteNotification(id)
       if (!res.success) throw new Error(res.error)
@@ -54,7 +56,7 @@ const Notification = ({ type, id, message }) => {
         </span>
       ) : (
         part
-      )
+      ),
     )
   }
 

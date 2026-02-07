@@ -3,7 +3,7 @@ import store from '../store/store'
 import { setAuth, logout } from '../store/authSlice'
 
 const URL = ['http://localhost:9000/api', 'https://taskmaster-backend-e940.onrender.com/api']
-const currentURL = 1
+const currentURL = 0
 
 const api = axios.create({
   baseURL: URL[currentURL],
@@ -27,7 +27,7 @@ api.interceptors.request.use(
     if (token) config.headers['Authorization'] = `Bearer ${token}`
     return config
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 )
 
 api.interceptors.response.use(
@@ -54,7 +54,7 @@ api.interceptors.response.use(
         const refreshRes = await axios.post(
           `${URL[currentURL]}/auth/refresh`,
           {},
-          { withCredentials: true }
+          { withCredentials: true },
         )
 
         const newAccessToken = refreshRes.data.accessToken
@@ -79,7 +79,7 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error)
-  }
+  },
 )
 
 export default api

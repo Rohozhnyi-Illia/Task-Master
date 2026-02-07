@@ -28,7 +28,7 @@ const BarChart = ({ tasks }) => {
 
   const counts = last7DaysISO.map((date) => {
     const count = tasks.filter((task) => task.createdAt.startsWith(date)).length
-    return count > 10 ? 10 : count
+    return count > 8 ? 8 : count
   })
 
   const tooltipCounts = last7DaysISO.map((date) => {
@@ -88,7 +88,7 @@ const BarChart = ({ tasks }) => {
         ticks: {
           stepSize: 1,
           callback: function (value) {
-            return value === 10 ? '10+' : value
+            return value === 8 ? '8+' : value
           },
         },
       },
