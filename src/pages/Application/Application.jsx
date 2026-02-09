@@ -59,7 +59,7 @@ const Application = () => {
     }
 
     fetchTasks()
-  }, [dispatch, tasks])
+  }, [dispatch])
 
   return (
     <div className={styles.application}>

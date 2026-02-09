@@ -11,27 +11,26 @@ const NotificationList = ({ selected }) => {
       ? notifications
       : notifications.filter((notification) => notification.type === selected.toLowerCase())
 
+  const isEmpty = filtredNotifications.length === 0
+
   return (
-    <div
-      className={`${styles.notificationList} ${
-        filtredNotifications.length < 1 ? styles.empty : ''
-      }`}
-    >
-      {filtredNotifications.length ? (
-        filtredNotifications.map((notification) => (
-          <Notification
-            key={notification._id}
-            id={notification._id}
-            type={notification.type}
-            message={notification.message}
-            isRead={notification.isRead}
-          />
-        ))
-      ) : (
+    <div className={styles.notificationList}>
+      {isEmpty ? (
         <div className={styles.notificationList__empty}>
           <img src={noData} alt="no data" />
-
-          <h2>There Are No Notifications.</h2>
+          <h2>No Notifications Yet.</h2>
+        </div>
+      ) : (
+        <div className={styles.notificationWrapper}>
+          {filtredNotifications.map((notification) => (
+            <Notification
+              key={notification._id}
+              id={notification._id}
+              type={notification.type}
+              message={notification.message}
+              isRead={notification.isRead}
+            />
+          ))}
         </div>
       )}
     </div>
