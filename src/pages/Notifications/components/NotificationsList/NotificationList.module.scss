@@ -2,7 +2,8 @@
 @use '@styles/mixins.scss' as m;
 
 .notificationList {
-  padding: 4rem 0;
+  padding: 0.5rem 0;
+  margin-top: 4rem;
   width: 100%;
   flex: 1;
   display: flex;

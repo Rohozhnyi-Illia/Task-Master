@@ -1,15 +1,11 @@
 @use '@styles/variables.scss' as v;
 @use '@styles/mixins.scss' as m;
 
-.toaster {
+.toast {
   padding: 2rem;
-  position: fixed;
-  bottom: 1rem;
-  left: 1rem;
-  z-index: 9999;
-
   display: flex;
   align-items: center;
+  justify-content: space-between;
   column-gap: 1rem;
 
   border: 1px solid #ccc;
@@ -17,11 +13,13 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   background-color: var(--bg-color);
 
-  transform: translateX(-100px) translateY(0);
+  transform: translateX(-100px);
   opacity: 0;
   transition:
-    transform 0.3s ease,
-    opacity 0.3s ease;
+    transform 0.4s ease,
+    opacity 0.4s ease,
+    max-height 0.4s ease,
+    margin-bottom 0.4s ease;
 
   &__icon {
     color: var(--accent-color);
@@ -34,11 +32,14 @@
     color: var(--text-color);
     transition: color 0.6s ease;
   }
-}
 
-.toaster.show {
-  transform: translateX(0) translateY(0);
-  opacity: 1;
+  &.show {
+    transform: translateX(0);
+    opacity: 1;
+
+    max-height: 200px;
+    margin-bottom: 10px;
+  }
 }
 
 @media screen and (max-width: 768.1px) {

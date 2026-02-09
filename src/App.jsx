@@ -2,7 +2,7 @@ import React, { Suspense, lazy, useEffect } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import ProtectedPath from './services/ProtectedPath'
-import { Loader, GlobalErrorModal, Toaster } from './components'
+import { Loader, GlobalErrorModal, ToastsContainer } from './components'
 
 const Login = lazy(() => import('./pages/Auth/Login'))
 const UpdatePassword = lazy(() => import('./pages/Auth/UpdatePassword'))
@@ -61,7 +61,7 @@ function App() {
           </Route>
         </Routes>
         <GlobalErrorModal />
-        <Toaster />
+        <ToastsContainer />
         {isLoaderShown && <Loader />}
       </Router>
     </Suspense>

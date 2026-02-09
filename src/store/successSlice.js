@@ -1,16 +1,24 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, nanoid } from '@reduxjs/toolkit'
 
 const successSlice = createSlice({
   name: 'success',
   initialState: {
-    message: null,
+    items: [],
   },
   reducers: {
-    showSuccess: (state, action) => {
-      state.message = action.payload
+    showSuccess: {
+      reducer: (state, action) => {
+        state.items.push(action.payload)
+      },
+      prepare: (message) => ({
+        payload: {
+          id: nanoid(),
+          message,
+        },
+      }),
     },
-    clearSuccess: (state) => {
-      state.message = null
+    clearSuccess: (state, action) => {
+      state.items = state.items.filter((toast) => toast.id !== action.payload)
     },
   },
 })
