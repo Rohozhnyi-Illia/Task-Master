@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { clearError } from '@store/errorSlice'
+import { clearError } from '@store/UI/errorSlice'
 import ErrorModal from '../ErrorModal/ErrorModal'
 
 const GlobalErrorModal = () => {

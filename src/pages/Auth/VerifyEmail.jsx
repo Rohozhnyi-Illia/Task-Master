@@ -10,7 +10,7 @@ import { setAuth } from '@store/authSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import AuthService from '@services/authService'
 import { useNavigate } from 'react-router-dom'
-import { showLoader, closeLoader } from '@store/loaderSlice'
+import { showLoader, closeLoader } from '@store/UI/loaderSlice'
 
 const VerifyEmail = () => {
   const [data, setData] = useState({ email: '', verifyCode: '' })
@@ -118,7 +118,7 @@ const VerifyEmail = () => {
           name: res.data.name,
           accessToken: res.data.accessToken,
           isAuth: true,
-        })
+        }),
       )
 
       setAccessAction(true)

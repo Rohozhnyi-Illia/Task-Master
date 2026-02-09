@@ -9,7 +9,7 @@ import { Input, AuthButton, ErrorModal } from '@components'
 import { useDispatch, useSelector } from 'react-redux'
 import { setAuth, updateEmail } from '@store/authSlice'
 import AuthService from '@services/authService'
-import { showLoader, closeLoader } from '@store/loaderSlice'
+import { showLoader, closeLoader } from '@store/UI/loaderSlice'
 
 const Login = () => {
   const [data, setData] = useState({

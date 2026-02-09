@@ -9,7 +9,7 @@ import {
   restoreNotification,
 } from '@store/notificationSlice'
 import { useDispatch, useSelector } from 'react-redux'
-import { showError } from '@store/errorSlice'
+import { showError } from '@store/UI/errorSlice'
 
 const typeIcon = {
   overdue: <FaExclamationCircle />,

@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom'
 import AuthService from '@services/authService'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateEmail } from '@store/authSlice'
-import { showLoader, closeLoader } from '@store/loaderSlice'
+import { showLoader, closeLoader } from '@store/UI/loaderSlice'
 
 const UpdatePassword = () => {
   const [data, setData] = useState({ email: '' })

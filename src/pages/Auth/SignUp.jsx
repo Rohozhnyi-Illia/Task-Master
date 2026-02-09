@@ -10,7 +10,7 @@ import AuthService from '@services/authService'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateEmail } from '@store/authSlice'
-import { showLoader, closeLoader } from '@store/loaderSlice'
+import { showLoader, closeLoader } from '@store/UI/loaderSlice'
 
 const SignUp = () => {
   const [data, setData] = useState({ name: '', email: '', password: '' })

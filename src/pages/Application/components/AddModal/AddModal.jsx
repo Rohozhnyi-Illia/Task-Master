@@ -9,9 +9,9 @@ import TaskService from '@services/taskService'
 import { createTask } from '@store/tasksSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import firstLetterToUpperCase from '@utils/helpers/firstLetterToUpperCase'
-import { showError } from '@store/errorSlice'
-import { showLoader, closeLoader } from '@store/loaderSlice'
-import { showSuccess } from '@store/successSlice'
+import { showError } from '@store/UI/errorSlice'
+import { showLoader, closeLoader } from '@store/UI/loaderSlice'
+import { showSuccess } from '@store/UI/toastSlice'
 
 const AddModal = ({ openModalHandler, isAddModalOpen }) => {
   const [categorySelected, setCategorySelected] = useState('')

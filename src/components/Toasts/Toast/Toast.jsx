@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { clearSuccess } from '@store/successSlice'
+import { clearSuccess } from '@store/UI/toastSlice'
 import { FaCheckCircle } from 'react-icons/fa'
 import * as styles from './Toast.module.scss'
 

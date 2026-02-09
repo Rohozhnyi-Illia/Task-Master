@@ -9,8 +9,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import AuthService from '@services/authService'
 import NotificationService from '../../services/notificationService'
 import { getNotifications } from '../../store/notificationSlice'
-import { showError } from '@store/errorSlice'
-import { showLoader, closeLoader } from '@store/loaderSlice'
+import { showError } from '@store/UI/errorSlice'
+import { showLoader, closeLoader } from '@store/UI/loaderSlice'
 
 const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)

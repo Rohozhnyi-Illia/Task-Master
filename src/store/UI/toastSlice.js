@@ -1,7 +1,7 @@
 import { createSlice, nanoid } from '@reduxjs/toolkit'
 
-const successSlice = createSlice({
-  name: 'success',
+const toastSlice = createSlice({
+  name: 'toast',
   initialState: {
     items: [],
   },
@@ -23,5 +23,5 @@ const successSlice = createSlice({
   },
 })
 
-export const { showSuccess, clearSuccess } = successSlice.actions
-export default successSlice.reducer
+export const { showSuccess, clearSuccess } = toastSlice.actions
+export default toastSlice.reducer

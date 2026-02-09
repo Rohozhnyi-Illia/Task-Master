@@ -5,13 +5,13 @@ import CategorySelect from '../Application/components/CategorySelect/CategorySel
 import NotificationList from './components/NotificationsList/NotificationList'
 import { FaTrash } from 'react-icons/fa'
 import NotificationService from '@services/notificationService'
-import { showError } from '@store/errorSlice'
+import { showError } from '@store/UI/errorSlice'
 import {
   deleteReadNotifications,
   getNotifications,
   deleteAllNotifications,
 } from '@store/notificationSlice'
-import { showSuccess } from '@store/successSlice'
+import { showSuccess } from '@store/UI/toastSlice'
 
 const NotificationsPage = () => {
   const [selected, setSelected] = useState('')

@@ -4,8 +4,8 @@ import { calendar, trash } from '@assets'
 import { useDispatch } from 'react-redux'
 import TaskService from '@services/taskService'
 import { deleteTasks, updateStatus, restoreTask } from '@store/tasksSlice'
-import { showError } from '@store/errorSlice'
-import { showSuccess } from '@store/successSlice'
+import { showError } from '@store/UI/errorSlice'
+import { showSuccess } from '@store/UI/toastSlice'
 import { FaAngleDown } from 'react-icons/fa6'
 
 const STATUS_OPTIONS = ['Active', 'InProgress', 'Done', 'Archived']

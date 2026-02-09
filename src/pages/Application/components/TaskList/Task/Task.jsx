@@ -4,10 +4,10 @@ import * as styles from './Task.module.scss'
 import { useDispatch } from 'react-redux'
 import TaskService from '@services/taskService'
 import { deleteTasks, updateStatus, restoreTask } from '@store/tasksSlice'
-import { showError } from '@store/errorSlice'
+import { showError } from '@store/UI/errorSlice'
 import { FaAngleDown } from 'react-icons/fa6'
 import { createPortal } from 'react-dom'
-import { showSuccess } from '../../../../../store/successSlice'
+import { showSuccess } from '@store/UI/toastSlice'
 
 const STATUS_OPTIONS = ['Active', 'InProgress', 'Done', 'Archived']
 

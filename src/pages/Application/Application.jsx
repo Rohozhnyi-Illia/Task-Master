@@ -6,10 +6,10 @@ import AddButton from './components/AddButton/AddButton'
 import TaskList from './components/TaskList/TaskList/TaskList'
 import AddModal from './components/AddModal/AddModal'
 import TaskService from '@services/taskService'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { getTasks } from '@store/tasksSlice'
-import { showError } from '@store/errorSlice'
-import { showLoader, closeLoader } from '@store/loaderSlice'
+import { showError } from '@store/UI/errorSlice'
+import { showLoader, closeLoader } from '@store/UI/loaderSlice'
 
 const FILTER_OPTIONS = [
   'All',
@@ -26,6 +26,7 @@ const Application = () => {
   const [selected, setSelected] = useState('')
   const [keywordValue, setKeyWordValue] = useState('')
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
+  const tasks = useSelector((state) => state.tasks)
 
   const dispatch = useDispatch()
 
@@ -35,7 +36,12 @@ const Application = () => {
 
   useEffect(() => {
     const fetchTasks = async () => {
-      dispatch(showLoader())
+      const isInitialLoad = tasks.length === 0
+
+      if (isInitialLoad) {
+        dispatch(showLoader())
+      }
+
       try {
         const res = await TaskService.getAllTasks()
         if (res.success) {
@@ -46,12 +52,14 @@ const Application = () => {
       } catch (error) {
         dispatch(showError(error.message || 'Something went wrong'))
       } finally {
-        dispatch(closeLoader())
+        if (isInitialLoad) {
+          dispatch(closeLoader())
+        }
       }
     }
 
     fetchTasks()
-  }, [dispatch])
+  }, [dispatch, tasks])
 
   return (
     <div className={styles.application}>

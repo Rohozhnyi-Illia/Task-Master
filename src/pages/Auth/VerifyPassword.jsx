@@ -7,7 +7,7 @@ import passwordVerifySchema from '@utils/validation/passwordVerify-validation'
 import { Input, AuthButton, ErrorModal, AccessModal } from '@components'
 import { useNavigate } from 'react-router-dom'
 import AuthService from '@services/authService'
-import { showLoader, closeLoader } from '@store/loaderSlice'
+import { showLoader, closeLoader } from '@store/UI/loaderSlice'
 import { useDispatch, useSelector } from 'react-redux'
 
 const VerifyPassword = () => {

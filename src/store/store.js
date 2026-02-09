@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
 import authReducer from './authSlice'
 import tasksReducer from './tasksSlice'
-import errorSlice from './errorSlice'
-import loaderSlice from './loaderSlice'
+import errorSlice from './UI/errorSlice'
+import loaderSlice from './UI/loaderSlice'
 import notificationReducer from './notificationSlice'
-import successSlice from './successSlice'
+import toastSlice from './UI/toastSlice'
 import { loadState, saveState } from './localStorage'
 
 const persistedState = loadState()
@@ -16,7 +16,7 @@ const store = configureStore({
     notification: notificationReducer,
     error: errorSlice,
     loader: loaderSlice,
-    success: successSlice,
+    success: toastSlice,
   },
   preloadedState: persistedState,
 })
