@@ -10,8 +10,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setAuth, updateEmail } from '@store/authSlice'
 import AuthService from '@services/authService'
 import { showLoader, closeLoader } from '@store/UI/loaderSlice'
+import useTheme from '../../hooks/useTheme'
 
 const Login = () => {
+  useTheme()
+
   const [data, setData] = useState({
     email: '',
     password: '',
