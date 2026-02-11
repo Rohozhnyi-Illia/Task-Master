@@ -15,9 +15,8 @@ const CustomSelect = ({
   const toggleOpen = () => setIsOpen(!isOpen)
 
   const handleSelect = (option) => {
-    setSelected(option)
-    setIsOpen(false)
     onChange?.(option)
+    setIsOpen(false)
     selectRef.current.focus()
   }
 

@@ -6,23 +6,16 @@ import noData from '../../../../assets/images/noData.svg'
 
 const NotificationList = ({ selected }) => {
   const notifications = useSelector((state) => state.notification)
-  const filtredNotifications =
-    !selected || selected === 'All'
-      ? notifications
-      : notifications.filter((notification) => notification.type === selected.toLowerCase())
-
-  const isEmpty = filtredNotifications.length === 0
+  const filteredNotifications = notifications.filter((notification) => {
+    if (!selected || selected === 'All') return true
+    return notification.type.toLowerCase() === selected.toLowerCase()
+  })
 
   return (
     <div className={styles.notificationList}>
-      {isEmpty ? (
-        <div className={styles.notificationList__empty}>
-          <img src={noData} alt="no data" />
-          <h2>No Notifications Yet.</h2>
-        </div>
-      ) : (
-        <div className={styles.notificationWrapper}>
-          {filtredNotifications.map((notification) => (
+      <div className={styles.notificationWrapper}>
+        {filteredNotifications.length > 0 ? (
+          filteredNotifications.map((notification) => (
             <Notification
               key={notification._id}
               id={notification._id}
@@ -30,9 +23,14 @@ const NotificationList = ({ selected }) => {
               message={notification.message}
               isRead={notification.isRead}
             />
-          ))}
-        </div>
-      )}
+          ))
+        ) : (
+          <div className={styles.notificationList__empty}>
+            <img src={noData} alt="no data" />
+            <h2>No Notifications Yet.</h2>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

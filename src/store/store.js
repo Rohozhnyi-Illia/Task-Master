@@ -5,6 +5,7 @@ import errorSlice from './UI/errorSlice'
 import loaderSlice from './UI/loaderSlice'
 import notificationReducer from './notificationSlice'
 import toastSlice from './UI/toastSlice'
+import appSlice from './appSlice'
 import { loadState, saveState } from './localStorage'
 
 const persistedState = loadState()
@@ -17,6 +18,7 @@ const store = configureStore({
     error: errorSlice,
     loader: loaderSlice,
     success: toastSlice,
+    app: appSlice,
   },
   preloadedState: persistedState,
 })

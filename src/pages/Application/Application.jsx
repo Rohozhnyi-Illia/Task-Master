@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import * as styles from './Application.module.scss'
 import { search } from '@assets'
-import CategorySelect from './components/CategorySelect/CategorySelect'
+import CategorySelect from '@components/CategorySelect/CategorySelect'
 import AddButton from './components/AddButton/AddButton'
 import TaskList from './components/TaskList/TaskList/TaskList'
 import AddModal from './components/AddModal/AddModal'
@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getTasks } from '@store/tasksSlice'
 import { showError } from '@store/UI/errorSlice'
 import { showLoader, closeLoader } from '@store/UI/loaderSlice'
+import { setFirstAppLoadDone } from '@store/appSlice'
 
 const FILTER_OPTIONS = [
   'All',
@@ -26,7 +27,7 @@ const Application = () => {
   const [selected, setSelected] = useState('')
   const [keywordValue, setKeyWordValue] = useState('')
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
-  const tasks = useSelector((state) => state.tasks)
+  const firstAppLoadDone = useSelector((state) => state.app.firstAppLoadDone)
 
   const dispatch = useDispatch()
 
@@ -36,9 +37,7 @@ const Application = () => {
 
   useEffect(() => {
     const fetchTasks = async () => {
-      const isInitialLoad = tasks.length === 0
-
-      if (isInitialLoad) {
+      if (!firstAppLoadDone) {
         dispatch(showLoader())
       }
 
@@ -52,7 +51,8 @@ const Application = () => {
       } catch (error) {
         dispatch(showError(error.message || 'Something went wrong'))
       } finally {
-        if (isInitialLoad) {
+        if (!firstAppLoadDone) {
+          dispatch(setFirstAppLoadDone())
           dispatch(closeLoader())
         }
       }

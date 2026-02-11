@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import * as styles from './NotificationsPage.module.scss'
 import { useDispatch, useSelector } from 'react-redux'
-import CategorySelect from '../Application/components/CategorySelect/CategorySelect'
+import CategorySelect from '@components/CategorySelect/CategorySelect'
 import NotificationList from './components/NotificationsList/NotificationList'
 import { FaTrash } from 'react-icons/fa'
 import NotificationService from '@services/notificationService'
@@ -71,9 +71,8 @@ const NotificationsPage = () => {
               <div className={styles.notifications__category}>
                 <CategorySelect
                   options={['All', 'Warning', 'Reminder', 'Overdue']}
-                  onChange={(val) => setSelected(val)}
                   selected={selected}
-                  setSelected={setSelected}
+                  onChange={setSelected} // <- используем только onChange
                 />
               </div>
 

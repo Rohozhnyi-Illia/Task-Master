@@ -31,9 +31,20 @@ const tasksSlice = createSlice({
     restoreTask(state, action) {
       return [...state, action.payload]
     },
+
+    resetTasks() {
+      return []
+    },
   },
 })
 
-export const { getTasks, deleteTasks, updateStatus, isComplete, createTask, restoreTask } =
-  tasksSlice.actions
+export const {
+  getTasks,
+  deleteTasks,
+  updateStatus,
+  isComplete,
+  createTask,
+  restoreTask,
+  resetTasks,
+} = tasksSlice.actions
 export default tasksSlice.reducer

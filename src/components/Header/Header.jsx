@@ -1,16 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { home, notification, stats, sun } from '../../assets'
-import { moon, exit } from '../../assets'
+import { Link, useNavigate } from 'react-router-dom'
+import { home, notification, stats, sun } from '@assets'
+import { moon, exit } from '@assets'
 import * as styles from './Header.module.scss'
-import useTheme from '../../hooks/useTheme'
+import useTheme from '@hooks/useTheme'
 import { logout } from '@store/authSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import AuthService from '@services/authService'
-import NotificationService from '../../services/notificationService'
-import { getNotifications } from '../../store/notificationSlice'
+import NotificationService from '@services/notificationService'
+import { getNotifications, deleteAllNotifications } from '@store/notificationSlice'
 import { showError } from '@store/UI/errorSlice'
 import { showLoader, closeLoader } from '@store/UI/loaderSlice'
+import { resetFirstAppLoadDone } from '@store/appSlice'
+import { resetTasks } from '@store/tasksSlice'
 
 const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -21,6 +23,7 @@ const Header = () => {
 
   const headerRef = useRef(null)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const modalOpenHandler = () => setIsModalOpen(!isModalOpen)
   const toggleTheme = () => setTheme(isDark ? 'light' : 'dark')
@@ -30,11 +33,15 @@ const Header = () => {
     const res = await AuthService.logout()
 
     if (res.success) {
+      dispatch(resetFirstAppLoadDone())
+      dispatch(resetTasks())
+      dispatch(deleteAllNotifications())
       dispatch(logout())
-    } else {
-      dispatch(showError(res.error))
+
+      navigate('/login', { replace: true })
     }
 
+    dispatch(showError(res.error))
     dispatch(closeLoader())
   }
 

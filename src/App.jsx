@@ -1,8 +1,8 @@
 import React, { Suspense, lazy, useEffect } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import { useSelector } from 'react-redux'
 import ProtectedPath from './services/ProtectedPath'
-import { Loader, GlobalErrorModal, ToastsContainer } from './components'
+import { GlobalLoader, GlobalErrorModal, ToastsContainer, SuspenseLoader } from './components'
+import useTheme from './hooks/useTheme'
 
 const Login = lazy(() => import('./pages/Auth/Login'))
 const UpdatePassword = lazy(() => import('./pages/Auth/UpdatePassword'))
@@ -15,7 +15,7 @@ const VerifyEmail = lazy(() => import('./pages/Auth/VerifyEmail'))
 const Notifications = lazy(() => import('./pages/Notifications/NotificationsPage'))
 
 function App() {
-  const isLoaderShown = useSelector((state) => state.loader.isLoaderShown)
+  useTheme()
 
   useEffect(() => {
     const fetchPingServer = async () => {
@@ -27,8 +27,8 @@ function App() {
 
   useEffect(() => {
     const setAppHeight = () => {
-      const vh = window.innerHeight * 0.01
-      document.documentElement.style.setProperty('--app-height', `${vh * 100}px`)
+      const viewHeight = window.innerHeight * 0.01
+      document.documentElement.style.setProperty('--app-height', `${viewHeight * 100}px`)
     }
 
     setAppHeight()
@@ -38,7 +38,7 @@ function App() {
   }, [])
 
   return (
-    <Suspense fallback={<Loader />}>
+    <Suspense fallback={<SuspenseLoader />}>
       <Router>
         <Routes>
           <Route path="/" element={<Login />} />
@@ -62,7 +62,7 @@ function App() {
         </Routes>
         <GlobalErrorModal />
         <ToastsContainer />
-        {isLoaderShown && <Loader />}
+        <GlobalLoader />
       </Router>
     </Suspense>
   )

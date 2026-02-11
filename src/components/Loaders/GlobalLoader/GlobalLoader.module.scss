@@ -1,0 +1,53 @@
+.loader__container {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--bg-color);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 99999;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  font-size: 8rem;
+  font-family: sans-serif;
+  color: var(--text-color);
+  background: repeating-linear-gradient(90deg, currentColor 0 8%, #0000 0 10%) 200% 100%/200%
+    3px no-repeat;
+  animation: l3 2s steps(6) infinite;
+
+  @media screen and (max-width: 768px) {
+    font-size: 5rem;
+  }
+}
+
+.loader:before {
+  content: 'Loading...';
+}
+
+@keyframes l3 {
+  to {
+    background-position: 80% 100%;
+  }
+}

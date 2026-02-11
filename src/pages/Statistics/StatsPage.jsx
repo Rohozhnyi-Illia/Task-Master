@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import * as styles from './StatsPage.module.scss'
 import ScaleChart from './components/ScaleChart/ScaleChart'
 import categories from '@utils/fields/taskCategories'
-import { Loader } from '@components'
+import { SuspenseLoader } from '@components'
 
 const CircleChart = lazy(() => import('./components/CircleChart/CircleChart'))
 const BarChart = lazy(() => import('./components/BarChart/BarChart'))
@@ -32,7 +32,7 @@ const StatsPage = () => {
   }))
 
   return (
-    <Suspense fallback={<Loader />}>
+    <Suspense fallback={<SuspenseLoader />}>
       <div className={styles.stats}>
         <div className="container">
           <h2 className={styles.stats__title}>Hello, {name}</h2>

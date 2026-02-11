@@ -15,7 +15,8 @@ _Statistics Page_
 _Notifications Page_
 ![Notifications](./src/assets/preview/Notifications.jpg)
 
-Frontend application for **TaskMaster** — a task management platform with deadlines, notifications, and user authentication. Built with React, Redux Toolkit, SCSS, and Webpack.
+Frontend application for **TaskMaster** — a task management platform with deadlines, notifications, and user authentication.  
+Designed and implemented with a focus on real-world authentication flows, state management, and user experience.
 
 ## Links
 
@@ -24,19 +25,36 @@ Frontend application for **TaskMaster** — a task management platform with dead
 
 ## Features
 
+### Authentication & Security
+
 - User registration and login with JWT authentication
 - **Email verification after registration**
 - **Password recovery with email verification**
 - JWT-based access and refresh tokens
+- Automatic token refresh via Axios interceptors
+- **Protected routes:** private pages are guarded via `ProtectPath` component; non-authenticated users are redirected to login
+
+### Tasks & Dashboard
+
 - Task management: create, update, complete, and delete tasks
 - Task sorting and filtering by category and keywords
-- Pagination on the main dashboard for large task lists
-- Task notifications: reminders, deadlines, and overdue alerts
-- **Notifications page with messages about deadlines**
-- Dark/light theme toggle
+- Pagination for large task lists
+- Statistics page with completed tasks overview
+
+### Notifications
+
+- Task reminders, deadlines, and overdue alerts
+- **Notifications page with user messages**
+- Mark notifications as read or delete them
+
+### UX & UI
+
+- Global loaders and error modals
+- **Global success notifications (toast system)**
+- Optimistic UI updates
+- Dark / light theme toggle
 - Responsive design for mobile and desktop
-- Automatic token refresh and optimistic UI updates
-- Error handling with modals and loaders
+- Consistent layout with shared Header component for all main pages (excluding auth pages)
 - Validation of forms, deadlines, and data
 - Custom favicon, app branding, and custom domain setup
 
@@ -47,6 +65,16 @@ Frontend application for **TaskMaster** — a task management platform with dead
 - **Frontend:** React 18, Redux Toolkit, React Router, SCSS, Webpack
 - **HTTP / API:** Axios with interceptors
 - **Validation:** Yup
+
+---
+
+## Architecture Notes
+
+- Organized by feature: each page has its own folder with components and styles, plus shared components for cross-page reuse
+- API logic isolated in services layer
+- Centralized UI feedback system (loaders, error modals, success toasts)
+- JWT authentication with automatic token refresh
+- UI state separated from business data in Redux
 
 ---
 
@@ -65,19 +93,11 @@ npm start # development mode
 npm run build # production build
 ```
 
-Default frontend URL: http://localhost:3000
-
-> By default, frontend uses the deployed backend at: https://taskmaster-backend-e940.onrender.com/api
-> To use a local backend instead, run your backend on http://localhost:9000 and edit src/services/api.js:
-
-```js
-const currentURL = 0 // use local backend at http://localhost:9000/api
-```
-
-> CORS is already configured on the backend to allow requests from:
->
-> - http://localhost:3000 (local frontend)
-> - https://taskmaster.ink (deployed frontend)
+- Default frontend URL: `http://localhost:3000`
+- By default, the frontend uses the deployed backend: `https://taskmaster-backend-e940.onrender.com/api`
+- To use a local backend:
+  - run it on `http://localhost:9000`
+  - update `src/services/api.js`
 
 ## Pages
 
@@ -108,6 +128,7 @@ Frontend communicates with TaskMaster-Backend through Axios services:
 
 - getAllTasks() — get all tasks
 - createTask({ task, status, category, deadline, remainingTime }) — create a new task
+- completeTask(id) - complete the task
 - deleteTasks(id) — delete a task
 - updateStatus(id, status) — update task status
 
@@ -116,12 +137,15 @@ Frontend communicates with TaskMaster-Backend through Axios services:
 - getUserNotifications() — get user notifications
 - markAsRead(id) — mark a notification as read
 - deleteNotification(id) — delete a notification
+- deleteReadNotifications() - delete read notifications
+- deleteAllNotifications() - delete all notifications
 
 ## Notes
 
 - Added email verification for registration and password recovery
 - Backend must be running for frontend to function correctly
 - Pagination improves performance on task-heavy dashboards
+- Success toasts provide user feedback for completed actions
 
 ## Author
 
