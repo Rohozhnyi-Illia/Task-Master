@@ -39,9 +39,10 @@ const Header = () => {
       dispatch(logout())
 
       navigate('/login', { replace: true })
+    } else {
+      dispatch(showError(res.error))
     }
 
-    dispatch(showError(res.error))
     dispatch(closeLoader())
   }
 
@@ -84,13 +85,21 @@ const Header = () => {
           >
             <ul className={styles.header__list}>
               <li>
-                <Link to={'/application'} className={styles.header__icon_wrapper}>
+                <Link
+                  to={'/application'}
+                  className={styles.header__icon_wrapper}
+                  onClick={() => modalOpenHandler()}
+                >
                   <img src={home} alt="home" className={styles.header__icon} />
                 </Link>
               </li>
 
               <li className={styles.header__notification}>
-                <Link to={'/notifications'} className={styles.header__icon_wrapper}>
+                <Link
+                  to={'/notifications'}
+                  className={styles.header__icon_wrapper}
+                  onClick={() => modalOpenHandler()}
+                >
                   <img
                     src={notification}
                     alt="notifications"
@@ -105,7 +114,11 @@ const Header = () => {
               </li>
 
               <li>
-                <Link to={'/statistics'} className={styles.header__icon_wrapper}>
+                <Link
+                  to={'/statistics'}
+                  className={styles.header__icon_wrapper}
+                  onClick={() => modalOpenHandler()}
+                >
                   <img src={stats} alt="stats" className={styles.header__icon} />
                 </Link>
               </li>

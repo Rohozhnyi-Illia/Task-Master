@@ -52,6 +52,7 @@ const Login = () => {
     const savedAuth = JSON.parse(localStorage.getItem('authState'))
 
     if (savedAuth?.keepLogged && savedAuth?.accessToken) {
+      dispatch(showLoader())
       dispatch(setAuth(savedAuth))
       navigate('/application')
     } else if (savedAuth?.email) {
@@ -102,6 +103,8 @@ const Login = () => {
     setAuthError('')
     dispatch(showLoader())
 
+    let isSuccess
+
     try {
       await loginSchema.validate(data, { abortEarly: false })
 
@@ -140,6 +143,7 @@ const Login = () => {
         localStorage.setItem('authState', JSON.stringify(authState))
       }
 
+      isSuccess = true
       navigate('/application')
     } catch (err) {
       if (err.inner) {
@@ -153,7 +157,9 @@ const Login = () => {
         setIsErrorModalOpen(true)
       }
     } finally {
-      dispatch(closeLoader())
+      if (!isSuccess) {
+        dispatch(closeLoader())
+      }
     }
   }
 

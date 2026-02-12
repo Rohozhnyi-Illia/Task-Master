@@ -40,8 +40,8 @@ const VerifyEmail = () => {
   const navigateHandler = () => {
     setAccessAction(false)
     sessionStorage.removeItem('signUpEmail')
+    dispatch(showLoader())
     navigate('/application', { replace: true })
-    return
   }
 
   const onChangeHandler = (e) => {
