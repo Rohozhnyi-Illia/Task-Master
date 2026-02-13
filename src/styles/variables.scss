@@ -1,6 +1,7 @@
 html[data-theme='light'] {
   --text-color: #4a4a4a;
   --accent-color: #140e56;
+  --secondary-color: #6c5ce7;
   --nav-color: #fcfff0;
   --bg-color: #ffffff;
   --header-shadow: rgba(0, 0, 0, 0.15);
@@ -10,6 +11,7 @@ html[data-theme='light'] {
 html[data-theme='dark'] {
   --text-color: #e0e0e0;
   --accent-color: #c20f70;
+  --secondary-color: #ff6eb4;
   --bg-color: #2b2b2b;
   --nav-color: #292929;
   --header-shadow: rgba(194, 194, 194, 0.1);
@@ -19,6 +21,7 @@ html[data-theme='dark'] {
 $color-accent: #851150;
 $color-primary-dark: #140e56;
 $color-primary-light: #cf0373;
+$accent-color-universal: #6c5ce7;
 
 $font-size-xl: 4.8rem;
 $font-title: 3.2rem;

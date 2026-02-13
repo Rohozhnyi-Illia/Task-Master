@@ -46,3 +46,9 @@
   row-gap: 2rem;
   align-items: center;
 }
+
+@media screen and (max-width: 500.1px) {
+  .notificationList {
+    margin-top: 0rem;
+  }
+}

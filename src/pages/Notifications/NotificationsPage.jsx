@@ -3,7 +3,6 @@ import * as styles from './NotificationsPage.module.scss'
 import { useDispatch, useSelector } from 'react-redux'
 import CategorySelect from '@components/CategorySelect/CategorySelect'
 import NotificationList from './components/NotificationsList/NotificationList'
-import { FaTrash } from 'react-icons/fa'
 import NotificationService from '@services/notificationService'
 import { showError } from '@store/UI/errorSlice'
 import {
@@ -12,6 +11,7 @@ import {
   deleteAllNotifications,
 } from '@store/notificationSlice'
 import { showSuccess } from '@store/UI/toastSlice'
+import NotificationActionButton from './components/NotificationActionButton/NotificationActionButton'
 
 const NotificationsPage = () => {
   const [selected, setSelected] = useState('')
@@ -68,23 +68,19 @@ const NotificationsPage = () => {
 
           {notifications.length > 0 && (
             <div className={styles.notifications__controls}>
-              <div className={styles.notifications__category}>
-                <CategorySelect
-                  options={['All', 'Warning', 'Reminder', 'Overdue']}
-                  selected={selected}
-                  onChange={setSelected} // <- используем только onChange
-                />
-              </div>
+              <div className={styles.notifications__controlsWrapper}>
+                <div className={styles.notifications__category}>
+                  <CategorySelect
+                    options={['All', 'Warning', 'Reminder', 'Overdue']}
+                    selected={selected}
+                    onChange={setSelected}
+                  />
+                </div>
 
-              <div className={styles.notifications__buttons}>
-                <button onClick={deleteReadHandler}>
-                  <p>Delete Read</p>
-                  <FaTrash />
-                </button>
-                <button onClick={deleteAllHandler}>
-                  <p>Delete All</p>
-                  <FaTrash />
-                </button>
+                <div className={styles.notifications__buttons}>
+                  <NotificationActionButton text="Delete Read" onClick={deleteReadHandler} />
+                  <NotificationActionButton text="Delete All" onClick={deleteAllHandler} />
+                </div>
               </div>
             </div>
           )}
