@@ -15,7 +15,7 @@ const GlobalLoader = () => {
       const timer = setTimeout(() => {
         setVisible(false)
         document.body.style.overflow = ''
-      }, 500)
+      }, 300)
 
       return () => clearTimeout(timer)
     }

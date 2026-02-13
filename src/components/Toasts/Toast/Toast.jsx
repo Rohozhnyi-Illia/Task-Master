@@ -12,7 +12,7 @@ const Toast = ({ id, message }) => {
     setVisible(true)
     const timer = setTimeout(() => {
       setVisible(false)
-      setTimeout(() => dispatch(clearSuccess(id)), 400)
+      setTimeout(() => dispatch(clearSuccess(id)), 300)
     }, 3000)
 
     return () => clearTimeout(timer)
