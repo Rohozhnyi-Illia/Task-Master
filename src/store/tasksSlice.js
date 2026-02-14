@@ -35,6 +35,10 @@ const tasksSlice = createSlice({
     resetTasks() {
       return []
     },
+
+    updateTaskOrder(state, action) {
+      return action.payload
+    },
   },
 })
 
@@ -46,5 +50,6 @@ export const {
   createTask,
   restoreTask,
   resetTasks,
+  updateTaskOrder,
 } = tasksSlice.actions
 export default tasksSlice.reducer

@@ -119,6 +119,51 @@
     font-size: 50px;
   }
 
+  .drag {
+    position: relative;
+    margin-top: 2.5rem;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    &__text {
+      @include m.text-style(v.$font-size-sm, v.$font-weight-semibold, v.$line-height-default);
+      color: var(--text-color);
+      letter-spacing: 0.1px;
+
+      position: absolute;
+      right: 100%;
+      margin-left: 0.5rem;
+      white-space: nowrap;
+
+      opacity: 0;
+      transform: translateX(15px);
+      transition:
+        opacity 0.4s ease,
+        transform 0.4s ease;
+    }
+
+    &__button {
+      border: none;
+      background-color: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+
+      svg {
+        color: var(--text-color);
+        font-size: 3rem;
+      }
+
+      &:hover + .drag__text {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+  }
+
   @media screen and (min-width: 1024.1px) {
     &__header {
       flex-wrap: nowrap;

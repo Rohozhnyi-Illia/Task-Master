@@ -11,6 +11,8 @@ import { getTasks } from '@store/tasksSlice'
 import { showError } from '@store/UI/errorSlice'
 import { showLoader, closeLoader } from '@store/UI/loaderSlice'
 import { setFirstAppLoadDone } from '@store/appSlice'
+import { RxDragHandleHorizontal } from 'react-icons/rx'
+import DragAndDropContainer from './components/DragAndDrop/Container/Container'
 
 const FILTER_OPTIONS = [
   'All',
@@ -28,6 +30,7 @@ const Application = () => {
   const [keywordValue, setKeyWordValue] = useState('')
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const firstAppLoadDone = useSelector((state) => state.app.firstAppLoadDone)
+  const [isDragAndDropOpen, setIsDragAndDropOpen] = useState(false)
 
   const dispatch = useDispatch()
 
@@ -60,6 +63,10 @@ const Application = () => {
 
     fetchTasks()
   }, [dispatch])
+
+  const openDropAndDownHandler = () => {
+    setIsDragAndDropOpen(!isDragAndDropOpen)
+  }
 
   return (
     <div className={styles.application}>
@@ -95,8 +102,20 @@ const Application = () => {
             />
           </header>
 
+          <div className={styles.drag}>
+            <button className={styles.drag__button} onClick={openDropAndDownHandler}>
+              <RxDragHandleHorizontal />
+            </button>
+
+            <p className={styles.drag__text}>Change the order</p>
+          </div>
           <TaskList keyword={keywordValue} selected={selected} />
         </div>
+
+        <DragAndDropContainer
+          isDragAndDropOpen={isDragAndDropOpen}
+          openDropAndDownHandler={openDropAndDownHandler}
+        />
 
         {isAddModalOpen && (
           <AddModal openModalHandler={openModalHandler} isAddModalOpen={isAddModalOpen} />
