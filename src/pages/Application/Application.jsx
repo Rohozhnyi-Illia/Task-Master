@@ -31,6 +31,7 @@ const Application = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const firstAppLoadDone = useSelector((state) => state.app.firstAppLoadDone)
   const [isDragAndDropOpen, setIsDragAndDropOpen] = useState(false)
+  const tasks = useSelector((state) => state.tasks)
 
   const dispatch = useDispatch()
 
@@ -102,13 +103,16 @@ const Application = () => {
             />
           </header>
 
-          <div className={styles.drag}>
-            <button className={styles.drag__button} onClick={openDropAndDownHandler}>
-              <RxDragHandleHorizontal />
-            </button>
+          {tasks.length > 0 && (
+            <div className={styles.drag}>
+              <button className={styles.drag__button} onClick={openDropAndDownHandler}>
+                <RxDragHandleHorizontal />
+              </button>
 
-            <p className={styles.drag__text}>Change the order</p>
-          </div>
+              <p className={styles.drag__text}>Change the order</p>
+            </div>
+          )}
+
           <TaskList keyword={keywordValue} selected={selected} />
         </div>
 

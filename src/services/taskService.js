@@ -57,6 +57,16 @@ const taskService = class taskService {
       return { success: false, error: message }
     }
   }
+
+  async reorderTasks(orderedIds) {
+    try {
+      const { data } = await api.patch('/tasks/reorder', { orderedIds })
+      return { success: true, data }
+    } catch (error) {
+      const message = parseError(error)
+      return { success: false, error: message }
+    }
+  }
 }
 
 const TaskService = new taskService()

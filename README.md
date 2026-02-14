@@ -62,7 +62,7 @@ Designed and implemented with a focus on real-world authentication flows, state 
 
 ## Technologies
 
-- **Frontend:** React 18, Redux Toolkit, React Router, SCSS, Webpack
+- **Frontend:** React 19, Redux Toolkit, React Router, SCSS, Webpack
 - **HTTP / API:** Axios with interceptors
 - **Validation:** Yup
 
