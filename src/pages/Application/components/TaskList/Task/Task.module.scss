@@ -66,27 +66,6 @@
     cursor: pointer;
   }
 
-  &.done {
-    background-color: #e0ffe0;
-    color: #333;
-  }
-
-  &.inprogress {
-    background-color: #fff4e0;
-    color: #333;
-  }
-
-  &.active {
-    background-color: #e0f0ff;
-    color: #333;
-  }
-
-  &.archived {
-    background-color: #f5f5f5;
-    color: #999;
-    font-style: italic;
-  }
-
   &__dateWrapper {
     display: inline-flex;
     align-items: center;
@@ -217,10 +196,14 @@
   }
 }
 
+.task.done .task__textCell {
+  text-decoration: line-through;
+}
+
 .task.done {
   th,
   td {
-    background-color: #e0ffe0;
+    background-color: v.$task-color-done;
     transition: all 0.4s ease;
   }
 }
@@ -228,7 +211,7 @@
 .task.inprogress {
   th,
   td {
-    background-color: #fff4e0;
+    background-color: v.$task-color-inprogress;
     border: 1px solid #e7e7e7;
     transition: all 0.4s ease;
   }
@@ -236,7 +219,7 @@
 
 .task.archived {
   td {
-    background-color: #ececec;
+    background-color: v.$task-color-archived;
     font-style: italic;
     transition: all 0.4s ease;
   }

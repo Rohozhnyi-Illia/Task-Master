@@ -13,10 +13,8 @@ const STATUS_OPTIONS = ['Active', 'InProgress', 'Done', 'Archived']
 const TaskMobile = ({ task }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [isDeleteMenuOpen, setIsDeleteMenuOpen] = useState(false)
-
   const statusRef = useRef(null)
   const deleteRef = useRef(null)
-
   const displayDate = task.deadline.split('T')[0]
   const taskId = task._id
   const dispatch = useDispatch()
@@ -24,14 +22,10 @@ const TaskMobile = ({ task }) => {
 
   useEffect(() => {
     const handler = (e) => {
-      if (statusRef.current && !statusRef.current.contains(e.target)) {
-        setIsDropdownOpen(false)
-      }
-      if (deleteRef.current && !deleteRef.current.contains(e.target)) {
+      if (statusRef.current && !statusRef.current.contains(e.target)) setIsDropdownOpen(false)
+      if (deleteRef.current && !deleteRef.current.contains(e.target))
         setIsDeleteMenuOpen(false)
-      }
     }
-
     document.addEventListener('click', handler)
     return () => document.removeEventListener('click', handler)
   }, [])
@@ -51,11 +45,7 @@ const TaskMobile = ({ task }) => {
   }
 
   const changeStatusHandler = async (status) => {
-    if (status === task.status) {
-      dispatch(showError('Status is already active'))
-      return
-    }
-
+    if (status === task.status) return dispatch(showError('Status is already active'))
     if (status === 'Done') {
       await completeHandler()
       setIsDropdownOpen(false)
@@ -64,7 +54,6 @@ const TaskMobile = ({ task }) => {
 
     const prevStatus = task.status
     dispatch(updateStatus({ id: taskId, status }))
-
     const res = await TaskService.updateStatus(taskId, status)
     if (!res.success) {
       dispatch(updateStatus({ id: taskId, status: prevStatus }))
@@ -84,9 +73,7 @@ const TaskMobile = ({ task }) => {
     if (!res.success) {
       dispatch(restoreTask(deleted))
       dispatch(showError(res.error))
-    } else {
-      dispatch(showSuccess('Task deleted'))
-    }
+    } else dispatch(showSuccess('Task deleted'))
   }
 
   const getStatusClass = (status) => {
@@ -104,28 +91,27 @@ const TaskMobile = ({ task }) => {
 
   return (
     <div className={`${styles.taskMobile} ${getStatusClass(task.status)}`}>
-      <header className={styles.taskMobile__header}>
-        <div className={styles.taskMobile__category}>
-          <p className={styles.taskMobile__categoryText}>{task.category}</p>
-        </div>
-
-        <input
-          type="checkbox"
-          className={styles.taskMobile__checkbox}
-          checked={isCompleted}
-          onChange={completeHandler}
-        />
-      </header>
+      <div className={styles.taskMobile__header}>
+        <div className={styles.taskMobile__category}>{task.category}</div>
+        <input type="checkbox" checked={isCompleted} onChange={completeHandler} />
+      </div>
 
       <div className={styles.taskMobile__body}>
-        <h5 className={styles.taskMobile__name}>{task.task}</h5>
-        <div className={styles.taskMobile__deadline}>
-          <img src={calendar} alt="calendar" />
-          <p className={styles.taskMobile__deadlineText}>{displayDate}</p>
+        <h4 className={styles.taskMobile__title}>{task.task}</h4>
+
+        <div className={styles.taskMobile__meta}>
+          <span>
+            <img src={calendar} alt="" />
+            <p>{displayDate}</p>
+          </span>
+
+          <span>
+            Remaining: {task.remainingTime === 0 ? 'None' : `${task.remainingTime}h`}
+          </span>
         </div>
       </div>
 
-      <footer className={styles.taskMobile__footer}>
+      <div className={styles.taskMobile__footer}>
         <div
           ref={statusRef}
           className={`${styles.taskMobile__status} ${isDropdownOpen ? styles.open : ''}`}
@@ -134,13 +120,16 @@ const TaskMobile = ({ task }) => {
             setIsDeleteMenuOpen(false)
           }}
         >
-          <p className={styles.taskMobile__statusText}>{task.status}</p>
-          <FaAngleDown />
+          <div className={styles.taskMobile__trigger}>
+            <p>{task.status}</p>
+            <FaAngleDown />
+          </div>
+
           {isDropdownOpen && (
             <ul className={styles.taskMobile__statusList}>
-              {STATUS_OPTIONS.map((status) => (
-                <li key={status} onClick={() => changeStatusHandler(status)}>
-                  {status}
+              {STATUS_OPTIONS.map((s) => (
+                <li key={s} onClick={() => changeStatusHandler(s)}>
+                  {s}
                 </li>
               ))}
             </ul>
@@ -148,33 +137,28 @@ const TaskMobile = ({ task }) => {
         </div>
 
         <div ref={deleteRef} className={styles.taskMobile__actions}>
-          <p className={styles.taskMobile__remaining}>
-            Remaining:{' '}
-            <span className={styles.taskMobile__remainingHighlight}>
-              {task.remainingTime === 0 ? 'None' : `${task.remainingTime}h`}
-            </span>
-          </p>
           <button
-            className={styles.taskMobile__deleteBtn}
-            onClick={() => {
-              setIsDeleteMenuOpen((prev) => !prev)
-              setIsDropdownOpen(false)
-            }}
+            className={styles.taskMobile__deleteButton}
+            onClick={() => setIsDeleteMenuOpen((prev) => !prev)}
           >
-            <img src={trash} alt="delete" />
+            <img src={trash} alt="" />
           </button>
 
-          {isDeleteMenuOpen && (
-            <div className={styles.taskMobile__deleteMenu}>
-              <p>Delete task?</p>
-              <div>
-                <button onClick={deleteTaskHandler}>Yes</button>
-                <button onClick={() => setIsDeleteMenuOpen(false)}>No</button>
-              </div>
+          <div
+            className={`${styles.taskMobile__deleteMenu} ${
+              isDeleteMenuOpen ? styles.taskMobile__deleteMenu_open : ''
+            }`}
+          >
+            <p>Delete task?</p>
+            <div>
+              <button onClick={deleteTaskHandler} className={styles.deleteButton}>
+                Yes
+              </button>
+              <button onClick={() => setIsDeleteMenuOpen(false)}>No</button>
             </div>
-          )}
+          </div>
         </div>
-      </footer>
+      </div>
     </div>
   )
 }
