@@ -57,6 +57,7 @@ Designed and implemented with a focus on real-world authentication flows, state 
 - Consistent layout with shared Header component for all main pages (excluding auth pages)
 - Validation of forms, deadlines, and data
 - Custom favicon, app branding, and custom domain setup
+- Drag & drop provides intuitive task organization
 
 ---
 
@@ -64,6 +65,7 @@ Designed and implemented with a focus on real-world authentication flows, state 
 
 - **Frontend:** React 19, Redux Toolkit, React Router, SCSS, Webpack
 - **HTTP / API:** Axios with interceptors
+- **Drag & Drop:** react-beautiful-dnd
 - **Validation:** Yup
 
 ---
@@ -75,6 +77,7 @@ Designed and implemented with a focus on real-world authentication flows, state 
 - Centralized UI feedback system (loaders, error modals, success toasts)
 - JWT authentication with automatic token refresh
 - UI state separated from business data in Redux
+- Drag & drop integrated with Redux for state persistence
 
 ---
 
@@ -131,6 +134,8 @@ Frontend communicates with TaskMaster-Backend through Axios services:
 - completeTask(id) - complete the task
 - deleteTasks(id) — delete a task
 - updateStatus(id, status) — update task status
+- updateCategory(id, category) - update task category
+- reorderTasks(orderedIds) - persist new task order after drag & drop
 
 ## NotificationService
 

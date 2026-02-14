@@ -58,6 +58,16 @@ const taskService = class taskService {
     }
   }
 
+  async updateCategory(id, category) {
+    try {
+      const { data } = await api.patch(`/tasks/${id}/category`, { category })
+      return { success: true, data }
+    } catch (error) {
+      const message = parseError(error)
+      return { success: false, error: message }
+    }
+  }
+
   async reorderTasks(orderedIds) {
     try {
       const { data } = await api.patch('/tasks/reorder', { orderedIds })

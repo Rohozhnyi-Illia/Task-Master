@@ -23,6 +23,11 @@ const tasksSlice = createSlice({
       return state.map((task) => (task._id === id ? { ...task, status } : task))
     },
 
+    updateCategory(state, action) {
+      const { id, category } = action.payload
+      return state.map((task) => (task._id === id ? { ...task, category } : task))
+    },
+
     isComplete(state, action) {
       const taskId = action.payload
       return state.map((task) => (task._id === taskId ? { ...task, status: 'Done' } : task))
@@ -51,5 +56,6 @@ export const {
   restoreTask,
   resetTasks,
   updateTaskOrder,
+  updateCategory,
 } = tasksSlice.actions
 export default tasksSlice.reducer
