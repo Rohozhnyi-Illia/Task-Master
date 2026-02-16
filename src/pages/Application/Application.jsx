@@ -36,7 +36,7 @@ const Application = () => {
   const dispatch = useDispatch()
 
   const keywordValueHandler = (e) => setKeyWordValue(e.target.value)
-  const openModalHandler = () => setIsAddModalOpen(!isAddModalOpen)
+  const openModalHandler = () => setIsAddModalOpen((prev) => !prev)
   const addButtonRef = useRef(null)
 
   useEffect(() => {
