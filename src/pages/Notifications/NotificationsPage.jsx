@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import * as styles from './NotificationsPage.module.scss'
 import { useDispatch, useSelector } from 'react-redux'
-import CategorySelect from '@components/CategorySelect/CategorySelect'
+import { CategorySelect } from '@components'
 import NotificationList from './components/NotificationsList/NotificationList'
 import NotificationService from '@services/notificationService'
 import { showError } from '@store/UI/errorSlice'

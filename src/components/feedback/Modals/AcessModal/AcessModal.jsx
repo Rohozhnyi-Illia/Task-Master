@@ -1,6 +1,6 @@
 import React from 'react'
-import ModalBase from '../ModalBase/ModalBase'
-import AuthButton from '../../AuthButton/AuthButton'
+import { ModalBase } from '@components'
+import { AuthButton } from '@components'
 import { done } from '@assets'
 import * as styles from './AcessModal.module.scss'
 

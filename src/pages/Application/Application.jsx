@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import * as styles from './Application.module.scss'
 import { search } from '@assets'
-import CategorySelect from '@components/CategorySelect/CategorySelect'
+import { CategorySelect } from '@components'
 import AddButton from './components/AddButton/AddButton'
 import TaskList from './components/TaskList/TaskList/TaskList'
 import AddModal from './components/AddModal/AddModal'

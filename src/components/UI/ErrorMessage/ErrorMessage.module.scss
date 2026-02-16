@@ -1,5 +1,5 @@
-@use '../../styles/variables.scss' as v;
-@use '../../styles/mixins.scss' as m;
+@use '@styles/variables.scss' as v;
+@use '@styles/mixins.scss' as m;
 
 .errorMessage {
   @include m.text-style(v.$font-size-md, v.$font-weight-medium, v.$line-height-default);

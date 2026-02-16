@@ -15,13 +15,13 @@
   }
 
   td {
-    padding: 1rem;
+    padding: 0.8rem;
     @include m.text-style(v.$font-size-sm, v.$font-weight-medium, 1.2);
     color: #b3b3b3;
     line-height: 1.1;
 
-    @media screen and (max-height: 800px) {
-      padding: 0.7rem;
+    @media screen and (max-height: 800.1px) {
+      padding: 0.6rem;
     }
   }
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import * as styles from './AddModal.module.scss'
-import CategorySelect from '@components/CategorySelect/CategorySelect'
+import { CategorySelect } from '@components'
 import AddButton from '../AddButton/AddButton'
 import { closeModal } from '@assets'
 import addTaskSchema from '@utils/validation/addTask-validation'
