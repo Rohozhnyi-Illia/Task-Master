@@ -94,7 +94,7 @@ const TaskList = ({ keyword, selected }) => {
         )}
       </div>
 
-      {filteredTasks.length > 10 && (
+      {filteredTasks.length > taskPerPage && (
         <div className={styles.pagination}>
           <div className={styles.pagination__back}>
             <button onClick={backHandler} disabled={currentPage === 1}>

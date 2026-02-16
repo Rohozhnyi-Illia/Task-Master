@@ -205,7 +205,7 @@ const AddModal = ({ openModalHandler, isAddModalOpen }) => {
             <label htmlFor="category">Category</label>
             <CategorySelect
               id="category"
-              options={['High', 'Middle', 'Low']}
+              options={['Critical', 'High', 'Middle', 'Low']}
               onChange={(val) => setCategorySelected(val)}
               selected={categorySelected}
               setSelected={setCategorySelected}

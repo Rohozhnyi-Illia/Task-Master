@@ -9,6 +9,7 @@ const ScaleChart = (props) => {
   const getColor = (category) => {
     if (category === 'High') return '#b32929'
     if (category === 'Middle') return '#e79805'
+    if (category === 'Critical') return '#999999'
     return '#4386dfff'
   }
 

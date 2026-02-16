@@ -40,7 +40,7 @@ const TaskMobile = ({ task }) => {
       dispatch(updateStatus({ id: taskId, status: prevStatus }))
       dispatch(showError(res.error))
     } else {
-      dispatch(showSuccess(isCompleted ? 'Task is active again' : 'Task completed'))
+      dispatch(showSuccess(isCompleted ? 'Task is active again' : 'The task was completed'))
     }
   }
 
@@ -59,7 +59,7 @@ const TaskMobile = ({ task }) => {
       dispatch(updateStatus({ id: taskId, status: prevStatus }))
       dispatch(showError(res.error))
     } else {
-      dispatch(showSuccess('Status updated'))
+      dispatch(showSuccess('Status has been updated'))
       setIsDropdownOpen(false)
     }
   }

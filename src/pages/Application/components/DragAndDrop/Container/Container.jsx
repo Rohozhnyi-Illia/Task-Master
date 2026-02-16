@@ -50,7 +50,7 @@ const Container = ({ isDragAndDropOpen, openDropAndDownHandler }) => {
       const response = await TaskService.reorderTasks(orderedIds)
 
       if (response.success) {
-        dispatch(showSuccess('The order has been changed.'))
+        dispatch(showSuccess('The order has been changed'))
       }
     } catch (error) {
       dispatch(showError(error.message))

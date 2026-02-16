@@ -28,6 +28,14 @@ const Task = ({ task }) => {
   const isCompleted = task.status === 'Done'
   const displayDate = task.deadline.split('T')[0]
 
+  const toggleStatusDropdownHandler = () => {
+    setIsStatusDropdownOpen((prev) => !prev)
+  }
+
+  const toggleCategoryDropdownHandler = () => {
+    setIsCategoryDropdownOpen((prev) => !prev)
+  }
+
   const closeStatusDropdownHandler = () => setIsStatusDropdownOpen(false)
   const closeCategoryDropdownHandler = () => setIsCategoryDropdownOpen(false)
 
@@ -45,7 +53,7 @@ const Task = ({ task }) => {
       return
     }
 
-    dispatch(showSuccess(isCompleted ? 'The task is active again' : 'Task completed'))
+    dispatch(showSuccess(isCompleted ? 'The task is active again' : 'The task was completed'))
   }
 
   const changeStatusHandler = async (newStatus) => {
@@ -137,7 +145,7 @@ const Task = ({ task }) => {
         <div
           ref={statusWrapperRef}
           className={styles.task__statusWrapper}
-          onClick={() => setIsStatusDropdownOpen((prev) => !prev)}
+          onClick={toggleStatusDropdownHandler}
         >
           {task.status}
           <FaAngleDown style={{ rotate: isStatusDropdownOpen ? '180deg' : '0deg' }} />
@@ -156,7 +164,7 @@ const Task = ({ task }) => {
         <div
           className={styles.task__categoryWrapper}
           ref={categoryWrapperRef}
-          onClick={() => setIsCategoryDropdownOpen((prev) => !prev)}
+          onClick={toggleCategoryDropdownHandler}
         >
           {task.category}
           <FaAngleDown style={{ rotate: isCategoryDropdownOpen ? '180deg' : '0deg' }} />
@@ -182,7 +190,10 @@ const Task = ({ task }) => {
 
       <td>
         <div ref={deleteWrapperRef} className={styles.task__deleteWrapper}>
-          <button className={styles.deleteBtn} onClick={() => setIsDeleteMenuOpen(true)}>
+          <button
+            className={styles.deleteBtn}
+            onClick={() => setIsDeleteMenuOpen((prev) => !prev)}
+          >
             <img src={trash} alt="delete" />
           </button>
 

@@ -7,12 +7,13 @@
   text-align: left;
   background-color: #fff;
   border: 1px solid #ccc;
-  border-radius: v.$radius-sm;
+  border-radius: v.$radius-md;
   cursor: pointer;
 }
 
 .option {
   padding: 0.8rem 1.2rem;
+  width: 100%;
   @include m.text-style(v.$font-size-xs, v.$font-weight-medium, v.$line-height-default);
   color: #b3b3b3;
   cursor: pointer;

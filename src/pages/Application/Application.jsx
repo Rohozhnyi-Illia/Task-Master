@@ -103,7 +103,7 @@ const Application = () => {
             />
           </header>
 
-          {tasks.length > 0 && (
+          {tasks.length > 1 && (
             <div className={styles.drag}>
               <button className={styles.drag__button} onClick={openDropAndDownHandler}>
                 <RxDragHandleHorizontal />

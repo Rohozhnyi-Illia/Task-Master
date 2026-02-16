@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useLayoutEffect } from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import * as styles from './DropdownPortal.module.scss'
@@ -7,17 +7,34 @@ const DropdownPortal = ({ isOpen, anchorRef, options, onSelect, onClose }) => {
   const dropdownRef = useRef(null)
   const [pos, setPos] = useState({ top: 0, left: 0, width: 0 })
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!isOpen || !anchorRef.current) return
 
-    const rect = anchorRef.current.getBoundingClientRect()
+    const rectangle = anchorRef.current.getBoundingClientRect()
 
     setPos({
-      top: rect.top + window.scrollY - 150,
-      left: rect.left + window.scrollX,
-      width: rect.width,
+      top: rectangle.top + window.scrollY - 150,
+      left: rectangle.left + window.scrollX,
+      width: rectangle.width,
     })
   }, [isOpen, anchorRef])
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target) &&
+        anchorRef.current &&
+        !anchorRef.current.contains(e.target)
+      ) {
+        onClose()
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [onClose, anchorRef])
 
   useEffect(() => {
     const keyHandler = (e) => {

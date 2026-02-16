@@ -1,3 +1,3 @@
-const categories = ['High', 'Middle', 'Low']
+const categories = ['Critical', 'High', 'Middle', 'Low']
 
 export default categories
