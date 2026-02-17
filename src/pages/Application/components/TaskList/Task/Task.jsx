@@ -115,7 +115,7 @@ const Task = ({ task }) => {
       return
     }
 
-    dispatch(showSuccess(`The task: "${task.task}" has been deleted`))
+    dispatch(showSuccess(`The task has been deleted`))
   }
 
   const getStatusClass = (status) => {

@@ -12,3 +12,4 @@ export { default as ToastsContainer } from './feedback/Toasts/ToastContainer/Toa
 export { default as SuspenseLoader } from './UI/Loaders/SuspenseLoader/SuspenseLoader'
 export { default as Pagination } from './UI/Pagination/Pagination'
 export { default as CategorySelect } from './UI/CategorySelect/CategorySelect'
+export { default as NoData } from './UI/NoData/NoData'

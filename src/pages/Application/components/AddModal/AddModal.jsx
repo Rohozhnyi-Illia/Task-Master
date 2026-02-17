@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import * as styles from './AddModal.module.scss'
 import { CategorySelect } from '@components'
 import AddButton from '../AddButton/AddButton'
-import { closeModal } from '@assets'
+import { FaCircleXmark } from 'react-icons/fa6'
 import addTaskSchema from '@utils/validation/addTask-validation'
 import { ErrorMessage } from '@components'
 import TaskService from '@services/taskService'
@@ -35,7 +35,7 @@ const AddModal = ({ openModalHandler, isAddModalOpen }) => {
 
   const onChangeHandler = (e) => {
     const { value } = e.target
-    if (value.length > 25) return
+    if (value.length > 30) return
     setTask(value)
   }
 
@@ -162,7 +162,7 @@ const AddModal = ({ openModalHandler, isAddModalOpen }) => {
       <fieldset disabled={isLoaderShown}>
         <form className={styles.addModal__content} onSubmit={onSubmitHandler}>
           <button className={styles.addModal__button} onClick={openModalHandler} type="button">
-            <img src={closeModal} alt="close" />
+            <FaCircleXmark />
           </button>
 
           <div>
@@ -177,12 +177,12 @@ const AddModal = ({ openModalHandler, isAddModalOpen }) => {
             />
             <p
               className={
-                task.length < 25
+                task.length < 30
                   ? styles.addModal__length
                   : `${styles.addModal__length} ${styles.warning}`
               }
             >
-              {task.length}/25
+              {task.length}/30
             </p>
             {errors.task && (
               <ErrorMessage error={errors.task} className={styles.addModal__error} />

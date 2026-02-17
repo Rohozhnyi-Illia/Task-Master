@@ -1,14 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react'
 import * as styles from './TaskMobile.module.scss'
-import { calendar, trash } from '@assets'
+import { calendar } from '@assets'
 import { useDispatch } from 'react-redux'
 import TaskService from '@services/taskService'
 import { deleteTasks, updateStatus, restoreTask } from '@store/tasksSlice'
 import { showError } from '@store/UI/errorSlice'
 import { showSuccess } from '@store/UI/toastSlice'
 import { FaAngleDown } from 'react-icons/fa6'
-
-const STATUS_OPTIONS = ['Active', 'InProgress', 'Done', 'Archived']
+import { FaTrash } from 'react-icons/fa'
+import STATUS_OPTIONS from '@utils/fields/statusOptions'
 
 const TaskMobile = ({ task }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
@@ -73,7 +73,7 @@ const TaskMobile = ({ task }) => {
     if (!res.success) {
       dispatch(restoreTask(deleted))
       dispatch(showError(res.error))
-    } else dispatch(showSuccess('Task deleted'))
+    } else dispatch(showSuccess('The task has been deleted'))
   }
 
   const getStatusClass = (status) => {
@@ -127,9 +127,9 @@ const TaskMobile = ({ task }) => {
 
           {isDropdownOpen && (
             <ul className={styles.taskMobile__statusList}>
-              {STATUS_OPTIONS.map((s) => (
-                <li key={s} onClick={() => changeStatusHandler(s)}>
-                  {s}
+              {STATUS_OPTIONS.map((status) => (
+                <li key={status} onClick={() => changeStatusHandler(status)}>
+                  {status}
                 </li>
               ))}
             </ul>
@@ -141,7 +141,7 @@ const TaskMobile = ({ task }) => {
             className={styles.taskMobile__deleteButton}
             onClick={() => setIsDeleteMenuOpen((prev) => !prev)}
           >
-            <img src={trash} alt="" />
+            <FaTrash />
           </button>
 
           <div

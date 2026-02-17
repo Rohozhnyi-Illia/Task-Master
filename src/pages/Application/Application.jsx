@@ -13,17 +13,7 @@ import { showLoader, closeLoader } from '@store/UI/loaderSlice'
 import { setFirstAppLoadDone } from '@store/appSlice'
 import { RxDragHandleHorizontal } from 'react-icons/rx'
 import DragAndDropContainer from './components/DragAndDrop/Container/Container'
-
-const FILTER_OPTIONS = [
-  'All',
-  'High',
-  'Middle',
-  'Low',
-  'Active',
-  'Done',
-  'InProgress',
-  'Archived',
-]
+import FILTER_OPTIONS from '@utils/fields/filterOptions.js'
 
 const Application = () => {
   const [selected, setSelected] = useState('')
@@ -100,6 +90,7 @@ const Application = () => {
               className={styles.application__newTaskBtn}
               onClick={openModalHandler}
               ref={addButtonRef}
+              variant="glass"
             />
           </header>
 

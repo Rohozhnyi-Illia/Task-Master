@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import * as styles from './TaskList.module.scss'
-import { noData } from '@assets'
 import Task from '../Task/Task'
 import TaskMobile from '../TaskMobile/TaskMobile'
 import { useSelector } from 'react-redux'
 import { Pagination } from '@components'
+import { NoData } from '@components'
 
 const TaskList = ({ keyword, selected }) => {
   const tasks = useSelector((state) => state.tasks)
@@ -42,12 +42,12 @@ const TaskList = ({ keyword, selected }) => {
             <table className={styles.taskList__table}>
               <colgroup>
                 <col style={{ width: '100px' }} />
-                <col style={{ width: '220px' }} />
-                <col style={{ width: '120px' }} />
-                <col style={{ width: '120px' }} />
+                <col style={{ width: '230px' }} />
+                <col style={{ width: '110px' }} />
+                <col style={{ width: '110px' }} />
                 <col style={{ width: '180px' }} />
-                <col style={{ width: '120px' }} />
-                <col style={{ width: '80px' }} />
+                <col style={{ width: '110px' }} />
+                <col style={{ width: '70px' }} />
               </colgroup>
               <thead>
                 <tr>
@@ -71,10 +71,7 @@ const TaskList = ({ keyword, selected }) => {
 
         {filteredTasks.length < 1 && (
           <div className={styles.taskList__empty}>
-            <div>
-              <img src={noData} alt="no tasks" />
-              <h2>No tasks for now — keep up the great work!</h2>
-            </div>
+            <NoData text="Nothing to see here… yet!" />
           </div>
         )}
 

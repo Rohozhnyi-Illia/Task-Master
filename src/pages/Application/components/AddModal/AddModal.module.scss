@@ -70,9 +70,17 @@
     border: none;
     cursor: pointer;
 
-    img {
+    &:hover {
+      svg {
+        transform: rotate(90deg);
+      }
+    }
+
+    svg {
       width: 2.5rem;
       height: 2.5rem;
+      color: #ccc;
+      transition: transform 0.3s ease;
     }
   }
 

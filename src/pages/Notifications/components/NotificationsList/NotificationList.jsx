@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react'
 import * as styles from './NotificationList.module.scss'
 import Notification from '../Notification/Notification'
 import { useSelector } from 'react-redux'
-import { noData } from '@assets'
-import { Pagination } from '@components'
+import { Pagination, NoData } from '@components'
 
 const NotificationList = ({ selected }) => {
   const notifications = useSelector((state) => state.notification)
   const [currentPage, setCurrentPage] = useState(1)
-  const notificationsPerPage = 10
+  const notificationsPerPage = 5
 
   const filteredNotifications = notifications.filter((notification) => {
     if (!selected || selected === 'All') return true
@@ -46,10 +45,7 @@ const NotificationList = ({ selected }) => {
             />
           ))
         ) : (
-          <div className={styles.notificationList__empty}>
-            <img src={noData} alt="no data" />
-            <h2>No Notifications Yet.</h2>
-          </div>
+          <NoData text="Nothing to see here… yet!" />
         )}
 
         {filteredNotifications.length > notificationsPerPage && (
