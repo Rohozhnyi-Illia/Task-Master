@@ -1,39 +1,45 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { Task, StatusType, CategoryType } from '../types/task'
+
+const initialState: Task[] = []
 
 const tasksSlice = createSlice({
   name: 'tasks',
-  initialState: [],
+  initialState,
   reducers: {
-    getTasks(state, action) {
+    getTasks(state, action: PayloadAction<Task[]>) {
       return action.payload
     },
 
-    createTask(state, action) {
+    createTask(state, action: PayloadAction<Task>) {
       const newState = [...state, action.payload]
 
-      return newState.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      return newState.sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      )
     },
-    deleteTasks(state, action) {
+
+    deleteTasks(state, action: PayloadAction<string>) {
       const taskId = action.payload
       return state.filter((task) => task._id !== taskId)
     },
 
-    updateStatus(state, action) {
+    updateStatus(state, action: PayloadAction<{ id: string; status: StatusType }>) {
       const { id, status } = action.payload
       return state.map((task) => (task._id === id ? { ...task, status } : task))
     },
 
-    updateCategory(state, action) {
+    updateCategory(state, action: PayloadAction<{ id: string; category: CategoryType }>) {
       const { id, category } = action.payload
       return state.map((task) => (task._id === id ? { ...task, category } : task))
     },
 
-    isComplete(state, action) {
+    isComplete(state, action: PayloadAction<string>) {
       const taskId = action.payload
       return state.map((task) => (task._id === taskId ? { ...task, status: 'Done' } : task))
     },
 
-    restoreTask(state, action) {
+    restoreTask(state, action: PayloadAction<Task>) {
       return [...state, action.payload]
     },
 
@@ -41,7 +47,7 @@ const tasksSlice = createSlice({
       return []
     },
 
-    updateTaskOrder(state, action) {
+    updateTaskOrder(state, action: PayloadAction<Task[]>) {
       return action.payload
     },
   },

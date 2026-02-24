@@ -1,23 +1,37 @@
-import { createSlice, nanoid } from '@reduxjs/toolkit'
+import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit'
+
+interface Item {
+  id: string
+  message: string
+}
+
+interface ToastState {
+  items: Item[]
+}
+
+const initialState: ToastState = {
+  items: [],
+}
 
 const toastSlice = createSlice({
   name: 'toast',
-  initialState: {
-    items: [],
-  },
+  initialState,
+
   reducers: {
     showSuccess: {
-      reducer: (state, action) => {
+      reducer: (state, action: PayloadAction<Item>) => {
         state.items.push(action.payload)
       },
-      prepare: (message) => ({
+
+      prepare: (message: string) => ({
         payload: {
           id: nanoid(),
           message,
         },
       }),
     },
-    clearSuccess: (state, action) => {
+
+    clearSuccess: (state, action: PayloadAction<string>) => {
       state.items = state.items.filter((toast) => toast.id !== action.payload)
     },
   },

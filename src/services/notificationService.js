@@ -12,16 +12,6 @@ const notificationService = class notificationService {
     }
   }
 
-  async getUserNotificationsCount() {
-    try {
-      const { data } = await api.get('/notification/count')
-      return { success: true, data }
-    } catch (error) {
-      const message = parseError(error)
-      return { success: false, error: message }
-    }
-  }
-
   async markAsRead(id) {
     try {
       const { data } = await api.patch(`/notification/${id}/read`)

@@ -10,6 +10,15 @@ import { loadState, saveState } from './localStorage'
 
 const persistedState = loadState()
 
+const initialAuthState = {
+  id: '',
+  email: '',
+  name: '',
+  accessToken: '',
+  isAuth: false,
+  keepLogged: false,
+}
+
 const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -20,7 +29,12 @@ const store = configureStore({
     success: toastSlice,
     app: appSlice,
   },
-  preloadedState: persistedState,
+
+  preloadedState: {
+    auth: persistedState?.auth ?? initialAuthState,
+    tasks: persistedState?.tasks ?? [],
+    notification: persistedState?.notification ?? [],
+  },
 })
 
 store.subscribe(() => {

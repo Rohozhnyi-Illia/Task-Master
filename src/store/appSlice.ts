@@ -1,10 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+interface AppState {
+  firstAppLoadDone: boolean
+}
+
+const initialState: AppState = {
+  firstAppLoadDone: false,
+}
+
 const appSlice = createSlice({
   name: 'App',
-  initialState: {
-    firstAppLoadDone: false,
-  },
+  initialState,
 
   reducers: {
     setFirstAppLoadDone(state) {
