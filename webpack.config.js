@@ -29,7 +29,7 @@ module.exports = (env, argv) => {
       new CleanWebpackPlugin(),
       new MiniCssExtractPlugin({
         filename: 'css/styles.[contenthash].css',
-      })
+      }),
     )
   }
 
@@ -38,7 +38,7 @@ module.exports = (env, argv) => {
   }
 
   return {
-    entry: './src/index.js',
+    entry: './src/index.tsx',
     output: {
       path: path.resolve(__dirname, 'build'),
       filename: isProduction ? 'js/[name].[contenthash].js' : 'js/[name].js',
@@ -48,7 +48,7 @@ module.exports = (env, argv) => {
     mode: isProduction ? 'production' : 'development',
     devtool: isProduction ? 'source-map' : 'eval-cheap-module-source-map',
     resolve: {
-      extensions: ['.js', '.jsx'],
+      extensions: ['.ts', '.tsx', '.js', '.jsx'],
       alias: {
         '@components': path.resolve(__dirname, 'src/components/'),
         '@pages': path.resolve(__dirname, 'src/pages/'),
@@ -61,6 +61,16 @@ module.exports = (env, argv) => {
     },
     module: {
       rules: [
+        {
+          test: /\.(ts|tsx)$/,
+          exclude: /node_modules/,
+          use: {
+            loader: 'ts-loader',
+            options: {
+              transpileOnly: true,
+            },
+          },
+        },
         {
           test: /\.(js|jsx)$/,
           exclude: /node_modules/,
