@@ -1,6 +1,7 @@
 import { mail } from '../../assets'
+import { Field } from '../../types/forms'
 
-const FIELDS = [
+const FIELDS: Field[] = [
   {
     label: 'E-Mail',
     name: 'email',

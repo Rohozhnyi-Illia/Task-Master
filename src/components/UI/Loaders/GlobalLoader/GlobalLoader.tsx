@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
-import * as styles from './GlobalLoader.module.scss'
+import styles from './GlobalLoader.module.scss'
 import { useSelector } from 'react-redux'
+import { RootState } from '@store/store'
 
 const GlobalLoader = () => {
-  const isLoaderShown = useSelector((state) => state.loader.isLoaderShown)
-  const [visible, setVisible] = useState(false)
+  const isLoaderShown = useSelector((state: RootState) => state.loader.isLoaderShown)
+  const [visible, setVisible] = useState<boolean>(false)
 
   useEffect(() => {
     if (isLoaderShown) {

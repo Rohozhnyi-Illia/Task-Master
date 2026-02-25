@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import * as styles from './Input.module.scss'
+import styles from './Input.module.scss'
 import { Link } from 'react-router-dom'
 import ErrorMessage from '../ErrorMessage/ErrorMessage'
 import { IoIosEye, IoMdEyeOff } from 'react-icons/io'

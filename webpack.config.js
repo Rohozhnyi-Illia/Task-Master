@@ -57,6 +57,7 @@ module.exports = (env, argv) => {
         '@assets': path.resolve(__dirname, 'src/assets/'),
         '@styles': path.resolve(__dirname, 'src/styles/'),
         '@store': path.resolve(__dirname, 'src/store/'),
+        '@types': path.resolve(__dirname, 'src/types/'),
       },
     },
     module: {
@@ -77,11 +78,38 @@ module.exports = (env, argv) => {
           use: ['babel-loader'],
         },
         {
-          test: /\.s[ac]ss$/i,
+          test: /\.module\.s[ac]ss$/i,
           use: [
-            isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+            'style-loader',
+            {
+              loader: 'css-loader',
+              options: {
+                modules: {
+                  localIdentName: '[name]__[local]__[hash:base64:5]',
+                },
+              },
+            },
+            {
+              loader: 'sass-loader',
+              options: {
+                implementation: require('sass'),
+              },
+            },
+          ],
+        },
+
+        {
+          test: /\.s[ac]ss$/i,
+          exclude: /\.module\.s[ac]ss$/i,
+          use: [
+            'style-loader',
             'css-loader',
-            'sass-loader',
+            {
+              loader: 'sass-loader',
+              options: {
+                implementation: require('sass'),
+              },
+            },
           ],
         },
         {

@@ -1,5 +1,16 @@
 {
   "compilerOptions": {
+    "baseUrl": "src",
+    "paths": {
+      "@components/*": ["components/*"],
+      "@pages/*": ["pages/*"],
+      "@services/*": ["services/*"],
+      "@utils/*": ["utils/*"],
+      "@assets/*": ["assets/*"],
+      "@styles/*": ["styles/*"],
+      "@store/*": ["store/*"],
+      "@types/*": ["types/*"]
+    },
     "target": "ES6",
     "module": "ESNext",
     "lib": ["DOM", "ESNext"],
@@ -13,6 +24,6 @@
     "skipLibCheck": true,
     "noEmit": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "declaration.d.ts"],
   "exclude": ["node_modules", "build"]
 }

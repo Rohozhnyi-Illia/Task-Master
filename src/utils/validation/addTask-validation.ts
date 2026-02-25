@@ -34,4 +34,6 @@ const addTaskSchema = yup.object().shape({
     .max(2100, 'Year must be valid'),
 })
 
+export type AddTaskValues = yup.InferType<typeof addTaskSchema>
+
 export default addTaskSchema

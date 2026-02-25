@@ -1,5 +1,5 @@
 import React from 'react'
-import * as styles from './AddButton.module.scss'
+import styles from './AddButton.module.scss'
 import { addTask } from '@assets'
 
 const AddButton = React.forwardRef(({ className, type = 'button', ...props }, ref) => {

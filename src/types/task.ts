@@ -1,7 +1,10 @@
 import { ISODataType, ModelBase } from './shared'
 
-export type CategoryType = 'Critical' | 'High' | 'Middle' | 'Low'
-export type StatusType = 'Done' | 'Active' | 'InProgress' | 'Archived'
+export const STATUS_OPTIONS = ['Done', 'Active', 'InProgress', 'Archived'] as const
+export type StatusType = (typeof STATUS_OPTIONS)[number]
+
+export const CATEGORIES_OPTIONS = ['Critical', 'High', 'Middle', 'Low'] as const
+export type CategoryType = (typeof CATEGORIES_OPTIONS)[number]
 
 export interface Task extends ModelBase {
   category: CategoryType

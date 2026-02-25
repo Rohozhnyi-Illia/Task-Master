@@ -1,8 +1,8 @@
 import React from 'react'
+import styles from './ErrorModal.module.scss'
 import ModalBase from '../ModalBase/ModalBase'
 import { errorImg } from '@assets'
 import AuthButton from '../../../UI/AuthButton/AuthButton'
-import * as styles from './ErrorModal.module.scss'
 
 const ErrorModal = ({ error, onClick }) => {
   return (

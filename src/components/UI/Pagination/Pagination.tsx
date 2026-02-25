@@ -1,18 +1,33 @@
 import React from 'react'
-import * as styles from './Pagination.module.scss'
-import { back, next } from '@assets'
+import styles from './Pagination.module.scss'
+import { back, next } from '@assets/index'
 
-const Pagination = ({ pageNumbers, totalPages, currentPage, setCurrentPage }) => {
+interface PaginationProps {
+  pageNumbers: number[]
+  totalPages: number
+  currentPage: number
+  setCurrentPage: (value: number) => void
+}
+
+const Pagination = (props: PaginationProps) => {
+  const { pageNumbers, totalPages, currentPage, setCurrentPage } = props
+
   const nextHandler = () => {
-    if (currentPage < totalPages) setCurrentPage((prev) => prev + 1)
+    if (currentPage < totalPages) {
+      const nextPage = currentPage + 1
+      setCurrentPage(nextPage)
+    }
   }
 
   const backHandler = () => {
-    if (currentPage > 1) setCurrentPage((prev) => prev - 1)
+    if (currentPage > 1) {
+      const prevPage = currentPage - 1
+      setCurrentPage(prevPage)
+    }
   }
 
   return (
-    <div className={styles.pagination}>
+    <div className={styles.pagination} tabIndex={0}>
       <div className={styles.pagination__back}>
         <button onClick={backHandler} disabled={currentPage === 1}>
           <img src={back} alt="back" />

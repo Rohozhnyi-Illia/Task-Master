@@ -1,6 +1,13 @@
 import { mdiPassword, mail } from '../../assets'
+import { Field } from '../../types/forms'
 
-const FIELDS = [
+const FIELDS: Field[] = [
+  {
+    label: 'Name',
+    name: 'name',
+    placeholder: 'Enter Your Name...',
+    img: mail,
+  },
   {
     label: 'E-Mail',
     name: 'email',
@@ -12,7 +19,6 @@ const FIELDS = [
     name: 'password',
     placeholder: 'Enter Your Password...',
     img: mdiPassword,
-    authOptions: true,
     type: 'password',
   },
 ]

@@ -22,4 +22,6 @@ const passwordVerifySchema = yup.object().shape({
     .required('Repeat password is required'),
 })
 
+export type PasswordVerifyValues = yup.InferType<typeof passwordVerifySchema>
+
 export default passwordVerifySchema

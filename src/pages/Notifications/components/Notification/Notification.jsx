@@ -1,7 +1,7 @@
 import React from 'react'
-import * as styles from './Notification.module.scss'
+import styles from './Notification.module.scss'
 import { FaCheck, FaTrash, FaExclamationCircle, FaClock, FaBell } from 'react-icons/fa'
-import firstLetterToUpperCase from '@utils/helpers/firstLetterToUpperCase'
+import capitalize from '@utils/helpers/capitalize'
 import NotificationService from '@services/notificationService'
 import {
   readNotification,
@@ -70,7 +70,7 @@ const Notification = ({ type, id, message }) => {
       <div className={styles.icon}>{typeIcon[type]}</div>
 
       <div className={styles.content}>
-        <span className={styles.label}>{firstLetterToUpperCase(type)}</span>
+        <span className={styles.label}>{capitalize(type)}</span>
         <p className={styles.text}>{highlightTask(message)}</p>
       </div>
 

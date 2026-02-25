@@ -1,8 +1,8 @@
 import React, { useMemo, lazy, Suspense } from 'react'
 import { useSelector } from 'react-redux'
-import * as styles from './StatsPage.module.scss'
+import styles from './StatsPage.module.scss'
 import ScaleChart from './components/ScaleChart/ScaleChart'
-import categories from '@utils/fields/taskCategories'
+import { CATEGORIES_OPTIONS } from '@types/task'
 import { SuspenseLoader } from '@components'
 
 const CircleChart = lazy(() => import('./components/CircleChart/CircleChart'))
@@ -14,7 +14,7 @@ const StatsPage = () => {
   const tasks = useSelector((state) => state.tasks)
 
   const statsData = useMemo(() => {
-    return categories.map((category) => {
+    return CATEGORIES_OPTIONS.map((category) => {
       const tasksOfCategory = tasks.filter((task) => task.category === category)
       const completed = tasksOfCategory.filter((task) => task.status === 'Done').length
 

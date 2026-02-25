@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import * as styles from './Application.module.scss'
+import styles from './Application.module.scss'
 import { search } from '@assets'
 import { CategorySelect } from '@components'
 import AddButton from './components/AddButton/AddButton'
@@ -13,7 +13,7 @@ import { showLoader, closeLoader } from '@store/UI/loaderSlice'
 import { setFirstAppLoadDone } from '@store/appSlice'
 import { RxDragHandleHorizontal } from 'react-icons/rx'
 import DragAndDropContainer from './components/DragAndDrop/Container/Container'
-import FILTER_OPTIONS from '@utils/fields/filterOptions.js'
+import { FILTER_OPTIONS } from '@utils/fields/filterOptions'
 
 const Application = () => {
   const [selected, setSelected] = useState('')

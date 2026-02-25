@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import * as styles from './AddModal.module.scss'
+import styles from './AddModal.module.scss'
 import { CategorySelect } from '@components'
 import AddButton from '../AddButton/AddButton'
 import { FaCircleXmark } from 'react-icons/fa6'
@@ -8,7 +8,7 @@ import { ErrorMessage } from '@components'
 import TaskService from '@services/taskService'
 import { createTask } from '@store/tasksSlice'
 import { useDispatch, useSelector } from 'react-redux'
-import firstLetterToUpperCase from '@utils/helpers/firstLetterToUpperCase'
+import capitalize from '@utils/helpers/capitalize'
 import { showError } from '@store/UI/errorSlice'
 import { showLoader, closeLoader } from '@store/UI/loaderSlice'
 import { showSuccess } from '@store/UI/toastSlice'
@@ -51,7 +51,7 @@ const AddModal = ({ openModalHandler, isAddModalOpen }) => {
     dispatch(showLoader())
 
     const formData = {
-      task: firstLetterToUpperCase(task.trim()),
+      task: capitalize(task.trim()),
       category: categorySelected.trim(),
       day: deadline.day,
       month: deadline.month,

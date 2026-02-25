@@ -9,7 +9,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js'
-import * as styles from './BarChart.module.scss'
+import styles from './BarChart.module.scss'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 

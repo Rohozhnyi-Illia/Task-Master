@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import Item from '../Item/Item'
-import * as styles from './Container.module.scss'
+import styles from './Container.module.scss'
 import { useDispatch, useSelector } from 'react-redux'
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd'
 import TaskService from '@services/taskService'

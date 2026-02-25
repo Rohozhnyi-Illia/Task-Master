@@ -10,7 +10,7 @@ const signUpSchema = yup.object().shape({
     .max(20)
     .matches(
       /^[a-zA-Z0-9._-]+$/,
-      'Name can contain letters, numbers, dots, underscores, or hyphens'
+      'Name can contain letters, numbers, dots, underscores, or hyphens',
     )
     .required('Name is required'),
 
@@ -23,5 +23,7 @@ const signUpSchema = yup.object().shape({
     .matches(/[@$!%*?&#]/, 'Password must contain at least one special character (!@#$%^&*)')
     .required('Password is required'),
 })
+
+export type SignUpValues = yup.InferType<typeof signUpSchema>
 
 export default signUpSchema

@@ -1,5 +1,5 @@
 import React from 'react'
-import * as styles from './ScaleChart.module.scss'
+import styles from './ScaleChart.module.scss'
 
 const ScaleChart = (props) => {
   const { category, totalQuantity, completedQuantity } = props

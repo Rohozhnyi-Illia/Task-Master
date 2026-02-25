@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import * as styles from './Auth.module.scss'
+import styles from './Auth.module.scss'
 import fields from '@utils/fields/signUpFields'
 import { Input, AuthButton } from '@components'
 import { bg } from '@assets'

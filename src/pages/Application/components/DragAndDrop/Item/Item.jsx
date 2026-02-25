@@ -1,6 +1,6 @@
 import React from 'react'
 import { RxDragHandleHorizontal } from 'react-icons/rx'
-import * as styles from './Item.module.scss'
+import styles from './Item.module.scss'
 
 const Item = ({ task }) => {
   return (

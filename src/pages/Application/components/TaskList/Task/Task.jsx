@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { trash, calendar } from '@assets'
-import * as styles from './Task.module.scss'
+import styles from './Task.module.scss'
 import { useDispatch } from 'react-redux'
 import TaskService from '@services/taskService'
 import { deleteTasks, updateStatus, restoreTask, updateCategory } from '@store/tasksSlice'
@@ -9,9 +9,7 @@ import { showSuccess } from '@store/UI/toastSlice'
 import { FaAngleDown } from 'react-icons/fa6'
 import DropdownPortal from '../DropdownPortal/DropdownPortal'
 import { createPortal } from 'react-dom'
-
-const STATUS_OPTIONS = ['Active', 'InProgress', 'Done', 'Archived']
-const CATEGORIES_OPTIONS = ['Critical', 'High', 'Middle', 'Low']
+import { CATEGORIES_OPTIONS, STATUS_OPTIONS } from '@types/task'
 
 const Task = ({ task }) => {
   const [isStatusDropdownOpen, setIsStatusDropdownOpen] = useState(false)

@@ -10,4 +10,5 @@ const loginSchema = yup.object().shape({
     .required('Password is required'),
 })
 
+export type LoginFormValues = yup.InferType<typeof loginSchema>
 export default loginSchema

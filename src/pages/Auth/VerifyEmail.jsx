@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import * as styles from './Auth.module.scss'
+import styles from './Auth.module.scss'
 import fields from '@utils/fields/verifyEmailFields'
 import { Input, AuthButton } from '@components'
 import { bg } from '@assets'

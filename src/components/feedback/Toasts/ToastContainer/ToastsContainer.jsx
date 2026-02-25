@@ -1,8 +1,8 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import ReactDOM from 'react-dom'
+import styles from './ToastsContainer.module.scss'
 import Toast from '../Toast/Toast'
-import * as styles from './ToastsContainer.module.scss'
 
 const ToastsContainer = () => {
   const toasts = useSelector((state) => state.success.items)

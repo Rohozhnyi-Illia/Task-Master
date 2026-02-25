@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import * as styles from './Auth.module.scss'
+import styles from './Auth.module.scss'
 import { bg } from '@assets'
 import fields from '@utils/fields/verifyPasswordFields'
 import passwordVerifySchema from '@utils/validation/passwordVerify-validation'

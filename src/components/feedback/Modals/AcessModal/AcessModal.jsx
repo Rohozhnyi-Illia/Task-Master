@@ -1,8 +1,8 @@
 import React from 'react'
+import styles from './AcessModal.module.scss'
 import { ModalBase } from '@components'
 import { AuthButton } from '@components'
 import { done } from '@assets'
-import * as styles from './AcessModal.module.scss'
 
 const AccessModal = ({ onClick, text }) => {
   return (

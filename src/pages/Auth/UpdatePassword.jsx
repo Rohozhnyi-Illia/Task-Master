@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import * as styles from './Auth.module.scss'
+import styles from './Auth.module.scss'
 import fields from '@utils/fields/updatePasswordFields'
 import { Input, AuthButton, ErrorModal, AccessModal } from '@components'
 import { bg } from '../../assets'

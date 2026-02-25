@@ -1,28 +1,39 @@
 import React, { useState, useRef, useEffect } from 'react'
-import * as styles from './CategorySelect.module.scss'
+import styles from './CategorySelect.module.scss'
 
-const CustomSelect = ({
-  options = [],
-  label = 'Select category',
-  onChange,
+interface CustomSelectProps<T extends string> {
+  options: T[]
+  label?: string
+  selected?: T
+  setSelected: (value: T) => void
+  onChange?: (value: T) => void
+  id?: string
+}
+
+const CustomSelect = <T extends string>({
+  options,
+  label = 'Select',
   selected,
   setSelected,
+  onChange,
   id,
-}) => {
+}: CustomSelectProps<T>) => {
   const [isOpen, setIsOpen] = useState(false)
-  const selectRef = useRef(null)
+  const selectRef = useRef<HTMLDivElement>(null)
+  const firstOptionRef = useRef<HTMLLIElement>(null)
 
   const toggleOpen = () => setIsOpen(!isOpen)
 
-  const handleSelect = (option) => {
+  const handleSelect = (option: T) => {
+    setSelected(option)
     onChange?.(option)
     setIsOpen(false)
-    selectRef.current.focus()
+    selectRef.current?.focus()
   }
 
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (selectRef.current && !selectRef.current.contains(e.target)) {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (selectRef.current && !selectRef.current.contains(e.target as Node)) {
         setIsOpen(false)
       }
     }
@@ -30,14 +41,13 @@ const CustomSelect = ({
     return () => document.removeEventListener('click', handleClickOutside)
   }, [])
 
-  const firstOptionRef = useRef(null)
-
   useEffect(() => {
     if (isOpen && firstOptionRef.current) {
       firstOptionRef.current.focus()
     }
   })
-  const keyDownHandler = (e) => {
+
+  const keyDownHandler = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault()
       toggleOpen()
@@ -49,7 +59,7 @@ const CustomSelect = ({
     }
   }
 
-  const optionKeyDownHandler = (e, option) => {
+  const optionKeyDownHandler = (e: React.KeyboardEvent<HTMLLIElement>, option: T) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault()
       handleSelect(option)

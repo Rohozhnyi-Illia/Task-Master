@@ -18,7 +18,7 @@ const errorSlice = createSlice({
     },
 
     clearError: (state) => {
-      state.error = 'null'
+      state.error = ''
     },
   },
 })

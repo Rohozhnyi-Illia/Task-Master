@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Doughnut } from 'react-chartjs-2'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title } from 'chart.js'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
-import * as styles from './CircleChart.module.scss'
+import styles from './CircleChart.module.scss'
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title)
 

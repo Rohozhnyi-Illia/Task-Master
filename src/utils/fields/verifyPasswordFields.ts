@@ -1,6 +1,7 @@
 import { mdiPassword, verify } from '../../assets'
+import { Field } from '../../types/forms'
 
-const FIELDS = [
+const FIELDS: Field[] = [
   {
     label: 'Verify Code',
     name: 'verifyCode',

@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import * as styles from './ModalBase.module.scss'
+import styles from './ModalBase.module.scss'
 
 const ModalBase = ({ children, onClose, modifier = '' }) => {
   return ReactDOM.createPortal(
@@ -12,7 +12,7 @@ const ModalBase = ({ children, onClose, modifier = '' }) => {
         {children}
       </div>
     </div>,
-    document.body
+    document.body,
   )
 }
 export default ModalBase

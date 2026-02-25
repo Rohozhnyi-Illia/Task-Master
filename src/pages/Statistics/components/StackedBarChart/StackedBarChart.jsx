@@ -9,7 +9,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js'
-import * as styles from './StackedBarChart.module.scss'
+import styles from './StackedBarChart.module.scss'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
@@ -17,19 +17,20 @@ const StackedBarChart = ({ tasks }) => {
   const categories = ['High', 'Middle', 'Low']
 
   const activeCounts = categories.map(
-    (cat) => tasks.filter((task) => task.category === cat && task.status === 'Active').length
+    (cat) => tasks.filter((task) => task.category === cat && task.status === 'Active').length,
   )
   const doneCounts = categories.map(
-    (cat) => tasks.filter((task) => task.category === cat && task.status === 'Done').length
+    (cat) => tasks.filter((task) => task.category === cat && task.status === 'Done').length,
   )
 
   const inProgressCounts = categories.map(
     (cat) =>
-      tasks.filter((task) => task.category === cat && task.status === 'InProgress').length
+      tasks.filter((task) => task.category === cat && task.status === 'InProgress').length,
   )
 
   const archivedCounts = categories.map(
-    (cat) => tasks.filter((task) => task.category === cat && task.status === 'Archived').length
+    (cat) =>
+      tasks.filter((task) => task.category === cat && task.status === 'Archived').length,
   )
 
   const data = {

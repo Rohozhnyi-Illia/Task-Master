@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import * as styles from './TaskList.module.scss'
+import styles from './TaskList.module.scss'
 import Task from '../Task/Task'
 import TaskMobile from '../TaskMobile/TaskMobile'
 import { useSelector } from 'react-redux'

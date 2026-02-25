@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import * as styles from './NotificationList.module.scss'
+import styles from './NotificationList.module.scss'
 import Notification from '../Notification/Notification'
 import { useSelector } from 'react-redux'
 import { Pagination, NoData } from '@components'

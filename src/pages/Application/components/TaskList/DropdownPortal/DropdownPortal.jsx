@@ -1,7 +1,7 @@
 import React, { useLayoutEffect } from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import * as styles from './DropdownPortal.module.scss'
+import styles from './DropdownPortal.module.scss'
 
 const DropdownPortal = ({ isOpen, anchorRef, options, onSelect, onClose }) => {
   const dropdownRef = useRef(null)

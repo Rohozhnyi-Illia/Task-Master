@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import * as styles from './TaskMobile.module.scss'
+import styles from './TaskMobile.module.scss'
 import { calendar } from '@assets'
 import { useDispatch } from 'react-redux'
 import TaskService from '@services/taskService'
@@ -8,7 +8,7 @@ import { showError } from '@store/UI/errorSlice'
 import { showSuccess } from '@store/UI/toastSlice'
 import { FaAngleDown } from 'react-icons/fa6'
 import { FaTrash } from 'react-icons/fa'
-import STATUS_OPTIONS from '@utils/fields/statusOptions'
+import { STATUS_OPTIONS } from '@types/task'
 
 const TaskMobile = ({ task }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
