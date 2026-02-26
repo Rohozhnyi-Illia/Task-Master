@@ -1,9 +1,17 @@
-import axios from 'axios'
+import axios, { AxiosRequestConfig, AxiosError } from 'axios'
 import store from '../store/store'
 import { setAuth, logout } from '../store/authSlice'
 
-const URL = ['http://localhost:9000/api', 'https://taskmaster-backend-e940.onrender.com/api']
-const currentURL = 1
+const URL: string[] = [
+  'http://localhost:9000/api',
+  'https://taskmaster-backend-e940.onrender.com/api',
+]
+const currentURL: number = 1
+
+interface FailedRequest {
+  resolve: (token: string) => void
+  reject: (err: any) => void
+}
 
 const api = axios.create({
   baseURL: URL[currentURL],
@@ -13,12 +21,16 @@ const api = axios.create({
   },
 })
 
-let isRefreshing = false
-let failedQueue = []
+let isRefreshing: boolean = false
+let failedQueue: FailedRequest[] = []
 
-const processQueue = (error, token = null) => {
-  failedQueue.forEach((p) => (error ? p.reject(error) : p.resolve(token)))
+const processQueue = (error: any, token: string | null = null) => {
+  failedQueue.forEach((p) => (error ? p.reject(error) : p.resolve(token!)))
   failedQueue = []
+}
+
+interface AxiosRequestConfigWithRetry extends AxiosRequestConfig {
+  _retry?: boolean
 }
 
 api.interceptors.request.use(
@@ -31,10 +43,10 @@ api.interceptors.request.use(
 )
 
 api.interceptors.response.use(
-  (res) => res,
+  (response) => response,
 
-  async (error) => {
-    const originalRequest = error.config
+  async (error: AxiosError) => {
+    const originalRequest = error.config as AxiosRequestConfigWithRetry
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
@@ -42,7 +54,7 @@ api.interceptors.response.use(
           failedQueue.push({ resolve, reject })
         }).then((token) => {
           originalRequest._retry = true
-          originalRequest.headers['Authorization'] = `Bearer ${token}`
+          originalRequest.headers!['Authorization'] = `Bearer ${token}`
           return api(originalRequest)
         })
       }
@@ -57,13 +69,12 @@ api.interceptors.response.use(
           { withCredentials: true },
         )
 
-        const newAccessToken = refreshRes.data.accessToken
+        const newAccessToken = refreshRes.data.data
 
         store.dispatch(setAuth({ ...store.getState().auth, accessToken: newAccessToken }))
-
         processQueue(null, newAccessToken)
 
-        originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`
+        originalRequest.headers!['Authorization'] = `Bearer ${newAccessToken}`
 
         return api(originalRequest)
       } catch (err) {

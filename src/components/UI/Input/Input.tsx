@@ -1,10 +1,26 @@
-import React, { useState } from 'react'
+import React, { ChangeEvent, useState } from 'react'
 import styles from './Input.module.scss'
 import { Link } from 'react-router-dom'
 import ErrorMessage from '../ErrorMessage/ErrorMessage'
 import { IoIosEye, IoMdEyeOff } from 'react-icons/io'
 
-const Input = (props) => {
+type InputType = 'text' | 'email' | 'password'
+
+interface InputProps<T extends string> {
+  label: string
+  placeholder: string
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void
+  value: string
+  name: T
+  img?: string
+  authOptions?: boolean
+  err: string
+  checkValue: boolean
+  type: InputType
+  formId: string
+}
+
+const Input = <T extends string>(props: InputProps<T>) => {
   const {
     label,
     placeholder,
@@ -19,7 +35,7 @@ const Input = (props) => {
     formId,
   } = props
 
-  const [showPassword, setShowPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState<boolean>(false)
   const isPasswordField = type === 'password'
 
   const inputId = `${formId}-${name}`
@@ -59,7 +75,7 @@ const Input = (props) => {
         )}
       </div>
 
-      {err && <ErrorMessage error={err} />}
+      {err && <ErrorMessage error={err} className="" />}
 
       {authOptions && (
         <div className={styles.input__options}>

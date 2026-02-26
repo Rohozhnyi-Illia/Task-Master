@@ -1,9 +1,14 @@
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { Outlet, useNavigate } from 'react-router-dom'
+import { RootState } from '@store/store'
 
-const ProtectPath = ({ children }) => {
-  const isAuth = useSelector((state) => state.auth.isAuth)
+interface ProtectPathProps {
+  children: React.ReactNode
+}
+
+const ProtectPath = ({ children }: ProtectPathProps) => {
+  const isAuth = useSelector((state: RootState) => state.auth.isAuth)
   const navigate = useNavigate()
 
   useEffect(() => {

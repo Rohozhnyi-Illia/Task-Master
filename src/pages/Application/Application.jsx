@@ -79,6 +79,7 @@ const Application = () => {
 
             <div className={styles.application__categories}>
               <CategorySelect
+                label="Select a category"
                 options={FILTER_OPTIONS}
                 onChange={(val) => setSelected(val)}
                 selected={selected}

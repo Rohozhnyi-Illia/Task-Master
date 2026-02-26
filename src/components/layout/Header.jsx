@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import styles from './Header.module.scss'
-import { home, notification, stats, sun } from '@assets'
-import { moon, exit } from '@assets'
-import useTheme from '../../../hooks/useTheme'
+import { home, notification, stats, sun, moon, exit } from '@assets'
+import useTheme from '../../hooks/useTheme'
 import { logout } from '@store/authSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import AuthService from '@services/authService'
@@ -57,6 +56,7 @@ const Header = () => {
     }
 
     fetchNotifications()
+
     const intervalId = setInterval(fetchNotifications, 15 * 60 * 1000)
     return () => clearInterval(intervalId)
   }, [dispatch])

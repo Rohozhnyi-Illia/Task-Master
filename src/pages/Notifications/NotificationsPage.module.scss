@@ -13,6 +13,7 @@
   overflow: hidden;
 
   &__wrapper {
+    padding-top: 1rem;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -21,7 +22,6 @@
   }
 
   &__title {
-    padding-top: 2rem;
     @include m.text-style(v.$font-title, v.$font-weight-bold, v.$line-height-default);
     color: var(--text-color);
     letter-spacing: 0.05rem;

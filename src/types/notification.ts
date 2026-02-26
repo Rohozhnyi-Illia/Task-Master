@@ -29,18 +29,6 @@ export interface OverdueNotification extends NotificationBase {
 
 export type Notification = WarningNotification | ReminderNotification | OverdueNotification
 
-export interface GetNotificationsResponse {
-  notifications: Notification[]
-}
-
-export type MarkAsReadResponse = Notification
-
-export interface DeleteNotificationResponse {
-  success: true
-  data: Notification
-}
-
 export interface DeleteNotificationsResponse {
-  success: true
   deletedCount: number
 }

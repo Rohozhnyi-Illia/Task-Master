@@ -1,10 +1,14 @@
 import React from 'react'
 import styles from './AcessModal.module.scss'
-import { ModalBase } from '@components'
-import { AuthButton } from '@components'
-import { done } from '@assets'
+import { ModalBase, AuthButton } from '@components/index'
+import { done } from '@assets/index'
 
-const AccessModal = ({ onClick, text }) => {
+interface AccessModalProps {
+  onClick: () => void
+  text: string
+}
+
+const AccessModal = ({ onClick, text }: AccessModalProps) => {
   return (
     <ModalBase onClose={onClick} modifier="access">
       <header className={styles.header}>

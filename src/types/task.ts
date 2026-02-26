@@ -15,23 +15,3 @@ export interface Task extends ModelBase {
   task: string
   timeTracker: boolean
 }
-
-export interface GetTasksResponse {
-  tasks: Task[]
-}
-
-export type CreateTaskResponse = Task
-
-export interface DeleteTaskResponse {
-  message: string
-  task: Task
-}
-
-export interface UpdateTaskResponse {
-  message: string
-  task: Task
-}
-
-export interface ReorderTasksResponse {
-  message: string
-}

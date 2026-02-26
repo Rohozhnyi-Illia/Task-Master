@@ -10,6 +10,7 @@ import {
 } from '@store/notificationSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { showError } from '@store/UI/errorSlice'
+import { showSuccess } from '@store/UI/toastSlice'
 
 const typeIcon = {
   overdue: <FaExclamationCircle />,
@@ -40,7 +41,12 @@ const Notification = ({ type, id, message }) => {
 
     try {
       const res = await NotificationService.deleteNotification(id)
-      if (!res.success) throw new Error(res.error)
+      if (!res.success) {
+        dispatch(showError(res.error))
+        return
+      }
+
+      dispatch(showSuccess('Notification has been deleted'))
     } catch (error) {
       dispatch(restoreNotification(backup))
       dispatch(showError(error.message))

@@ -36,7 +36,7 @@ const NotificationsPage = () => {
       dispatch(getNotifications(oldNotifications))
       dispatch(showError(error))
     } else {
-      dispatch(showSuccess(`${data.deletedCount} notifications deleted`))
+      dispatch(showSuccess(`${data} ${data > 1 ? 'Notifications' : 'Notification'} deleted`))
     }
   }
 
@@ -55,7 +55,7 @@ const NotificationsPage = () => {
       dispatch(getNotifications(oldNotifications))
       dispatch(showError(error))
     } else {
-      dispatch(showSuccess(`${data.deletedCount} notifications deleted`))
+      dispatch(showSuccess(`${data} ${data > 1 ? 'Notifications' : 'Notification'} deleted`))
     }
   }
 

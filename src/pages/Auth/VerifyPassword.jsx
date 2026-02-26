@@ -74,13 +74,10 @@ const VerifyPassword = () => {
         setAuthError(res.error)
         openModalHandler()
         setAccessAction(false)
-
         return
       }
 
-      if (res.success) {
-        setAccessAction(true)
-      }
+      setAccessAction(true)
     } catch (err) {
       if (err.inner) {
         const newErrors = {}

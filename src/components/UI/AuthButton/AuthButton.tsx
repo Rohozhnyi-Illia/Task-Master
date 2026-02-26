@@ -7,7 +7,7 @@ interface AuthButtonProps {
   text: string
   onClick: () => void
   type: AuthButtonType
-  disabled: boolean
+  disabled?: boolean
 }
 
 const AuthButton = ({ text, onClick, type = 'submit', disabled }: AuthButtonProps) => {

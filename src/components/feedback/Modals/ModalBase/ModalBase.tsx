@@ -2,7 +2,13 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import styles from './ModalBase.module.scss'
 
-const ModalBase = ({ children, onClose, modifier = '' }) => {
+interface ModalBaseProps {
+  children: React.ReactNode
+  onClose: () => void
+  modifier: string
+}
+
+const ModalBase = ({ children, onClose, modifier = '' }: ModalBaseProps) => {
   return ReactDOM.createPortal(
     <div className={styles.modal} onClick={onClose}>
       <div

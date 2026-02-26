@@ -4,9 +4,14 @@ import { clearSuccess } from '@store/UI/toastSlice'
 import { FaCheckCircle } from 'react-icons/fa'
 import styles from './Toast.module.scss'
 
-const Toast = ({ id, message }) => {
+interface ToastProps {
+  id: string
+  message: string
+}
+
+const Toast = ({ id, message }: ToastProps) => {
   const dispatch = useDispatch()
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState<boolean>(false)
 
   useEffect(() => {
     setVisible(true)

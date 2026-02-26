@@ -7,3 +7,5 @@ export interface ModelBase {
   __v: number
   _id: string
 }
+
+export type ServiceResponse<T> = { success: true; data: T } | { success: false; error: string }

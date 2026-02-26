@@ -2,13 +2,14 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { clearError } from '@store/UI/errorSlice'
 import ErrorModal from '../ErrorModal/ErrorModal'
+import { RootState } from '@store/store'
 
 const GlobalErrorModal = () => {
   const dispatch = useDispatch()
-  const error = useSelector((state) => state.error.error)
+  const error = useSelector((state: RootState) => state.error.error)
 
   useEffect(() => {
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         dispatch(clearError())
       }

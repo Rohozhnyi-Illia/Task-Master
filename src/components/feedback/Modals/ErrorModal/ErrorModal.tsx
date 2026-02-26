@@ -1,10 +1,15 @@
 import React from 'react'
 import styles from './ErrorModal.module.scss'
 import ModalBase from '../ModalBase/ModalBase'
-import { errorImg } from '@assets'
-import AuthButton from '../../../UI/AuthButton/AuthButton'
+import { errorImg } from '@assets/index'
+import { AuthButton } from '@components/index'
 
-const ErrorModal = ({ error, onClick }) => {
+interface ErrorModalProps {
+  error: string
+  onClick: () => void
+}
+
+const ErrorModal = ({ error, onClick }: ErrorModalProps) => {
   return (
     <ModalBase onClose={onClick} modifier="error">
       <header className={styles.header}>
