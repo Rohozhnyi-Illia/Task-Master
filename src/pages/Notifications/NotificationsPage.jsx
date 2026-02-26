@@ -74,6 +74,7 @@ const NotificationsPage = () => {
                     options={['All', 'Warning', 'Reminder', 'Overdue']}
                     selected={selected}
                     onChange={setSelected}
+                    label="Select a category"
                   />
                 </div>
 

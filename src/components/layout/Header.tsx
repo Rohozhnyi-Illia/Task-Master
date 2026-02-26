@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import styles from './Header.module.scss'
-import { home, notification, stats, sun, moon, exit } from '@assets'
+import { home, notification, stats, sun, moon, exit } from '@assets/index'
 import useTheme from '../../hooks/useTheme'
 import { logout } from '@store/authSlice'
 import { useDispatch, useSelector } from 'react-redux'
@@ -12,15 +12,16 @@ import { showError } from '@store/UI/errorSlice'
 import { showLoader, closeLoader } from '@store/UI/loaderSlice'
 import { resetFirstAppLoadDone } from '@store/appSlice'
 import { resetTasks } from '@store/tasksSlice'
+import { RootState } from '@store/store'
 
 const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { theme, setTheme } = useTheme()
   const isDark = theme === 'dark'
-  const notificationsList = useSelector((state) => state.notification) || []
-  const isLoaderShown = useSelector((state) => state.loader.isLoaderShown)
+  const notificationsList = useSelector((state: RootState) => state.notification) || []
+  const isLoaderShown = useSelector((state: RootState) => state.loader.isLoaderShown)
 
-  const headerRef = useRef(null)
+  const headerRef = useRef<HTMLElementTagNameMap['header']>(null)
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -64,7 +65,7 @@ const Header = () => {
   useEffect(() => {
     const setHeaderHeight = () => {
       if (headerRef.current) {
-        const height = headerRef.current.offsetHeight
+        const height = headerRef.current?.offsetHeight
         document.documentElement.style.setProperty('--header-height', `${height}px`)
       }
     }
