@@ -1,12 +1,19 @@
 import React from 'react'
 import styles from './ScaleChart.module.scss'
+import { CategoryType } from '../../../../types/task'
 
-const ScaleChart = (props) => {
+interface ScaleChartProps {
+  category: CategoryType
+  totalQuantity: number
+  completedQuantity: number
+}
+
+const ScaleChart = (props: ScaleChartProps) => {
   const { category, totalQuantity, completedQuantity } = props
-  const completedPercent =
+  const completedPercent: number =
     totalQuantity > 0 ? Math.round((completedQuantity / totalQuantity) * 100) : 0
 
-  const getColor = (category) => {
+  const getColor = (category: CategoryType) => {
     if (category === 'High') return '#b32929'
     if (category === 'Middle') return '#e79805'
     if (category === 'Critical') return '#999999'

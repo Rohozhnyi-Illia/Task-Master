@@ -8,36 +8,41 @@ import {
   Title,
   Tooltip,
   Legend,
+  ChartData,
+  ChartOptions,
 } from 'chart.js'
 import styles from './StackedBarChart.module.scss'
+import { CATEGORIES_OPTIONS, TaskInterface } from '../../../../types/task'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
-const StackedBarChart = ({ tasks }) => {
-  const categories = ['Critical', 'High', 'Middle', 'Low']
+interface StackedBarChartProps {
+  tasks: TaskInterface[]
+}
 
-  const activeCounts = categories.map(
+const StackedBarChart = ({ tasks }: StackedBarChartProps) => {
+  const activeCounts = CATEGORIES_OPTIONS.map(
     (category) =>
       tasks.filter((task) => task.category === category && task.status === 'Active').length,
   )
-  const doneCounts = categories.map(
+  const doneCounts = CATEGORIES_OPTIONS.map(
     (category) =>
       tasks.filter((task) => task.category === category && task.status === 'Done').length,
   )
 
-  const inProgressCounts = categories.map(
+  const inProgressCounts = CATEGORIES_OPTIONS.map(
     (category) =>
       tasks.filter((task) => task.category === category && task.status === 'InProgress')
         .length,
   )
 
-  const archivedCounts = categories.map(
+  const archivedCounts = CATEGORIES_OPTIONS.map(
     (category) =>
       tasks.filter((task) => task.category === category && task.status === 'Archived').length,
   )
 
-  const data = {
-    labels: categories,
+  const data: ChartData<'bar', number[], string> = {
+    labels: [...CATEGORIES_OPTIONS],
     datasets: [
       {
         label: 'Active',
@@ -62,7 +67,7 @@ const StackedBarChart = ({ tasks }) => {
     ],
   }
 
-  const options = {
+  const options: ChartOptions<'bar'> = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {

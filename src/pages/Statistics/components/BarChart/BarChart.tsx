@@ -8,12 +8,19 @@ import {
   Title,
   Tooltip,
   Legend,
+  ChartOptions,
+  ChartData,
 } from 'chart.js'
 import styles from './BarChart.module.scss'
+import { TaskInterface } from '../../../../types/task'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
-const BarChart = ({ tasks }) => {
+interface BarChartProps {
+  tasks: TaskInterface[]
+}
+
+const BarChart = ({ tasks }: BarChartProps) => {
   const today = new Date()
   const last7DaysISO = []
   const last7DaysLabels = []
@@ -35,7 +42,7 @@ const BarChart = ({ tasks }) => {
     return tasks.filter((task) => task.createdAt.startsWith(date)).length
   })
 
-  const data = {
+  const data: ChartData<'bar', number[], string> = {
     labels: last7DaysLabels,
     datasets: [
       {
@@ -46,7 +53,7 @@ const BarChart = ({ tasks }) => {
     ],
   }
 
-  const options = {
+  const options: ChartOptions<'bar'> = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {

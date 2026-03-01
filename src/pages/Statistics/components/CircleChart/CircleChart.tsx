@@ -1,13 +1,32 @@
 import React, { useEffect, useState } from 'react'
 import { Doughnut } from 'react-chartjs-2'
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title } from 'chart.js'
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  Title,
+  ChartOptions,
+  ChartData,
+} from 'chart.js'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 import styles from './CircleChart.module.scss'
+import { CategoryType } from '../../../../types/task'
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title)
 
-const CircleChart = ({ data, title }) => {
-  const [chartData, setChartData] = useState({
+interface CircleChartItem {
+  category: CategoryType
+  value: number
+}
+
+interface CircleChartProps {
+  data: CircleChartItem[]
+  title: string
+}
+
+const CircleChart = ({ data, title }: CircleChartProps) => {
+  const [chartData, setChartData] = useState<ChartData<'doughnut', number[], string>>({
     labels: [],
     datasets: [{ data: [], backgroundColor: [], borderWidth: 1 }],
   })
@@ -30,7 +49,7 @@ const CircleChart = ({ data, title }) => {
     return () => clearTimeout(timer)
   }, [data])
 
-  const options = {
+  const options: ChartOptions<'doughnut'> = {
     responsive: true,
     maintainAspectRatio: false,
     animation: {

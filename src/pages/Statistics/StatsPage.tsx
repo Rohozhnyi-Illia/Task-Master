@@ -2,18 +2,30 @@ import React, { useMemo, lazy, Suspense } from 'react'
 import { useSelector } from 'react-redux'
 import styles from './StatsPage.module.scss'
 import ScaleChart from './components/ScaleChart/ScaleChart'
-import { CATEGORIES_OPTIONS } from '@types/task'
-import { SuspenseLoader } from '@components'
+import { CATEGORIES_OPTIONS, CategoryType, TaskInterface } from '../../types/task'
+import { SuspenseLoader } from '@components/index'
+import { RootState } from '@store/store'
 
 const CircleChart = lazy(() => import('./components/CircleChart/CircleChart'))
 const BarChart = lazy(() => import('./components/BarChart/BarChart'))
 const StackedBarChart = lazy(() => import('./components/StackedBarChart/StackedBarChart'))
 
-const StatsPage = () => {
-  const name = useSelector((state) => state.auth.name)
-  const tasks = useSelector((state) => state.tasks)
+interface StatsDataItem {
+  category: CategoryType
+  totalQuantity: number
+  completedQuantity: number
+}
 
-  const statsData = useMemo(() => {
+interface CircleDataItem {
+  category: CategoryType
+  value: number
+}
+
+const StatsPage = () => {
+  const name: string = useSelector((state: RootState) => state.auth.name)
+  const tasks: TaskInterface[] = useSelector((state: RootState) => state.tasks)
+
+  const statsData: StatsDataItem[] = useMemo(() => {
     return CATEGORIES_OPTIONS.map((category) => {
       const tasksOfCategory = tasks.filter((task) => task.category === category)
       const completed = tasksOfCategory.filter((task) => task.status === 'Done').length
@@ -26,7 +38,7 @@ const StatsPage = () => {
     })
   }, [tasks])
 
-  const circleData = statsData.map(({ category, totalQuantity }) => ({
+  const circleData: CircleDataItem[] = statsData.map(({ category, totalQuantity }) => ({
     category,
     value: totalQuantity,
   }))
