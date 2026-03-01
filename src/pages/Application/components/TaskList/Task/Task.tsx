@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react'
-import { trash, calendar } from '@assets'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { trash, calendar } from '@assets/index'
 import styles from './Task.module.scss'
 import { useDispatch } from 'react-redux'
 import TaskService from '@services/taskService'
@@ -9,17 +9,28 @@ import { showSuccess } from '@store/UI/toastSlice'
 import { FaAngleDown } from 'react-icons/fa6'
 import DropdownPortal from '../DropdownPortal/DropdownPortal'
 import { createPortal } from 'react-dom'
-import { CATEGORIES_OPTIONS, STATUS_OPTIONS } from '@types/task'
+import {
+  CATEGORIES_OPTIONS,
+  STATUS_OPTIONS,
+  TaskInterface,
+  CategoryType,
+  StatusType,
+} from '../../../../../types/task'
 
-const Task = ({ task }) => {
-  const [isStatusDropdownOpen, setIsStatusDropdownOpen] = useState(false)
-  const [isDeleteMenuOpen, setIsDeleteMenuOpen] = useState(false)
-  const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false)
+interface TaskProps {
+  task: TaskInterface
+}
 
-  const categoryWrapperRef = useRef(null)
-  const statusWrapperRef = useRef(null)
-  const deleteWrapperRef = useRef(null)
-  const deleteDropdownRef = useRef(null)
+const Task = ({ task }: TaskProps) => {
+  const [isStatusDropdownOpen, setIsStatusDropdownOpen] = useState<boolean>(false)
+  const [isDeleteMenuOpen, setIsDeleteMenuOpen] = useState<boolean>(false)
+  const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState<boolean>(false)
+  const [position, setPosition] = useState<{ top: number; left: number }>({ top: 0, left: 0 })
+
+  const categoryWrapperRef = useRef<HTMLDivElement>(null)
+  const statusWrapperRef = useRef<HTMLDivElement>(null)
+  const deleteWrapperRef = useRef<HTMLDivElement>(null)
+  const deleteDropdownRef = useRef<HTMLDivElement>(null)
 
   const dispatch = useDispatch()
   const taskId = task._id
@@ -54,7 +65,7 @@ const Task = ({ task }) => {
     dispatch(showSuccess(isCompleted ? 'The task is active again' : 'The task was completed'))
   }
 
-  const changeStatusHandler = async (newStatus) => {
+  const changeStatusHandler = async (newStatus: StatusType) => {
     const prevStatus = task.status
 
     if (newStatus === prevStatus) {
@@ -80,7 +91,7 @@ const Task = ({ task }) => {
     dispatch(showSuccess('Status has been updated'))
   }
 
-  const changeCategoryHandler = async (newCategory) => {
+  const changeCategoryHandler = async (newCategory: CategoryType) => {
     const prevCategory = task.category
 
     if (newCategory === prevCategory) {
@@ -116,7 +127,18 @@ const Task = ({ task }) => {
     dispatch(showSuccess(`The task has been deleted`))
   }
 
-  const getStatusClass = (status) => {
+  useEffect(() => {
+    const keyHandler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsDeleteMenuOpen(false)
+      }
+    }
+
+    document.addEventListener('keydown', keyHandler)
+    return () => document.removeEventListener('keydown', keyHandler)
+  }, [setIsDeleteMenuOpen, deleteDropdownRef])
+
+  const getStatusClass = (status: StatusType) => {
     switch (status?.toLowerCase()) {
       case 'done':
         return styles.done
@@ -128,6 +150,18 @@ const Task = ({ task }) => {
         return ''
     }
   }
+
+  useLayoutEffect(() => {
+    if (!isDeleteMenuOpen) return
+    if (!deleteWrapperRef.current) return
+
+    const rect = deleteWrapperRef.current.getBoundingClientRect()
+
+    setPosition({
+      top: rect.bottom + window.scrollY,
+      left: rect.left + window.scrollX,
+    })
+  }, [isDeleteMenuOpen])
 
   return (
     <tr className={`${styles.task} ${getStatusClass(task.status)}`}>
@@ -200,11 +234,7 @@ const Task = ({ task }) => {
               <div
                 ref={deleteDropdownRef}
                 className={styles.task__deleteMenu}
-                style={{
-                  top:
-                    deleteWrapperRef.current.getBoundingClientRect().bottom + window.scrollY,
-                  left: deleteWrapperRef.current.getBoundingClientRect().left,
-                }}
+                style={{ top: position.top, left: position.left }}
               >
                 <p>Are you sure you want to delete?</p>
                 <div>

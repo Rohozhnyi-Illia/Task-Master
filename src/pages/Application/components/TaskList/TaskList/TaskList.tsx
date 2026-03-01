@@ -3,13 +3,20 @@ import styles from './TaskList.module.scss'
 import Task from '../Task/Task'
 import TaskMobile from '../TaskMobile/TaskMobile'
 import { useSelector } from 'react-redux'
-import { Pagination } from '@components'
-import { NoData } from '@components'
+import { Pagination } from '@components/index'
+import { NoData } from '@components/index'
+import { RootState } from '@store/store'
+import { FilterOption } from '@utils/fields/filterOptions'
 
-const TaskList = ({ keyword, selected }) => {
-  const tasks = useSelector((state) => state.tasks)
-  const [currentPage, setCurrentPage] = useState(1)
-  const taskPerPage = 10
+interface TaskListProps {
+  keyword: string
+  selected: FilterOption | ''
+}
+
+const TaskList = ({ keyword, selected }: TaskListProps) => {
+  const tasks = useSelector((state: RootState) => state.tasks)
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const taskPerPage: number = 10
 
   const filteredTasks = tasks.filter((task) => {
     const matchesKeyword = !keyword || task.task.toLowerCase().includes(keyword.toLowerCase())

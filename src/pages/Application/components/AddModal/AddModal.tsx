@@ -69,36 +69,42 @@ const AddModal = ({ openModalHandler, isAddModalOpen }: AddModalProps) => {
     e.preventDefault()
     if (isSubmittingRef.current) return
     isSubmittingRef.current = true
-    dispatch(showLoader())
 
-    if (!categorySelected) return
-    const formData: AddTaskValues = {
+    const formDataRaw = {
       task: capitalize(task.trim()),
       category: categorySelected,
-      day: Number(deadline.day),
-      month: Number(deadline.month),
-      year: Number(deadline.year),
+      day: deadline.day,
+      month: deadline.month,
+      year: deadline.year,
     }
 
     try {
-      await addTaskSchema.validate(formData, { abortEarly: false })
+      const validatedData: AddTaskValues = await addTaskSchema.validate(formDataRaw, {
+        abortEarly: false,
+      })
       setErrors({})
 
+      dispatch(showLoader())
+
       const formattedDate = new Date(
-        Date.UTC(Number(deadline.year), Number(deadline.month) - 1, Number(deadline.day)),
+        Date.UTC(
+          Number(validatedData.year),
+          Number(validatedData.month) - 1,
+          Number(validatedData.day),
+        ),
       )
       const now = new Date()
       now.setHours(0, 0, 0)
 
       if (formattedDate < now) {
-        setErrors((prev) => ({ ...prev, date: 'Deadline must be in the future' }))
+        setErrors({ date: 'Deadline must be in the future' })
         return
       }
 
       const res = await TaskService.createTask({
-        task: formData.task,
+        task: validatedData.task,
         status: 'Active',
-        category: categorySelected,
+        category: validatedData.category!,
         remainingTime: Number(reminderSelected),
         deadline: formattedDate.toISOString(),
       })
@@ -116,7 +122,7 @@ const AddModal = ({ openModalHandler, isAddModalOpen }: AddModalProps) => {
       setDeadline({ day: '', month: '', year: '' })
 
       closeModalSmooth()
-      dispatch(showSuccess('The task has been added.'))
+      dispatch(showSuccess('The task has been added'))
     } catch (err: unknown) {
       if (err instanceof yup.ValidationError) {
         const newErrors: Record<string, string> = {}
@@ -288,7 +294,7 @@ const AddModal = ({ openModalHandler, isAddModalOpen }: AddModalProps) => {
             )}
           </div>
 
-          <div>
+          <div className={styles.addModal__submit}>
             <AddButton type="submit" disabled={isLoaderShown} />
           </div>
         </form>

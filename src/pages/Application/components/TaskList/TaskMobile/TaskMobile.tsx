@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import styles from './TaskMobile.module.scss'
-import { calendar } from '@assets'
+import { calendar } from '@assets/index'
 import { useDispatch } from 'react-redux'
 import TaskService from '@services/taskService'
 import { deleteTasks, updateStatus, restoreTask } from '@store/tasksSlice'
@@ -8,22 +8,37 @@ import { showError } from '@store/UI/errorSlice'
 import { showSuccess } from '@store/UI/toastSlice'
 import { FaAngleDown } from 'react-icons/fa6'
 import { FaTrash } from 'react-icons/fa'
-import { STATUS_OPTIONS } from '@types/task'
+import { updateCategory } from '@store/tasksSlice'
+import {
+  STATUS_OPTIONS,
+  StatusType,
+  TaskInterface,
+  CATEGORIES_OPTIONS,
+  CategoryType,
+} from '../../../../../types/task'
 
-const TaskMobile = ({ task }) => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-  const [isDeleteMenuOpen, setIsDeleteMenuOpen] = useState(false)
-  const statusRef = useRef(null)
-  const deleteRef = useRef(null)
-  const displayDate = task.deadline.split('T')[0]
-  const taskId = task._id
+interface TaskProps {
+  task: TaskInterface
+}
+
+const TaskMobile = ({ task }: TaskProps) => {
+  const [isStatusDropdownOpen, setIsStatusDropdownOpen] = useState<boolean>(false)
+  const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState<boolean>(false)
+  const [isDeleteMenuOpen, setIsDeleteMenuOpen] = useState<boolean>(false)
+
+  const statusRef = useRef<HTMLDivElement>(null)
+  const categoryRef = useRef<HTMLDivElement>(null)
+  const deleteRef = useRef<HTMLDivElement>(null)
+  const displayDate: string = task.deadline.split('T')[0]
+  const taskId: string = task._id
+  const isCompleted: boolean = task.status === 'Done'
   const dispatch = useDispatch()
-  const isCompleted = task.status === 'Done'
 
   useEffect(() => {
-    const handler = (e) => {
-      if (statusRef.current && !statusRef.current.contains(e.target)) setIsDropdownOpen(false)
-      if (deleteRef.current && !deleteRef.current.contains(e.target))
+    const handler = (e: MouseEvent) => {
+      if (statusRef.current && !statusRef.current.contains(e.target as Node))
+        setIsStatusDropdownOpen(false)
+      if (deleteRef.current && !deleteRef.current.contains(e.target as Node))
         setIsDeleteMenuOpen(false)
     }
     document.addEventListener('click', handler)
@@ -44,11 +59,11 @@ const TaskMobile = ({ task }) => {
     }
   }
 
-  const changeStatusHandler = async (status) => {
+  const changeStatusHandler = async (status: StatusType) => {
     if (status === task.status) return dispatch(showError('Status is already active'))
     if (status === 'Done') {
       await completeHandler()
-      setIsDropdownOpen(false)
+      setIsStatusDropdownOpen(false)
       return
     }
 
@@ -60,8 +75,29 @@ const TaskMobile = ({ task }) => {
       dispatch(showError(res.error))
     } else {
       dispatch(showSuccess('Status has been updated'))
-      setIsDropdownOpen(false)
+      setIsStatusDropdownOpen(false)
     }
+  }
+
+  const changeCategoryHandler = async (newCategory: CategoryType) => {
+    const prevCategory = task.category
+
+    if (newCategory === prevCategory) {
+      dispatch(showError('This category is already active'))
+      return
+    }
+
+    dispatch(updateCategory({ id: taskId, category: newCategory }))
+
+    const res = await TaskService.updateCategory(taskId, newCategory)
+    if (!res.success) {
+      dispatch(updateCategory({ id: taskId, category: prevCategory }))
+      dispatch(showError(res.error))
+      return
+    }
+
+    dispatch(updateCategory({ id: taskId, category: newCategory }))
+    dispatch(showSuccess('Category has been updated'))
   }
 
   const deleteTaskHandler = async () => {
@@ -76,7 +112,7 @@ const TaskMobile = ({ task }) => {
     } else dispatch(showSuccess('The task has been deleted'))
   }
 
-  const getStatusClass = (status) => {
+  const getStatusClass = (status: StatusType) => {
     switch (status?.toLowerCase()) {
       case 'done':
         return styles.done
@@ -92,7 +128,29 @@ const TaskMobile = ({ task }) => {
   return (
     <div className={`${styles.taskMobile} ${getStatusClass(task.status)}`}>
       <div className={styles.taskMobile__header}>
-        <div className={styles.taskMobile__category}>{task.category}</div>
+        <div
+          ref={categoryRef}
+          className={`${styles.taskMobile__category} ${isCategoryDropdownOpen ? styles.open : ''}`}
+          onClick={() => {
+            setIsCategoryDropdownOpen((prev) => !prev)
+            setIsDeleteMenuOpen(false)
+          }}
+        >
+          <div className={styles.taskMobile__trigger}>
+            <div className={styles.taskMobile__category}>{task.category}</div>
+            <FaAngleDown />
+          </div>
+
+          {isCategoryDropdownOpen && (
+            <ul className={styles.taskMobile__categoryList}>
+              {CATEGORIES_OPTIONS.map((category) => (
+                <li key={category} onClick={() => changeCategoryHandler(category)}>
+                  {category}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
         <input type="checkbox" checked={isCompleted} onChange={completeHandler} />
       </div>
 
@@ -114,9 +172,9 @@ const TaskMobile = ({ task }) => {
       <div className={styles.taskMobile__footer}>
         <div
           ref={statusRef}
-          className={`${styles.taskMobile__status} ${isDropdownOpen ? styles.open : ''}`}
+          className={`${styles.taskMobile__status} ${isStatusDropdownOpen ? styles.open : ''}`}
           onClick={() => {
-            setIsDropdownOpen((p) => !p)
+            setIsStatusDropdownOpen((prev) => !prev)
             setIsDeleteMenuOpen(false)
           }}
         >
@@ -125,7 +183,7 @@ const TaskMobile = ({ task }) => {
             <FaAngleDown />
           </div>
 
-          {isDropdownOpen && (
+          {isStatusDropdownOpen && (
             <ul className={styles.taskMobile__statusList}>
               {STATUS_OPTIONS.map((status) => (
                 <li key={status} onClick={() => changeStatusHandler(status)}>

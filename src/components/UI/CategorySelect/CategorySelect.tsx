@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import styles from './CategorySelect.module.scss'
 
 interface CustomSelectProps<T extends string> {
-  options: T[]
+  options: readonly T[]
   label?: string
   selected?: T
   setSelected: (value: T) => void

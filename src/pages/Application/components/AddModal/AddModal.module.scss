@@ -142,6 +142,10 @@
     }
   }
 
+  .addModal__submit {
+    margin-top: 1rem;
+  }
+
   label {
     @include m.text-style(v.$font-size-md, v.$font-weight-semibold, v.$line-height-default);
     margin: 1rem 0;

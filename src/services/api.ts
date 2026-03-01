@@ -6,7 +6,7 @@ const URL: string[] = [
   'http://localhost:9000/api',
   'https://taskmaster-backend-e940.onrender.com/api',
 ]
-const currentURL: number = 1
+const currentURL: number = 0
 
 interface FailedRequest {
   resolve: (token: string) => void

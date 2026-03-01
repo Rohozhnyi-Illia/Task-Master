@@ -8,11 +8,12 @@ interface AddButtonProps {
   className?: string
   type: AddButtonType
   disabled?: boolean
+  onClick?: () => void
 }
 
 const AddButton = ({ className, type = 'button', ...props }: AddButtonProps) => {
   return (
-    <button type={type} className={`${styles.addButton} ${className || ''}`} {...props}>
+    <button type={type} className={styles.addButton} {...props}>
       New Task
       <img src={addTask} alt="add task" className={styles.addButton__icon} />
     </button>

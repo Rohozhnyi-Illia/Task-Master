@@ -12,6 +12,7 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   border: 1px solid #e5e5e5;
   transition: all 0.3s ease;
+  overflow: visible;
 
   &__header {
     display: flex;
@@ -23,12 +24,6 @@
       width: 1.8rem;
       height: 1.8rem;
     }
-  }
-
-  &__category {
-    @include m.text-style(v.$font-size-xs, v.$font-weight-medium, 1.4);
-    color: #6f6f6f;
-    letter-spacing: 0.3px;
   }
 
   &__body {
@@ -68,10 +63,60 @@
     align-items: center;
   }
 
+  &__category {
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  &__categoryList {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 6px 0;
+    min-width: 140px;
+    border: 1px solid #ccc;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+    z-index: 10;
+    animation: slideDownFade 0.3s ease-out forwards;
+
+    li {
+      padding: 6px 14px;
+      cursor: pointer;
+      @include m.text-style(v.$font-size-xs, v.$font-weight-regular, 1.4);
+      color: #444;
+      transition: background 0.15s ease;
+    }
+  }
+
   &__status {
     position: relative;
     cursor: pointer;
     user-select: none;
+  }
+
+  &__statusList {
+    position: absolute;
+    bottom: 4rem;
+    left: 0;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 6px 0;
+    min-width: 140px;
+    border: 1px solid #ccc;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+    z-index: 10;
+    animation: fadeIn 0.3s ease-out forwards;
+
+    li {
+      padding: 6px 14px;
+      cursor: pointer;
+      @include m.text-style(v.$font-size-xs, v.$font-weight-regular, 1.4);
+      color: #444;
+      transition: background 0.15s ease;
+    }
   }
 
   &__trigger {
@@ -94,27 +139,6 @@
 
     &:hover {
       background: #ededed;
-    }
-  }
-
-  &__statusList {
-    position: absolute;
-    bottom: 4rem;
-    left: 0;
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 6px 0;
-    min-width: 140px;
-    border: 1px solid #ccc;
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
-    z-index: 10;
-
-    li {
-      padding: 6px 14px;
-      cursor: pointer;
-      @include m.text-style(v.$font-size-xs, v.$font-weight-regular, 1.4);
-      color: #444;
-      transition: background 0.15s ease;
     }
   }
 
@@ -145,7 +169,7 @@
     padding: 14px;
     position: absolute;
     right: 0;
-    bottom: 48px;
+    bottom: 5rem;
     background: #ffffff;
     border: 1px solid #ccc;
     border-radius: 14px;
@@ -218,6 +242,12 @@
   }
 }
 
+.taskMobile__category.open {
+  .taskMobile__trigger svg {
+    transform: rotate(180deg);
+  }
+}
+
 .deleteButton {
   background-color: var(--accent-color);
   color: #fff;
@@ -231,5 +261,16 @@
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@keyframes slideDownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

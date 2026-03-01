@@ -6,9 +6,12 @@ const addTaskSchema = yup.object().shape({
     .string()
     .trim()
     .required('Task is required')
-    .max(25, 'Task name must be less than 25 characters'),
+    .max(30, 'Task name must be less than 30 characters'),
 
-  category: yup.mixed<CategoryType>().oneOf(CATEGORIES_OPTIONS).required(),
+  category: yup
+    .mixed<CategoryType>()
+    .oneOf(CATEGORIES_OPTIONS, 'Category is required')
+    .required('Category is required'),
 
   day: yup
     .number()

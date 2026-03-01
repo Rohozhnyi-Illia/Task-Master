@@ -7,15 +7,22 @@ import TaskService from '@services/taskService'
 import { updateTaskOrder, getTasks } from '@store/tasksSlice'
 import { showError } from '@store/UI/errorSlice'
 import { showSuccess } from '@store/UI/toastSlice'
+import { RootState } from '@store/store'
+import { DropResult } from '@hello-pangea/dnd'
 
-const Container = ({ isDragAndDropOpen, openDropAndDownHandler }) => {
-  const tasks = useSelector((state) => state.tasks)
+interface ContainerProps {
+  isDragAndDropOpen: boolean
+  openDropAndDownHandler: () => void
+}
+
+const Container = ({ isDragAndDropOpen, openDropAndDownHandler }: ContainerProps) => {
+  const tasks = useSelector((state: RootState) => state.tasks)
   const dispatch = useDispatch()
 
   useEffect(() => {
     if (!isDragAndDropOpen) return
 
-    const keyDownHandler = (e) => {
+    const keyDownHandler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         openDropAndDownHandler()
       }
@@ -36,7 +43,7 @@ const Container = ({ isDragAndDropOpen, openDropAndDownHandler }) => {
 
   if (!isDragAndDropOpen) return null
 
-  const onDragEnd = async (result) => {
+  const onDragEnd = async (result: DropResult) => {
     if (!result.destination) return
 
     const newTasks = Array.from(tasks)
@@ -52,8 +59,10 @@ const Container = ({ isDragAndDropOpen, openDropAndDownHandler }) => {
       if (response.success) {
         dispatch(showSuccess('The order has been changed'))
       }
-    } catch (error) {
-      dispatch(showError(error.message))
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        dispatch(showError(error.message))
+      }
       dispatch(getTasks(tasks))
     }
   }

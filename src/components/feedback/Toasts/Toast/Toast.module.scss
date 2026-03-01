@@ -2,52 +2,97 @@
 @use '@styles/mixins.scss' as m;
 
 .toast {
-  padding: 1.5rem;
+  padding: 1rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   column-gap: 1rem;
 
   border: 1px solid #ccc;
-  border-radius: v.$radius-md;
+  border-radius: v.$radius-lg;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   background-color: var(--bg-color);
+  overflow: hidden;
 
-  transform: translateX(-100px);
+  transform: translateX(-120%);
   opacity: 0;
   transition:
-    transform 0.4s ease,
+    transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
     opacity 0.4s ease,
     max-height 0.4s ease,
-    margin-bottom 0.4s ease;
+    margin 0.4s ease,
+    background-color 0.3s ease;
+
+  div {
+    flex-shrink: 0;
+    width: 3.5rem;
+    height: 3.5rem;
+    background-color: #c4ffc4;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    color: white;
+  }
 
   &__icon {
-    color: var(--accent-color);
-    font-size: 2.5rem;
-    transition: color 0.6s ease;
+    color: white;
+    font-size: 2rem;
+    transition: color 0.4s ease;
   }
 
   &__text {
-    @include m.text-style(2rem, v.$font-weight-semibold, v.$line-height-tight);
+    @include m.text-style(1.8rem, v.$font-weight-semibold, v.$line-height-tight);
     color: var(--text-color);
-    transition: color 0.6s ease;
-    text-align: center;
+    transition:
+      color 0.4s ease,
+      transform 0.3s ease;
+    flex: 1;
+    margin: 0;
+  }
+
+  &__xmark {
+    margin-left: auto;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+      transform 0.3s ease,
+      color 0.3s ease;
+
+    svg {
+      font-size: 1.8rem;
+      color: #aaa;
+      transition: color 0.3s ease;
+    }
+
+    &:hover svg {
+      color: #555;
+      transform: scale(1.1);
+    }
   }
 
   &.show {
     transform: translateX(0);
     opacity: 1;
-
-    max-height: 200px;
-    margin-bottom: 10px;
+    max-height: 120px;
+    margin-bottom: 1rem;
   }
 }
 
-@media screen and (max-width: 768.1px) {
-  .toaster {
+@media screen and (max-width: 768px) {
+  .toast {
+    padding: 1rem;
+    align-items: center;
+    column-gap: 1rem;
+
     &__text {
-      color: var(--text-color);
-      @include m.text-style(3rem, v.$font-weight-semibold, v.$line-height-tight);
+      @include m.text-style(1.6rem, v.$font-weight-semibold, v.$line-height-tight);
+      text-align: left;
     }
   }
 }

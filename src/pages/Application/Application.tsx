@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import styles from './Application.module.scss'
-import { search } from '@assets'
-import { CategorySelect } from '@components'
+import { search } from '@assets/index'
+import { CategorySelect } from '@components/index'
 import AddButton from './components/AddButton/AddButton'
 import TaskList from './components/TaskList/TaskList/TaskList'
 import AddModal from './components/AddModal/AddModal'
@@ -13,20 +13,22 @@ import { showLoader, closeLoader } from '@store/UI/loaderSlice'
 import { setFirstAppLoadDone } from '@store/appSlice'
 import { RxDragHandleHorizontal } from 'react-icons/rx'
 import DragAndDropContainer from './components/DragAndDrop/Container/Container'
-import { FILTER_OPTIONS } from '@utils/fields/filterOptions'
+import { FILTER_OPTIONS, FilterOption } from '@utils/fields/filterOptions'
+import { RootState } from '@store/store'
 
 const Application = () => {
-  const [selected, setSelected] = useState('')
-  const [keywordValue, setKeyWordValue] = useState('')
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false)
-  const firstAppLoadDone = useSelector((state) => state.app.firstAppLoadDone)
-  const [isDragAndDropOpen, setIsDragAndDropOpen] = useState(false)
-  const tasks = useSelector((state) => state.tasks)
+  const [selected, setSelected] = useState<FilterOption | ''>('')
+  const [keywordValue, setKeyWordValue] = useState<string>('')
+  const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false)
+  const firstAppLoadDone = useSelector((state: RootState) => state.app.firstAppLoadDone)
+  const [isDragAndDropOpen, setIsDragAndDropOpen] = useState<boolean>(false)
+  const tasks = useSelector((state: RootState) => state.tasks)
 
   const dispatch = useDispatch()
 
-  const keywordValueHandler = (e) => setKeyWordValue(e.target.value)
-  const openModalHandler = () => setIsAddModalOpen((prev) => !prev)
+  const keywordValueHandler = (e: ChangeEvent<HTMLInputElement>) =>
+    setKeyWordValue(e.target.value)
+  const openModalHandler = () => setIsAddModalOpen(!isAddModalOpen)
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -41,8 +43,14 @@ const Application = () => {
         } else {
           dispatch(showError(res.error))
         }
-      } catch (error) {
-        dispatch(showError(error.message || 'Something went wrong'))
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          dispatch(showError(error.message || 'Something went wrong'))
+        } else if (typeof error === 'string') {
+          dispatch(showError(error))
+        } else {
+          dispatch(showError('Something went wrong'))
+        }
       } finally {
         if (!firstAppLoadDone) {
           dispatch(setFirstAppLoadDone())
@@ -52,6 +60,8 @@ const Application = () => {
     }
 
     fetchTasks()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch])
 
   const openDropAndDownHandler = () => {
@@ -89,7 +99,7 @@ const Application = () => {
             <AddButton
               className={styles.application__newTaskBtn}
               onClick={openModalHandler}
-              variant="glass"
+              type="button"
             />
           </header>
 

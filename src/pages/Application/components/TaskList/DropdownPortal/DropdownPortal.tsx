@@ -3,9 +3,27 @@ import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import styles from './DropdownPortal.module.scss'
 
-const DropdownPortal = ({ isOpen, anchorRef, options, onSelect, onClose }) => {
-  const dropdownRef = useRef(null)
-  const [pos, setPos] = useState({ top: 0, left: 0, width: 0 })
+interface DropdownPortalProps<T extends string> {
+  isOpen: boolean
+  anchorRef: React.RefObject<HTMLDivElement | null>
+  options: readonly T[]
+  onSelect: (value: T) => void
+  onClose: () => void
+}
+
+const DropdownPortal = <T extends string>({
+  isOpen,
+  anchorRef,
+  options,
+  onSelect,
+  onClose,
+}: DropdownPortalProps<T>) => {
+  const dropdownRef = useRef<HTMLDivElement>(null)
+  const [pos, setPos] = useState<{ top: number; left: number; width: number }>({
+    top: 0,
+    left: 0,
+    width: 0,
+  })
 
   useLayoutEffect(() => {
     if (!isOpen || !anchorRef.current) return
@@ -20,12 +38,12 @@ const DropdownPortal = ({ isOpen, anchorRef, options, onSelect, onClose }) => {
   }, [isOpen, anchorRef])
 
   useEffect(() => {
-    const handleClickOutside = (e) => {
+    const handleClickOutside = (e: MouseEvent) => {
       if (
         dropdownRef.current &&
-        !dropdownRef.current.contains(e.target) &&
+        !dropdownRef.current.contains(e.target as Node) &&
         anchorRef.current &&
-        !anchorRef.current.contains(e.target)
+        !anchorRef.current.contains(e.target as Node)
       ) {
         onClose()
       }
@@ -37,7 +55,7 @@ const DropdownPortal = ({ isOpen, anchorRef, options, onSelect, onClose }) => {
   }, [onClose, anchorRef])
 
   useEffect(() => {
-    const keyHandler = (e) => {
+    const keyHandler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         onClose()
       }
@@ -52,6 +70,7 @@ const DropdownPortal = ({ isOpen, anchorRef, options, onSelect, onClose }) => {
   return createPortal(
     <div
       ref={dropdownRef}
+      tabIndex={0}
       className={styles.dropdown}
       style={{
         top: pos.top,
