@@ -27,7 +27,6 @@ const Application = () => {
 
   const keywordValueHandler = (e) => setKeyWordValue(e.target.value)
   const openModalHandler = () => setIsAddModalOpen((prev) => !prev)
-  const addButtonRef = useRef(null)
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -90,7 +89,6 @@ const Application = () => {
             <AddButton
               className={styles.application__newTaskBtn}
               onClick={openModalHandler}
-              ref={addButtonRef}
               variant="glass"
             />
           </header>

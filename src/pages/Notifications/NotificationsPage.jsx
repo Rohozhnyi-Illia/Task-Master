@@ -73,7 +73,7 @@ const NotificationsPage = () => {
                   <CategorySelect
                     options={['All', 'Warning', 'Reminder', 'Overdue']}
                     selected={selected}
-                    onChange={setSelected}
+                    onChange={(val) => setSelected(val)}
                     label="Select a category"
                   />
                 </div>

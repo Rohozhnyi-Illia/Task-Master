@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styles from './AddModal.module.scss'
-import { CategorySelect } from '@components'
+import { CategorySelect, ErrorMessage } from '@components/index'
 import AddButton from '../AddButton/AddButton'
 import { FaCircleXmark } from 'react-icons/fa6'
 import addTaskSchema from '@utils/validation/addTask-validation'
-import { ErrorMessage } from '@components'
 import TaskService from '@services/taskService'
 import { createTask } from '@store/tasksSlice'
 import { useDispatch, useSelector } from 'react-redux'
@@ -12,18 +11,40 @@ import capitalize from '@utils/helpers/capitalize'
 import { showError } from '@store/UI/errorSlice'
 import { showLoader, closeLoader } from '@store/UI/loaderSlice'
 import { showSuccess } from '@store/UI/toastSlice'
+import { RootState } from '@store/store'
+import { CategoryType } from '../../../../types/task'
+import { AddTaskValues } from '@utils/validation/addTask-validation'
+import * as yup from 'yup'
 
-const AddModal = ({ openModalHandler, isAddModalOpen }) => {
-  const [categorySelected, setCategorySelected] = useState('')
-  const [reminderSelected, setReminderSelected] = useState('')
-  const [task, setTask] = useState('')
-  const [deadline, setDeadline] = useState({ day: '', month: '', year: '' })
-  const [errors, setErrors] = useState({})
-  const [isClosing, setIsClosing] = useState(false)
+interface AddModalProps {
+  openModalHandler: () => void
+  isAddModalOpen: boolean
+}
+type FormErrors = {
+  task?: string
+  category?: string
+  day?: string
+  month?: string
+  year?: string
+  date?: string
+}
+
+const AddModal = ({ openModalHandler, isAddModalOpen }: AddModalProps) => {
+  const [categorySelected, setCategorySelected] = useState<CategoryType | ''>('')
+  const [reminderSelected, setReminderSelected] = useState<string>('')
+  const [task, setTask] = useState<string>('')
+  const [deadline, setDeadline] = useState<{ day: string; month: string; year: string }>({
+    day: '',
+    month: '',
+    year: '',
+  })
+  const [errors, setErrors] = useState<FormErrors>({})
+  const [isClosing, setIsClosing] = useState<boolean>(false)
+
   const dispatch = useDispatch()
   const isSubmittingRef = useRef(false)
-  const modalRef = useRef(null)
-  const isLoaderShown = useSelector((state) => state.loader.isLoaderShown)
+  const modalRef = useRef<HTMLDivElement>(null)
+  const isLoaderShown = useSelector((state: RootState) => state.loader.isLoaderShown)
 
   const closeModalSmooth = () => {
     setIsClosing(true)
@@ -33,29 +54,30 @@ const AddModal = ({ openModalHandler, isAddModalOpen }) => {
     }, 400)
   }
 
-  const onChangeHandler = (e) => {
+  const onChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = e.target
     if (value.length > 30) return
     setTask(value)
   }
 
-  const deadlineHandler = (e) => {
+  const deadlineHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setDeadline({ ...deadline, [name]: value })
   }
 
-  const onSubmitHandler = async (e) => {
+  const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (isSubmittingRef.current) return
     isSubmittingRef.current = true
     dispatch(showLoader())
 
-    const formData = {
+    if (!categorySelected) return
+    const formData: AddTaskValues = {
       task: capitalize(task.trim()),
-      category: categorySelected.trim(),
-      day: deadline.day,
-      month: deadline.month,
-      year: deadline.year,
+      category: categorySelected,
+      day: Number(deadline.day),
+      month: Number(deadline.month),
+      year: Number(deadline.year),
     }
 
     try {
@@ -63,12 +85,9 @@ const AddModal = ({ openModalHandler, isAddModalOpen }) => {
       setErrors({})
 
       const formattedDate = new Date(
-        Number(deadline.year),
-        Number(deadline.month) - 1,
-        Number(deadline.day),
+        Date.UTC(Number(deadline.year), Number(deadline.month) - 1, Number(deadline.day)),
       )
       const now = new Date()
-      formattedDate.setHours(0, 0, 0)
       now.setHours(0, 0, 0)
 
       if (formattedDate < now) {
@@ -81,7 +100,7 @@ const AddModal = ({ openModalHandler, isAddModalOpen }) => {
         status: 'Active',
         category: categorySelected,
         remainingTime: Number(reminderSelected),
-        deadline: formattedDate,
+        deadline: formattedDate.toISOString(),
       })
 
       if (!res.success) {
@@ -98,15 +117,21 @@ const AddModal = ({ openModalHandler, isAddModalOpen }) => {
 
       closeModalSmooth()
       dispatch(showSuccess('The task has been added.'))
-    } catch (err) {
-      if (err.inner) {
-        const newErrors = {}
+    } catch (err: unknown) {
+      if (err instanceof yup.ValidationError) {
+        const newErrors: Record<string, string> = {}
+
         err.inner.forEach((e) => {
-          newErrors[e.path] = e.message
+          if (e.path) {
+            newErrors[e.path] = e.message
+          }
         })
+
         setErrors(newErrors)
+      } else if (err instanceof Error) {
+        dispatch(showError(err.message))
       } else {
-        dispatch(showError(err.message || 'Something went wrong'))
+        dispatch(showError('Something went wrong'))
       }
     } finally {
       isSubmittingRef.current = false
@@ -117,16 +142,18 @@ const AddModal = ({ openModalHandler, isAddModalOpen }) => {
   useEffect(() => {
     if (!isAddModalOpen) return
 
-    const focusableElements = modalRef.current.querySelectorAll(
+    const focusableElements = modalRef.current?.querySelectorAll<HTMLElement>(
       'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
     )
+
+    if (!focusableElements || focusableElements.length === 0) return
 
     const firstElement = focusableElements[0]
     const lastElement = focusableElements[focusableElements.length - 1]
 
     firstElement.focus()
 
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Tab') {
         if (e.shiftKey) {
           if (document.activeElement === firstElement) {
@@ -209,6 +236,7 @@ const AddModal = ({ openModalHandler, isAddModalOpen }) => {
               onChange={(val) => setCategorySelected(val)}
               selected={categorySelected}
               setSelected={setCategorySelected}
+              label="Select a category"
             />
             {errors.category && (
               <ErrorMessage error={errors.category} className={styles.addModal__error} />

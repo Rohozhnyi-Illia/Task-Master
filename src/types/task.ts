@@ -1,4 +1,5 @@
-import { ISODataType, ModelBase } from './shared'
+import { ModelBase } from './shared'
+import { ISODataType } from './shared'
 
 export const STATUS_OPTIONS = ['Done', 'Active', 'InProgress', 'Archived'] as const
 export type StatusType = (typeof STATUS_OPTIONS)[number]
