@@ -15,14 +15,17 @@ import { RxDragHandleHorizontal } from 'react-icons/rx'
 import DragAndDropContainer from './components/DragAndDrop/Container/Container'
 import { FILTER_OPTIONS, FilterOption } from '@utils/fields/filterOptions'
 import { RootState } from '@store/store'
+import { TaskInterface } from '../../types/task'
 
 const Application = () => {
-  const [selected, setSelected] = useState<FilterOption | ''>('')
+  const [selected, setSelected] = useState<FilterOption | undefined>(undefined)
   const [keywordValue, setKeyWordValue] = useState<string>('')
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false)
-  const firstAppLoadDone = useSelector((state: RootState) => state.app.firstAppLoadDone)
   const [isDragAndDropOpen, setIsDragAndDropOpen] = useState<boolean>(false)
-  const tasks = useSelector((state: RootState) => state.tasks)
+  const firstAppLoadDone: boolean = useSelector(
+    (state: RootState) => state.app.firstAppLoadDone,
+  )
+  const tasks: TaskInterface[] = useSelector((state: RootState) => state.tasks)
 
   const dispatch = useDispatch()
 
@@ -87,12 +90,11 @@ const Application = () => {
             </div>
 
             <div className={styles.application__categories}>
-              <CategorySelect
+              <CategorySelect<FilterOption>
                 label="Select a category"
                 options={FILTER_OPTIONS}
                 onChange={(val) => setSelected(val)}
                 selected={selected}
-                setSelected={setSelected}
               />
             </div>
 

@@ -33,9 +33,9 @@ const Task = ({ task }: TaskProps) => {
   const deleteDropdownRef = useRef<HTMLDivElement>(null)
 
   const dispatch = useDispatch()
-  const taskId = task._id
-  const isCompleted = task.status === 'Done'
-  const displayDate = task.deadline.split('T')[0]
+  const taskId: string = task._id
+  const isCompleted: boolean = task.status === 'Done'
+  const displayDate: string = task.deadline.split('T')[0]
 
   const toggleStatusDropdownHandler = () => {
     setIsStatusDropdownOpen((prev) => !prev)

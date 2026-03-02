@@ -2,7 +2,12 @@ import React from 'react'
 import { FaTrash } from 'react-icons/fa'
 import styles from './NotificationActionButton.module.scss'
 
-const NotificationActionButton = ({ text, onClick }) => (
+interface NotificationActionButtonProps {
+  text: string
+  onClick: () => void
+}
+
+const NotificationActionButton = ({ text, onClick }: NotificationActionButtonProps) => (
   <button className={styles.notifications__button} onClick={onClick}>
     <p>{text}</p>
     <FaTrash />

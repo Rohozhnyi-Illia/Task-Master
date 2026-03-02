@@ -1,5 +1,7 @@
 import { ISODataType, ModelBase } from './shared'
 
+export type NotificationFilterType = 'All' | 'Warning' | 'Reminder' | 'Overdue'
+
 interface NotificationBase extends ModelBase {
   task: string
   dismissedAt: ISODataType | null

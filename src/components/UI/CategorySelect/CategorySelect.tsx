@@ -1,23 +1,21 @@
 import React, { useState, useRef, useEffect } from 'react'
 import styles from './CategorySelect.module.scss'
 
-interface CustomSelectProps<T extends string> {
+interface CategorySelectProps<T extends string> {
   options: readonly T[]
   label?: string
-  selected?: T
-  setSelected: (value: T) => void
+  selected: T | undefined
   onChange?: (value: T) => void
   id?: string
 }
 
-const CustomSelect = <T extends string>({
+const CategorySelect = <T extends string>({
   options,
   label = 'Select',
   selected,
-  setSelected,
   onChange,
   id,
-}: CustomSelectProps<T>) => {
+}: CategorySelectProps<T>) => {
   const [isOpen, setIsOpen] = useState(false)
   const selectRef = useRef<HTMLDivElement>(null)
   const firstOptionRef = useRef<HTMLLIElement>(null)
@@ -25,8 +23,7 @@ const CustomSelect = <T extends string>({
   const toggleOpen = () => setIsOpen(!isOpen)
 
   const handleSelect = (option: T) => {
-    setSelected(option)
-    onChange?.(option)
+    if (onChange) onChange(option)
     setIsOpen(false)
     selectRef.current?.focus()
   }
@@ -99,4 +96,4 @@ const CustomSelect = <T extends string>({
   )
 }
 
-export default CustomSelect
+export default CategorySelect

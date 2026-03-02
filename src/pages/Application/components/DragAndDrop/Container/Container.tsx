@@ -9,6 +9,7 @@ import { showError } from '@store/UI/errorSlice'
 import { showSuccess } from '@store/UI/toastSlice'
 import { RootState } from '@store/store'
 import { DropResult } from '@hello-pangea/dnd'
+import { TaskInterface } from '../../../../../types/task'
 
 interface ContainerProps {
   isDragAndDropOpen: boolean
@@ -16,7 +17,7 @@ interface ContainerProps {
 }
 
 const Container = ({ isDragAndDropOpen, openDropAndDownHandler }: ContainerProps) => {
-  const tasks = useSelector((state: RootState) => state.tasks)
+  const tasks: TaskInterface[] = useSelector((state: RootState) => state.tasks)
   const dispatch = useDispatch()
 
   useEffect(() => {

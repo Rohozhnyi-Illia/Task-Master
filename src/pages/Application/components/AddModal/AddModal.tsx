@@ -44,7 +44,7 @@ const AddModal = ({ openModalHandler, isAddModalOpen }: AddModalProps) => {
   const dispatch = useDispatch()
   const isSubmittingRef = useRef(false)
   const modalRef = useRef<HTMLDivElement>(null)
-  const isLoaderShown = useSelector((state: RootState) => state.loader.isLoaderShown)
+  const isLoaderShown: boolean = useSelector((state: RootState) => state.loader.isLoaderShown)
 
   const closeModalSmooth = () => {
     setIsClosing(true)
@@ -229,7 +229,6 @@ const AddModal = ({ openModalHandler, isAddModalOpen }: AddModalProps) => {
               options={['None', '24', '48', '72', '96', '120']}
               onChange={(val) => setReminderSelected(val === 'None' ? '0' : val)}
               selected={reminderSelected}
-              setSelected={setReminderSelected}
               label="Hours before task deadline"
             />
           </div>
@@ -241,7 +240,6 @@ const AddModal = ({ openModalHandler, isAddModalOpen }: AddModalProps) => {
               options={['Critical', 'High', 'Middle', 'Low']}
               onChange={(val) => setCategorySelected(val)}
               selected={categorySelected}
-              setSelected={setCategorySelected}
               label="Select a category"
             />
             {errors.category && (

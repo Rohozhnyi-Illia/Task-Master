@@ -11,6 +11,8 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 import { showError } from '@store/UI/errorSlice'
 import { showSuccess } from '@store/UI/toastSlice'
+import { Notification as NotificationType } from '../../../../types/notification'
+import { RootState } from '@store/store'
 
 const typeIcon = {
   overdue: <FaExclamationCircle />,
@@ -18,9 +20,18 @@ const typeIcon = {
   reminder: <FaBell />,
 }
 
-const Notification = ({ type, id, message }) => {
+interface NotificationProps {
+  type: NotificationType['type']
+  id: string
+  message: string
+  isRead: boolean
+}
+
+const Notification = ({ type, id, message }: NotificationProps) => {
   const dispatch = useDispatch()
-  const notification = useSelector((state) => state.notification.find((n) => n._id === id))
+  const notification: NotificationType | undefined = useSelector((state: RootState) =>
+    state.notification.find((n) => n._id === id),
+  )
   const isRead = notification?.isRead
 
   const readHandler = async () => {
@@ -28,10 +39,14 @@ const Notification = ({ type, id, message }) => {
 
     try {
       const res = await NotificationService.markAsRead(id)
-      if (!res.success) throw new Error(res.error)
-    } catch (error) {
-      dispatch(readNotification({ id, markAsRead: false }))
-      dispatch(showError(error.message))
+      if (!res.success) dispatch(showError(res.error))
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        dispatch(readNotification({ id, markAsRead: false }))
+        dispatch(showError(error.message))
+      } else {
+        dispatch(showError('Something wrong'))
+      }
     }
   }
 
@@ -48,12 +63,18 @@ const Notification = ({ type, id, message }) => {
 
       dispatch(showSuccess('Notification has been deleted'))
     } catch (error) {
-      dispatch(restoreNotification(backup))
-      dispatch(showError(error.message))
+      if (error instanceof Error) {
+        if (backup) {
+          dispatch(restoreNotification(backup))
+        }
+        dispatch(showError(error.message))
+      } else {
+        dispatch(showError('Something wrong'))
+      }
     }
   }
 
-  const highlightTask = (message) => {
+  const highlightTask = (message: string) => {
     const parts = message.split(/(".*?")/)
     return parts.map((part, index) =>
       part.startsWith('"') && part.endsWith('"') ? (

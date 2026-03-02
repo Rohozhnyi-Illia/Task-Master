@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styles from './NotificationsPage.module.scss'
 import { useDispatch, useSelector } from 'react-redux'
-import { CategorySelect } from '@components'
+import { CategorySelect } from '@components/index'
 import NotificationList from './components/NotificationsList/NotificationList'
 import NotificationService from '@services/notificationService'
 import { showError } from '@store/UI/errorSlice'
@@ -12,11 +12,13 @@ import {
 } from '@store/notificationSlice'
 import { showSuccess } from '@store/UI/toastSlice'
 import NotificationActionButton from './components/NotificationActionButton/NotificationActionButton'
+import { RootState } from '@store/store'
+import { Notification, NotificationFilterType } from '../../types/notification'
 
 const NotificationsPage = () => {
-  const [selected, setSelected] = useState('')
-  const name = useSelector((state) => state.auth.name)
-  const notifications = useSelector((state) => state.notification)
+  const [selected, setSelected] = useState<NotificationFilterType | undefined>(undefined)
+  const name: string = useSelector((state: RootState) => state.auth.name)
+  const notifications: Notification[] = useSelector((state: RootState) => state.notification)
   const dispatch = useDispatch()
 
   const deleteReadHandler = async () => {
@@ -30,13 +32,17 @@ const NotificationsPage = () => {
     const oldNotifications = [...notifications]
     dispatch(deleteReadNotifications())
 
-    const { success, data, error } = await NotificationService.deleteReadNotifications()
+    const res = await NotificationService.deleteReadNotifications()
 
-    if (!success) {
-      dispatch(getNotifications(oldNotifications))
-      dispatch(showError(error))
+    if (res.success) {
+      dispatch(
+        showSuccess(
+          `${res.data.deletedCount} ${res.data.deletedCount > 1 ? 'Notifications' : 'Notification'} deleted`,
+        ),
+      )
     } else {
-      dispatch(showSuccess(`${data} ${data > 1 ? 'Notifications' : 'Notification'} deleted`))
+      dispatch(getNotifications(oldNotifications))
+      dispatch(showError(res.error))
     }
   }
 
@@ -49,13 +55,17 @@ const NotificationsPage = () => {
     const oldNotifications = [...notifications]
     dispatch(deleteAllNotifications())
 
-    const { success, data, error } = await NotificationService.deleteAllNotifications()
+    const res = await NotificationService.deleteAllNotifications()
 
-    if (!success) {
-      dispatch(getNotifications(oldNotifications))
-      dispatch(showError(error))
+    if (res.success) {
+      dispatch(
+        showSuccess(
+          `${res.data.deletedCount} ${res.data.deletedCount > 1 ? 'Notifications' : 'Notification'} deleted`,
+        ),
+      )
     } else {
-      dispatch(showSuccess(`${data} ${data > 1 ? 'Notifications' : 'Notification'} deleted`))
+      dispatch(getNotifications(oldNotifications))
+      dispatch(showError(res.error))
     }
   }
 
@@ -70,7 +80,7 @@ const NotificationsPage = () => {
             <div className={styles.notifications__controls}>
               <div className={styles.notifications__controlsWrapper}>
                 <div className={styles.notifications__category}>
-                  <CategorySelect
+                  <CategorySelect<NotificationFilterType>
                     options={['All', 'Warning', 'Reminder', 'Overdue']}
                     selected={selected}
                     onChange={(val) => setSelected(val)}

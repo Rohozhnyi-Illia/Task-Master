@@ -7,14 +7,15 @@ import { Pagination } from '@components/index'
 import { NoData } from '@components/index'
 import { RootState } from '@store/store'
 import { FilterOption } from '@utils/fields/filterOptions'
+import { TaskInterface } from '../../../../../types/task'
 
 interface TaskListProps {
   keyword: string
-  selected: FilterOption | ''
+  selected: FilterOption | undefined
 }
 
 const TaskList = ({ keyword, selected }: TaskListProps) => {
-  const tasks = useSelector((state: RootState) => state.tasks)
+  const tasks: TaskInterface[] = useSelector((state: RootState) => state.tasks)
   const [currentPage, setCurrentPage] = useState<number>(1)
   const taskPerPage: number = 10
 

@@ -8,7 +8,7 @@ interface ProtectPathProps {
 }
 
 const ProtectPath = ({ children }: ProtectPathProps) => {
-  const isAuth = useSelector((state: RootState) => state.auth.isAuth)
+  const isAuth: boolean = useSelector((state: RootState) => state.auth.isAuth)
   const navigate = useNavigate()
 
   useEffect(() => {

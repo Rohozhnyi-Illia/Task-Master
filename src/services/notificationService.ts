@@ -38,9 +38,10 @@ const notificationService = class notificationService {
 
   async deleteReadNotifications(): Promise<ServiceResponse<DeleteNotificationsResponse>> {
     try {
-      const { data } =
-        await api.patch<ServiceResponse<DeleteNotificationsResponse>>('/notification/readAll')
-      return data
+      const res = await api.patch<{ success: boolean; data: DeleteNotificationsResponse }>(
+        '/notification/readAll',
+      )
+      return { success: true, data: res.data.data }
     } catch (error) {
       const message = parseError(error)
       return { success: false, error: message }
@@ -49,10 +50,10 @@ const notificationService = class notificationService {
 
   async deleteAllNotifications(): Promise<ServiceResponse<DeleteNotificationsResponse>> {
     try {
-      const { data } = await api.patch<ServiceResponse<DeleteNotificationsResponse>>(
+      const res = await api.patch<{ success: boolean; data: DeleteNotificationsResponse }>(
         '/notification/deleteAll',
       )
-      return data
+      return { success: true, data: res.data.data }
     } catch (error) {
       const message = parseError(error)
       return { success: false, error: message }

@@ -2,19 +2,28 @@ import React, { useEffect, useState } from 'react'
 import styles from './NotificationList.module.scss'
 import Notification from '../Notification/Notification'
 import { useSelector } from 'react-redux'
-import { Pagination, NoData } from '@components'
+import { Pagination, NoData } from '@components/index'
+import { NotificationFilterType } from '../../../../types/notification'
+import { RootState } from '@store/store'
+import { Notification as NotificationType } from '../../../../types/notification'
 
-const NotificationList = ({ selected }) => {
-  const notifications = useSelector((state) => state.notification)
-  const [currentPage, setCurrentPage] = useState(1)
-  const notificationsPerPage = 5
+interface NotificationListProps {
+  selected: NotificationFilterType | undefined
+}
+
+const NotificationList = ({ selected }: NotificationListProps) => {
+  const notifications: NotificationType[] = useSelector(
+    (state: RootState) => state.notification,
+  )
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const notificationsPerPage: number = 5
 
   const filteredNotifications = notifications.filter((notification) => {
     if (!selected || selected === 'All') return true
     return notification.type.toLowerCase() === selected.toLowerCase()
   })
 
-  const totalPages = Math.ceil(filteredNotifications.length / notificationsPerPage)
+  const totalPages: number = Math.ceil(filteredNotifications.length / notificationsPerPage)
 
   useEffect(() => {
     if (currentPage > totalPages && totalPages > 0) {
