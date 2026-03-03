@@ -1,5 +1,5 @@
-import React from 'react'
-import { Bar } from 'react-chartjs-2'
+import React from 'react';
+import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,36 +10,35 @@ import {
   Legend,
   ChartData,
   ChartOptions,
-} from 'chart.js'
-import styles from './StackedBarChart.module.scss'
-import { CATEGORIES_OPTIONS, TaskInterface } from '../../../../types/task'
+} from 'chart.js';
+import styles from './StackedBarChart.module.scss';
+import { CATEGORIES_OPTIONS, TaskInterface } from '../../../../types/task';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 interface StackedBarChartProps {
-  tasks: TaskInterface[]
+  tasks: TaskInterface[];
 }
 
 const StackedBarChart = ({ tasks }: StackedBarChartProps) => {
   const activeCounts = CATEGORIES_OPTIONS.map(
     (category) =>
       tasks.filter((task) => task.category === category && task.status === 'Active').length,
-  )
+  );
   const doneCounts = CATEGORIES_OPTIONS.map(
     (category) =>
       tasks.filter((task) => task.category === category && task.status === 'Done').length,
-  )
+  );
 
   const inProgressCounts = CATEGORIES_OPTIONS.map(
     (category) =>
-      tasks.filter((task) => task.category === category && task.status === 'InProgress')
-        .length,
-  )
+      tasks.filter((task) => task.category === category && task.status === 'InProgress').length,
+  );
 
   const archivedCounts = CATEGORIES_OPTIONS.map(
     (category) =>
       tasks.filter((task) => task.category === category && task.status === 'Archived').length,
-  )
+  );
 
   const data: ChartData<'bar', number[], string> = {
     labels: [...CATEGORIES_OPTIONS],
@@ -65,7 +64,7 @@ const StackedBarChart = ({ tasks }: StackedBarChartProps) => {
         backgroundColor: '#999999',
       },
     ],
-  }
+  };
 
   const options: ChartOptions<'bar'> = {
     responsive: true,
@@ -105,13 +104,13 @@ const StackedBarChart = ({ tasks }: StackedBarChartProps) => {
         },
       },
     },
-  }
+  };
 
   return (
     <div className={styles.chartContainer}>
       <Bar data={data} options={options} />
     </div>
-  )
-}
+  );
+};
 
-export default StackedBarChart
+export default StackedBarChart;

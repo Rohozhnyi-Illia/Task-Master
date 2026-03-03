@@ -1,11 +1,11 @@
-import React from 'react'
-import styles from './AcessModal.module.scss'
-import { ModalBase, AuthButton } from '@components/index'
-import { done } from '@assets/index'
+import React from 'react';
+import styles from './AcessModal.module.scss';
+import { ModalBase, AuthButton } from '@components/index';
+import { done } from '@assets/index';
 
 interface AccessModalProps {
-  onClick: () => void
-  text?: string
+  onClick: () => void;
+  text?: string;
 }
 
 const AccessModal = ({ onClick, text = 'Action completed' }: AccessModalProps) => {
@@ -22,7 +22,7 @@ const AccessModal = ({ onClick, text = 'Action completed' }: AccessModalProps) =
         <AuthButton text="Continue" type="button" onClick={onClick} />
       </div>
     </ModalBase>
-  )
-}
+  );
+};
 
-export default AccessModal
+export default AccessModal;

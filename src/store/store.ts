@@ -1,14 +1,14 @@
-import { configureStore } from '@reduxjs/toolkit'
-import authReducer from './authSlice'
-import tasksReducer from './tasksSlice'
-import errorSlice from './UI/errorSlice'
-import loaderSlice from './UI/loaderSlice'
-import notificationReducer from './notificationSlice'
-import toastSlice from './UI/toastSlice'
-import appSlice from './appSlice'
-import { loadState, saveState } from './localStorage'
+import { configureStore } from '@reduxjs/toolkit';
+import authReducer from './authSlice';
+import tasksReducer from './tasksSlice';
+import errorSlice from './UI/errorSlice';
+import loaderSlice from './UI/loaderSlice';
+import notificationReducer from './notificationSlice';
+import toastSlice from './UI/toastSlice';
+import appSlice from './appSlice';
+import { loadState, saveState } from './localStorage';
 
-const persistedState = loadState()
+const persistedState = loadState();
 
 const initialAuthState = {
   id: '',
@@ -16,7 +16,7 @@ const initialAuthState = {
   name: '',
   accessToken: '',
   keepLogged: false,
-}
+};
 
 const store = configureStore({
   reducer: {
@@ -34,11 +34,11 @@ const store = configureStore({
     tasks: persistedState?.tasks ?? [],
     notification: persistedState?.notification ?? [],
   },
-})
+});
 
 store.subscribe(() => {
-  saveState(store.getState())
-})
+  saveState(store.getState());
+});
 
-export default store
-export type RootState = ReturnType<typeof store.getState>
+export default store;
+export type RootState = ReturnType<typeof store.getState>;

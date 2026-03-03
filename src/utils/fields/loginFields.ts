@@ -1,5 +1,5 @@
-import { mdiPassword, mail } from '../../assets'
-import { Field } from '../../types/forms'
+import { mdiPassword, mail } from '../../assets';
+import { Field } from '../../types/forms';
 
 const FIELDS: Field[] = [
   {
@@ -16,6 +16,6 @@ const FIELDS: Field[] = [
     authOptions: true,
     type: 'password',
   },
-]
+];
 
-export default FIELDS
+export default FIELDS;

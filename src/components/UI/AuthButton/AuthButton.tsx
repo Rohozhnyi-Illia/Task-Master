@@ -1,13 +1,13 @@
-import React from 'react'
-import styles from './AuthButton.module.scss'
+import React from 'react';
+import styles from './AuthButton.module.scss';
 
-type AuthButtonType = 'submit' | 'button' | 'reset'
+type AuthButtonType = 'submit' | 'button' | 'reset';
 
 interface AuthButtonProps {
-  text: string
-  onClick?: () => void
-  type: AuthButtonType
-  disabled?: boolean
+  text: string;
+  onClick?: () => void;
+  type: AuthButtonType;
+  disabled?: boolean;
 }
 
 const AuthButton = ({ text, onClick, type = 'submit', disabled }: AuthButtonProps) => {
@@ -15,7 +15,7 @@ const AuthButton = ({ text, onClick, type = 'submit', disabled }: AuthButtonProp
     <button disabled={disabled} className={styles.auth__button} onClick={onClick} type={type}>
       {text}
     </button>
-  )
-}
+  );
+};
 
-export default AuthButton
+export default AuthButton;

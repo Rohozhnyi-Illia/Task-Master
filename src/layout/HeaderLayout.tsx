@@ -1,7 +1,7 @@
-import React from 'react'
-import { Outlet } from 'react-router-dom'
-import { Header } from '@components/index'
-import styles from './HeaderLayout.module.scss'
+import React from 'react';
+import { Outlet } from 'react-router-dom';
+import { Header } from '@components/index';
+import styles from './HeaderLayout.module.scss';
 
 const HeaderLayout = () => {
   return (
@@ -11,7 +11,7 @@ const HeaderLayout = () => {
         <Outlet />
       </main>
     </div>
-  )
-}
+  );
+};
 
-export default HeaderLayout
+export default HeaderLayout;

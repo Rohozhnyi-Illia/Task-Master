@@ -1,10 +1,10 @@
-import React from 'react'
-import { FaTrash } from 'react-icons/fa'
-import styles from './NotificationActionButton.module.scss'
+import React from 'react';
+import { FaTrash } from 'react-icons/fa';
+import styles from './NotificationActionButton.module.scss';
 
 interface NotificationActionButtonProps {
-  text: string
-  onClick: () => void
+  text: string;
+  onClick: () => void;
 }
 
 const NotificationActionButton = ({ text, onClick }: NotificationActionButtonProps) => (
@@ -12,6 +12,6 @@ const NotificationActionButton = ({ text, onClick }: NotificationActionButtonPro
     <p>{text}</p>
     <FaTrash />
   </button>
-)
+);
 
-export default NotificationActionButton
+export default NotificationActionButton;

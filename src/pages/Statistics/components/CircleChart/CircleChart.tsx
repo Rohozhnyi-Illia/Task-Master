@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { Doughnut } from 'react-chartjs-2'
+import React, { useEffect, useState } from 'react';
+import { Doughnut } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   ArcElement,
@@ -8,31 +8,31 @@ import {
   Title,
   ChartOptions,
   ChartData,
-} from 'chart.js'
-import ChartDataLabels from 'chartjs-plugin-datalabels'
-import styles from './CircleChart.module.scss'
-import { CategoryType } from '../../../../types/task'
+} from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+import styles from './CircleChart.module.scss';
+import { CategoryType } from '../../../../types/task';
 
-ChartJS.register(ArcElement, Tooltip, Legend, Title)
+ChartJS.register(ArcElement, Tooltip, Legend, Title);
 
 interface CircleChartItem {
-  category: CategoryType
-  value: number
+  category: CategoryType;
+  value: number;
 }
 
 interface CircleChartProps {
-  data: CircleChartItem[]
-  title: string
+  data: CircleChartItem[];
+  title: string;
 }
 
 const CircleChart = ({ data, title }: CircleChartProps) => {
   const [chartData, setChartData] = useState<ChartData<'doughnut', number[], string>>({
     labels: [],
     datasets: [{ data: [], backgroundColor: [], borderWidth: 1 }],
-  })
+  });
 
   useEffect(() => {
-    const COLORS = ['#999999', '#b32929', '#e79805', '#4386dfff']
+    const COLORS = ['#999999', '#b32929', '#e79805', '#4386dfff'];
     const timer = setTimeout(() => {
       setChartData({
         labels: data.map((item) => item.category),
@@ -43,11 +43,11 @@ const CircleChart = ({ data, title }: CircleChartProps) => {
             borderWidth: 1,
           },
         ],
-      })
-    }, 50)
+      });
+    }, 50);
 
-    return () => clearTimeout(timer)
-  }, [data])
+    return () => clearTimeout(timer);
+  }, [data]);
 
   const options: ChartOptions<'doughnut'> = {
     responsive: true,
@@ -81,13 +81,13 @@ const CircleChart = ({ data, title }: CircleChartProps) => {
         formatter: (value) => value,
       },
     },
-  }
+  };
 
   return (
     <div style={{ position: 'relative' }} className={styles.circle}>
       <Doughnut data={chartData} options={options} plugins={[ChartDataLabels]} />
     </div>
-  )
-}
+  );
+};
 
-export default CircleChart
+export default CircleChart;

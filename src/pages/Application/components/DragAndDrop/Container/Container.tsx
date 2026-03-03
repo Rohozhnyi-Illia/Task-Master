@@ -1,72 +1,72 @@
-import React, { useEffect } from 'react'
-import Item from '../Item/Item'
-import styles from './Container.module.scss'
-import { useDispatch, useSelector } from 'react-redux'
-import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd'
-import TaskService from '@services/taskService'
-import { updateTaskOrder, getTasks } from '@store/tasksSlice'
-import { showError } from '@store/UI/errorSlice'
-import { showSuccess } from '@store/UI/toastSlice'
-import { RootState } from '@store/store'
-import { DropResult } from '@hello-pangea/dnd'
-import { TaskInterface } from '../../../../../types/task'
+import React, { useEffect } from 'react';
+import Item from '../Item/Item';
+import styles from './Container.module.scss';
+import { useDispatch, useSelector } from 'react-redux';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import TaskService from '@services/taskService';
+import { updateTaskOrder, getTasks } from '@store/tasksSlice';
+import { showError } from '@store/UI/errorSlice';
+import { showSuccess } from '@store/UI/toastSlice';
+import { RootState } from '@store/store';
+import { DropResult } from '@hello-pangea/dnd';
+import { TaskInterface } from '../../../../../types/task';
 
 interface ContainerProps {
-  isDragAndDropOpen: boolean
-  openDropAndDownHandler: () => void
+  isDragAndDropOpen: boolean;
+  openDropAndDownHandler: () => void;
 }
 
 const Container = ({ isDragAndDropOpen, openDropAndDownHandler }: ContainerProps) => {
-  const tasks: TaskInterface[] = useSelector((state: RootState) => state.tasks)
-  const dispatch = useDispatch()
+  const tasks: TaskInterface[] = useSelector((state: RootState) => state.tasks);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!isDragAndDropOpen) return
+    if (!isDragAndDropOpen) return;
 
     const keyDownHandler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        openDropAndDownHandler()
+        openDropAndDownHandler();
       }
-    }
+    };
 
-    document.addEventListener('keydown', keyDownHandler)
+    document.addEventListener('keydown', keyDownHandler);
 
-    return () => document.removeEventListener('keydown', keyDownHandler)
-  }, [isDragAndDropOpen, openDropAndDownHandler])
+    return () => document.removeEventListener('keydown', keyDownHandler);
+  }, [isDragAndDropOpen, openDropAndDownHandler]);
 
   useEffect(() => {
     if (isDragAndDropOpen) {
-      document.body.style.overflow = 'hidden'
+      document.body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = ''
+      document.body.style.overflow = '';
     }
-  }, [isDragAndDropOpen])
+  }, [isDragAndDropOpen]);
 
-  if (!isDragAndDropOpen) return null
+  if (!isDragAndDropOpen) return null;
 
   const onDragEnd = async (result: DropResult) => {
-    if (!result.destination) return
+    if (!result.destination) return;
 
-    const newTasks = Array.from(tasks)
-    const [movedTask] = newTasks.splice(result.source.index, 1)
-    newTasks.splice(result.destination.index, 0, movedTask)
+    const newTasks = Array.from(tasks);
+    const [movedTask] = newTasks.splice(result.source.index, 1);
+    newTasks.splice(result.destination.index, 0, movedTask);
 
-    dispatch(updateTaskOrder(newTasks))
+    dispatch(updateTaskOrder(newTasks));
 
     try {
-      const orderedIds = newTasks.map((task) => task._id)
-      const response = await TaskService.reorderTasks(orderedIds)
+      const orderedIds = newTasks.map((task) => task._id);
+      const response = await TaskService.reorderTasks(orderedIds);
 
       if (response.success) {
-        dispatch(showSuccess('The order has been changed'))
+        dispatch(showSuccess('The order has been changed'));
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
-        dispatch(showError(error.message))
+        dispatch(showError(error.message));
       }
-      dispatch(getTasks(tasks))
+      dispatch(getTasks(tasks));
     }
-  }
+  };
 
   return (
     <div
@@ -76,11 +76,7 @@ const Container = ({ isDragAndDropOpen, openDropAndDownHandler }: ContainerProps
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="tasks">
           {(provided) => (
-            <div
-              className={styles.taskList}
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-            >
+            <div className={styles.taskList} ref={provided.innerRef} {...provided.droppableProps}>
               {tasks.map((task, index) => (
                 <Draggable key={task._id} draggableId={task._id} index={index}>
                   {(provided, snapshot) => (
@@ -104,7 +100,7 @@ const Container = ({ isDragAndDropOpen, openDropAndDownHandler }: ContainerProps
         </Droppable>
       </DragDropContext>
     </div>
-  )
-}
+  );
+};
 
-export default Container
+export default Container;

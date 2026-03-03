@@ -1,23 +1,23 @@
-import React, { ChangeEvent, useState } from 'react'
-import styles from './Input.module.scss'
-import { Link } from 'react-router-dom'
-import ErrorMessage from '../ErrorMessage/ErrorMessage'
-import { IoIosEye, IoMdEyeOff } from 'react-icons/io'
+import React, { ChangeEvent, useState } from 'react';
+import styles from './Input.module.scss';
+import { Link } from 'react-router-dom';
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
+import { IoIosEye, IoMdEyeOff } from 'react-icons/io';
 
-type InputType = 'text' | 'email' | 'password'
+type InputType = 'text' | 'email' | 'password';
 
 interface InputProps<T extends string> {
-  label: string
-  placeholder: string
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void
-  value: string
-  name: T
-  img?: string
-  authOptions?: boolean
-  err: string
-  checkValue?: boolean
-  type: InputType
-  formId: string
+  label: string;
+  placeholder: string;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  value: string;
+  name: T;
+  img?: string;
+  authOptions?: boolean;
+  err: string;
+  checkValue?: boolean;
+  type: InputType;
+  formId: string;
 }
 
 const Input = <T extends string>(props: InputProps<T>) => {
@@ -33,16 +33,16 @@ const Input = <T extends string>(props: InputProps<T>) => {
     checkValue,
     type = 'text',
     formId,
-  } = props
+  } = props;
 
-  const [showPassword, setShowPassword] = useState<boolean>(false)
-  const isPasswordField: boolean = type === 'password'
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const isPasswordField: boolean = type === 'password';
 
-  const inputId: string = `${formId}-${name}`
+  const inputId = `${formId}-${name}`;
 
   const changePasswordTypeHandler = () => {
-    setShowPassword(!showPassword)
-  }
+    setShowPassword(!showPassword);
+  };
 
   return (
     <div className={styles.input}>
@@ -96,7 +96,7 @@ const Input = <T extends string>(props: InputProps<T>) => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Input
+export default Input;

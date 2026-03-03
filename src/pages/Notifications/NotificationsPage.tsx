@@ -1,73 +1,73 @@
-import React, { useState } from 'react'
-import styles from './NotificationsPage.module.scss'
-import { useDispatch, useSelector } from 'react-redux'
-import { CategorySelect } from '@components/index'
-import NotificationList from './components/NotificationsList/NotificationList'
-import NotificationService from '@services/notificationService'
-import { showError } from '@store/UI/errorSlice'
+import React, { useState } from 'react';
+import styles from './NotificationsPage.module.scss';
+import { useDispatch, useSelector } from 'react-redux';
+import { CategorySelect } from '@components/index';
+import NotificationList from './components/NotificationsList/NotificationList';
+import NotificationService from '@services/notificationService';
+import { showError } from '@store/UI/errorSlice';
 import {
   deleteReadNotifications,
   getNotifications,
   deleteAllNotifications,
-} from '@store/notificationSlice'
-import { showSuccess } from '@store/UI/toastSlice'
-import NotificationActionButton from './components/NotificationActionButton/NotificationActionButton'
-import { RootState } from '@store/store'
-import { Notification, NotificationFilterType } from '../../types/notification'
+} from '@store/notificationSlice';
+import { showSuccess } from '@store/UI/toastSlice';
+import NotificationActionButton from './components/NotificationActionButton/NotificationActionButton';
+import { RootState } from '@store/store';
+import { Notification, NotificationFilterType } from '../../types/notification';
 
 const NotificationsPage = () => {
-  const [selected, setSelected] = useState<NotificationFilterType | undefined>(undefined)
-  const name: string = useSelector((state: RootState) => state.auth.name)
-  const notifications: Notification[] = useSelector((state: RootState) => state.notification)
-  const dispatch = useDispatch()
+  const [selected, setSelected] = useState<NotificationFilterType | undefined>(undefined);
+  const name: string = useSelector((state: RootState) => state.auth.name);
+  const notifications: Notification[] = useSelector((state: RootState) => state.notification);
+  const dispatch = useDispatch();
 
   const deleteReadHandler = async () => {
-    const readNotifications = notifications.filter((notification) => notification.isRead)
+    const readNotifications = notifications.filter((notification) => notification.isRead);
 
     if (readNotifications.length === 0) {
-      dispatch(showError('No read notifications to delete'))
-      return
+      dispatch(showError('No read notifications to delete'));
+      return;
     }
 
-    const oldNotifications = [...notifications]
-    dispatch(deleteReadNotifications())
+    const oldNotifications = [...notifications];
+    dispatch(deleteReadNotifications());
 
-    const res = await NotificationService.deleteReadNotifications()
+    const res = await NotificationService.deleteReadNotifications();
 
     if (res.success) {
       dispatch(
         showSuccess(
           `${res.data.deletedCount} ${res.data.deletedCount > 1 ? 'Notifications' : 'Notification'} deleted`,
         ),
-      )
+      );
     } else {
-      dispatch(getNotifications(oldNotifications))
-      dispatch(showError(res.error))
+      dispatch(getNotifications(oldNotifications));
+      dispatch(showError(res.error));
     }
-  }
+  };
 
   const deleteAllHandler = async () => {
     if (notifications.length === 0) {
-      dispatch(showError('No notifications to delete'))
-      return
+      dispatch(showError('No notifications to delete'));
+      return;
     }
 
-    const oldNotifications = [...notifications]
-    dispatch(deleteAllNotifications())
+    const oldNotifications = [...notifications];
+    dispatch(deleteAllNotifications());
 
-    const res = await NotificationService.deleteAllNotifications()
+    const res = await NotificationService.deleteAllNotifications();
 
     if (res.success) {
       dispatch(
         showSuccess(
           `${res.data.deletedCount} ${res.data.deletedCount > 1 ? 'Notifications' : 'Notification'} deleted`,
         ),
-      )
+      );
     } else {
-      dispatch(getNotifications(oldNotifications))
-      dispatch(showError(res.error))
+      dispatch(getNotifications(oldNotifications));
+      dispatch(showError(res.error));
     }
-  }
+  };
 
   return (
     <div className={styles.notifications}>
@@ -100,7 +100,7 @@ const NotificationsPage = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default NotificationsPage
+export default NotificationsPage;

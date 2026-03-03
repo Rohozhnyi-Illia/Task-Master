@@ -1,23 +1,23 @@
-import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import { Outlet, useNavigate } from 'react-router-dom'
-import { selectIsAuth } from '@store/authSlice'
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { Outlet, useNavigate } from 'react-router-dom';
+import { selectIsAuth } from '@store/authSlice';
 
 interface ProtectPathProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 const ProtectPath = ({ children }: ProtectPathProps) => {
-  const isAuth: boolean = useSelector(selectIsAuth)
-  const navigate = useNavigate()
+  const isAuth: boolean = useSelector(selectIsAuth);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!isAuth) {
-      navigate('/login', { replace: true })
+      navigate('/login', { replace: true });
     }
-  }, [isAuth, navigate])
+  }, [isAuth, navigate]);
 
-  return children ? <>{children}</> : <Outlet />
-}
+  return children ? <>{children}</> : <Outlet />;
+};
 
-export default ProtectPath
+export default ProtectPath;

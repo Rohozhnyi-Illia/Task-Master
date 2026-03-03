@@ -1,14 +1,14 @@
-import React, { useLayoutEffect } from 'react'
-import { useEffect, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
-import styles from './DropdownPortal.module.scss'
+import React, { useLayoutEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import styles from './DropdownPortal.module.scss';
 
 interface DropdownPortalProps<T extends string> {
-  isOpen: boolean
-  anchorRef: React.RefObject<HTMLDivElement | null>
-  options: readonly T[]
-  onSelect: (value: T) => void
-  onClose: () => void
+  isOpen: boolean;
+  anchorRef: React.RefObject<HTMLDivElement | null>;
+  options: readonly T[];
+  onSelect: (value: T) => void;
+  onClose: () => void;
 }
 
 const DropdownPortal = <T extends string>({
@@ -18,24 +18,24 @@ const DropdownPortal = <T extends string>({
   onSelect,
   onClose,
 }: DropdownPortalProps<T>) => {
-  const dropdownRef = useRef<HTMLDivElement>(null)
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState<{ top: number; left: number; width: number }>({
     top: 0,
     left: 0,
     width: 0,
-  })
+  });
 
   useLayoutEffect(() => {
-    if (!isOpen || !anchorRef.current) return
+    if (!isOpen || !anchorRef.current) return;
 
-    const rectangle = anchorRef.current.getBoundingClientRect()
+    const rectangle = anchorRef.current.getBoundingClientRect();
 
     setPos({
       top: rectangle.top + window.scrollY - 150,
       left: rectangle.left + window.scrollX,
       width: rectangle.width,
-    })
-  }, [isOpen, anchorRef])
+    });
+  }, [isOpen, anchorRef]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -45,27 +45,27 @@ const DropdownPortal = <T extends string>({
         anchorRef.current &&
         !anchorRef.current.contains(e.target as Node)
       ) {
-        onClose()
+        onClose();
       }
-    }
+    };
 
-    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('mousedown', handleClickOutside);
 
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [onClose, anchorRef])
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [onClose, anchorRef]);
 
   useEffect(() => {
     const keyHandler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        onClose()
+        onClose();
       }
-    }
+    };
 
-    document.addEventListener('keydown', keyHandler)
-    return () => document.removeEventListener('keydown', keyHandler)
-  }, [onClose, anchorRef])
+    document.addEventListener('keydown', keyHandler);
+    return () => document.removeEventListener('keydown', keyHandler);
+  }, [onClose, anchorRef]);
 
-  if (!isOpen) return null
+  if (!isOpen) return null;
 
   return createPortal(
     <div
@@ -85,8 +85,8 @@ const DropdownPortal = <T extends string>({
           key={option}
           className={styles.option}
           onClick={() => {
-            onSelect(option)
-            onClose()
+            onSelect(option);
+            onClose();
           }}
         >
           {option}
@@ -94,7 +94,7 @@ const DropdownPortal = <T extends string>({
       ))}
     </div>,
     document.body,
-  )
-}
+  );
+};
 
-export default DropdownPortal
+export default DropdownPortal;

@@ -1,9 +1,9 @@
-import React from 'react'
-import { RxDragHandleHorizontal } from 'react-icons/rx'
-import styles from './Item.module.scss'
+import React from 'react';
+import { RxDragHandleHorizontal } from 'react-icons/rx';
+import styles from './Item.module.scss';
 
 interface ItemProps {
-  task: string
+  task: string;
 }
 
 const Item = ({ task }: ItemProps) => {
@@ -14,7 +14,7 @@ const Item = ({ task }: ItemProps) => {
         <RxDragHandleHorizontal />
       </button>
     </div>
-  )
-}
+  );
+};
 
-export default Item
+export default Item;

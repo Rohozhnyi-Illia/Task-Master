@@ -1,30 +1,30 @@
-import React from 'react'
-import styles from './Pagination.module.scss'
-import { back, next } from '@assets/index'
+import React from 'react';
+import styles from './Pagination.module.scss';
+import { back, next } from '@assets/index';
 
 interface PaginationProps {
-  pageNumbers: number[]
-  totalPages: number
-  currentPage: number
-  setCurrentPage: (value: number) => void
+  pageNumbers: number[];
+  totalPages: number;
+  currentPage: number;
+  setCurrentPage: (value: number) => void;
 }
 
 const Pagination = (props: PaginationProps) => {
-  const { pageNumbers, totalPages, currentPage, setCurrentPage } = props
+  const { pageNumbers, totalPages, currentPage, setCurrentPage } = props;
 
   const nextHandler = () => {
     if (currentPage < totalPages) {
-      const nextPage = currentPage + 1
-      setCurrentPage(nextPage)
+      const nextPage = currentPage + 1;
+      setCurrentPage(nextPage);
     }
-  }
+  };
 
   const backHandler = () => {
     if (currentPage > 1) {
-      const prevPage = currentPage - 1
-      setCurrentPage(prevPage)
+      const prevPage = currentPage - 1;
+      setCurrentPage(prevPage);
     }
-  }
+  };
 
   return (
     <div className={styles.pagination} tabIndex={0}>
@@ -54,7 +54,7 @@ const Pagination = (props: PaginationProps) => {
         </button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Pagination
+export default Pagination;

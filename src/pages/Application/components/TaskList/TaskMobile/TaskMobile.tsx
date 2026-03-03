@@ -1,129 +1,129 @@
-import React, { useState, useRef, useEffect } from 'react'
-import styles from './TaskMobile.module.scss'
-import { calendar } from '@assets/index'
-import { useDispatch } from 'react-redux'
-import TaskService from '@services/taskService'
-import { deleteTasks, updateStatus, restoreTask } from '@store/tasksSlice'
-import { showError } from '@store/UI/errorSlice'
-import { showSuccess } from '@store/UI/toastSlice'
-import { FaAngleDown } from 'react-icons/fa6'
-import { FaTrash } from 'react-icons/fa'
-import { updateCategory } from '@store/tasksSlice'
+import React, { useState, useRef, useEffect } from 'react';
+import styles from './TaskMobile.module.scss';
+import { calendar } from '@assets/index';
+import { useDispatch } from 'react-redux';
+import TaskService from '@services/taskService';
+import { deleteTasks, updateStatus, restoreTask } from '@store/tasksSlice';
+import { showError } from '@store/UI/errorSlice';
+import { showSuccess } from '@store/UI/toastSlice';
+import { FaAngleDown } from 'react-icons/fa6';
+import { FaTrash } from 'react-icons/fa';
+import { updateCategory } from '@store/tasksSlice';
 import {
   STATUS_OPTIONS,
   StatusType,
   TaskInterface,
   CATEGORIES_OPTIONS,
   CategoryType,
-} from '../../../../../types/task'
+} from '../../../../../types/task';
 
 interface TaskProps {
-  task: TaskInterface
+  task: TaskInterface;
 }
 
 const TaskMobile = ({ task }: TaskProps) => {
-  const [isStatusDropdownOpen, setIsStatusDropdownOpen] = useState<boolean>(false)
-  const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState<boolean>(false)
-  const [isDeleteMenuOpen, setIsDeleteMenuOpen] = useState<boolean>(false)
+  const [isStatusDropdownOpen, setIsStatusDropdownOpen] = useState<boolean>(false);
+  const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState<boolean>(false);
+  const [isDeleteMenuOpen, setIsDeleteMenuOpen] = useState<boolean>(false);
 
-  const statusRef = useRef<HTMLDivElement>(null)
-  const categoryRef = useRef<HTMLDivElement>(null)
-  const deleteRef = useRef<HTMLDivElement>(null)
-  const displayDate: string = task.deadline.split('T')[0]
-  const taskId: string = task._id
-  const isCompleted: boolean = task.status === 'Done'
-  const dispatch = useDispatch()
+  const statusRef = useRef<HTMLDivElement>(null);
+  const categoryRef = useRef<HTMLDivElement>(null);
+  const deleteRef = useRef<HTMLDivElement>(null);
+  const displayDate: string = task.deadline.split('T')[0];
+  const taskId: string = task._id;
+  const isCompleted: boolean = task.status === 'Done';
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (statusRef.current && !statusRef.current.contains(e.target as Node))
-        setIsStatusDropdownOpen(false)
+        setIsStatusDropdownOpen(false);
       if (deleteRef.current && !deleteRef.current.contains(e.target as Node))
-        setIsDeleteMenuOpen(false)
-    }
-    document.addEventListener('click', handler)
-    return () => document.removeEventListener('click', handler)
-  }, [])
+        setIsDeleteMenuOpen(false);
+    };
+    document.addEventListener('click', handler);
+    return () => document.removeEventListener('click', handler);
+  }, []);
 
   const completeHandler = async () => {
-    const prevStatus = task.status
-    const newStatus = isCompleted ? 'Active' : 'Done'
-    dispatch(updateStatus({ id: taskId, status: newStatus }))
+    const prevStatus = task.status;
+    const newStatus = isCompleted ? 'Active' : 'Done';
+    dispatch(updateStatus({ id: taskId, status: newStatus }));
 
-    const res = await TaskService.updateStatus(taskId, newStatus)
+    const res = await TaskService.updateStatus(taskId, newStatus);
     if (!res.success) {
-      dispatch(updateStatus({ id: taskId, status: prevStatus }))
-      dispatch(showError(res.error))
+      dispatch(updateStatus({ id: taskId, status: prevStatus }));
+      dispatch(showError(res.error));
     } else {
-      dispatch(showSuccess(isCompleted ? 'Task is active again' : 'The task was completed'))
+      dispatch(showSuccess(isCompleted ? 'Task is active again' : 'The task was completed'));
     }
-  }
+  };
 
   const changeStatusHandler = async (status: StatusType) => {
-    if (status === task.status) return dispatch(showError('Status is already active'))
+    if (status === task.status) return dispatch(showError('Status is already active'));
     if (status === 'Done') {
-      await completeHandler()
-      setIsStatusDropdownOpen(false)
-      return
+      await completeHandler();
+      setIsStatusDropdownOpen(false);
+      return;
     }
 
-    const prevStatus = task.status
-    dispatch(updateStatus({ id: taskId, status }))
-    const res = await TaskService.updateStatus(taskId, status)
+    const prevStatus = task.status;
+    dispatch(updateStatus({ id: taskId, status }));
+    const res = await TaskService.updateStatus(taskId, status);
     if (!res.success) {
-      dispatch(updateStatus({ id: taskId, status: prevStatus }))
-      dispatch(showError(res.error))
+      dispatch(updateStatus({ id: taskId, status: prevStatus }));
+      dispatch(showError(res.error));
     } else {
-      dispatch(showSuccess('Status has been updated'))
-      setIsStatusDropdownOpen(false)
+      dispatch(showSuccess('Status has been updated'));
+      setIsStatusDropdownOpen(false);
     }
-  }
+  };
 
   const changeCategoryHandler = async (newCategory: CategoryType) => {
-    const prevCategory = task.category
+    const prevCategory = task.category;
 
     if (newCategory === prevCategory) {
-      dispatch(showError('This category is already active'))
-      return
+      dispatch(showError('This category is already active'));
+      return;
     }
 
-    dispatch(updateCategory({ id: taskId, category: newCategory }))
+    dispatch(updateCategory({ id: taskId, category: newCategory }));
 
-    const res = await TaskService.updateCategory(taskId, newCategory)
+    const res = await TaskService.updateCategory(taskId, newCategory);
     if (!res.success) {
-      dispatch(updateCategory({ id: taskId, category: prevCategory }))
-      dispatch(showError(res.error))
-      return
+      dispatch(updateCategory({ id: taskId, category: prevCategory }));
+      dispatch(showError(res.error));
+      return;
     }
 
-    dispatch(updateCategory({ id: taskId, category: newCategory }))
-    dispatch(showSuccess('Category has been updated'))
-  }
+    dispatch(updateCategory({ id: taskId, category: newCategory }));
+    dispatch(showSuccess('Category has been updated'));
+  };
 
   const deleteTaskHandler = async () => {
-    const deleted = task
-    dispatch(deleteTasks(taskId))
-    setIsDeleteMenuOpen(false)
+    const deleted = task;
+    dispatch(deleteTasks(taskId));
+    setIsDeleteMenuOpen(false);
 
-    const res = await TaskService.deleteTasks(taskId)
+    const res = await TaskService.deleteTasks(taskId);
     if (!res.success) {
-      dispatch(restoreTask(deleted))
-      dispatch(showError(res.error))
-    } else dispatch(showSuccess('The task has been deleted'))
-  }
+      dispatch(restoreTask(deleted));
+      dispatch(showError(res.error));
+    } else dispatch(showSuccess('The task has been deleted'));
+  };
 
   const getStatusClass = (status: StatusType) => {
     switch (status?.toLowerCase()) {
       case 'done':
-        return styles.done
+        return styles.done;
       case 'inprogress':
-        return styles.inprogress
+        return styles.inprogress;
       case 'archived':
-        return styles.archived
+        return styles.archived;
       default:
-        return ''
+        return '';
     }
-  }
+  };
 
   return (
     <div className={`${styles.taskMobile} ${getStatusClass(task.status)}`}>
@@ -132,8 +132,8 @@ const TaskMobile = ({ task }: TaskProps) => {
           ref={categoryRef}
           className={`${styles.taskMobile__category} ${isCategoryDropdownOpen ? styles.open : ''}`}
           onClick={() => {
-            setIsCategoryDropdownOpen((prev) => !prev)
-            setIsDeleteMenuOpen(false)
+            setIsCategoryDropdownOpen((prev) => !prev);
+            setIsDeleteMenuOpen(false);
           }}
         >
           <div className={styles.taskMobile__trigger}>
@@ -163,9 +163,7 @@ const TaskMobile = ({ task }: TaskProps) => {
             <p>{displayDate}</p>
           </span>
 
-          <span>
-            Remaining: {task.remainingTime === 0 ? 'None' : `${task.remainingTime}h`}
-          </span>
+          <span>Remaining: {task.remainingTime === 0 ? 'None' : `${task.remainingTime}h`}</span>
         </div>
       </div>
 
@@ -174,8 +172,8 @@ const TaskMobile = ({ task }: TaskProps) => {
           ref={statusRef}
           className={`${styles.taskMobile__status} ${isStatusDropdownOpen ? styles.open : ''}`}
           onClick={() => {
-            setIsStatusDropdownOpen((prev) => !prev)
-            setIsDeleteMenuOpen(false)
+            setIsStatusDropdownOpen((prev) => !prev);
+            setIsDeleteMenuOpen(false);
           }}
         >
           <div className={styles.taskMobile__trigger}>
@@ -218,7 +216,7 @@ const TaskMobile = ({ task }: TaskProps) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default TaskMobile
+export default TaskMobile;

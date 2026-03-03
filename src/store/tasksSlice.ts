@@ -1,57 +1,57 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Task, StatusType, CategoryType } from '../types/task'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Task, StatusType, CategoryType } from '../types/task';
 
-const initialState: Task[] = []
+const initialState: Task[] = [];
 
 const tasksSlice = createSlice({
   name: 'tasks',
   initialState,
   reducers: {
     getTasks(state, action: PayloadAction<Task[]>) {
-      return action.payload
+      return action.payload;
     },
 
     createTask(state, action: PayloadAction<Task>) {
-      const newState = [...state, action.payload]
+      const newState = [...state, action.payload];
 
       return newState.sort(
         (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-      )
+      );
     },
 
     deleteTasks(state, action: PayloadAction<string>) {
-      const taskId = action.payload
-      return state.filter((task) => task._id !== taskId)
+      const taskId = action.payload;
+      return state.filter((task) => task._id !== taskId);
     },
 
     updateStatus(state, action: PayloadAction<{ id: string; status: StatusType }>) {
-      const { id, status } = action.payload
-      return state.map((task) => (task._id === id ? { ...task, status } : task))
+      const { id, status } = action.payload;
+      return state.map((task) => (task._id === id ? { ...task, status } : task));
     },
 
     updateCategory(state, action: PayloadAction<{ id: string; category: CategoryType }>) {
-      const { id, category } = action.payload
-      return state.map((task) => (task._id === id ? { ...task, category } : task))
+      const { id, category } = action.payload;
+      return state.map((task) => (task._id === id ? { ...task, category } : task));
     },
 
     isComplete(state, action: PayloadAction<string>) {
-      const taskId = action.payload
-      return state.map((task) => (task._id === taskId ? { ...task, status: 'Done' } : task))
+      const taskId = action.payload;
+      return state.map((task) => (task._id === taskId ? { ...task, status: 'Done' } : task));
     },
 
     restoreTask(state, action: PayloadAction<Task>) {
-      return [...state, action.payload]
+      return [...state, action.payload];
     },
 
     resetTasks() {
-      return []
+      return [];
     },
 
     updateTaskOrder(state, action: PayloadAction<Task[]>) {
-      return action.payload
+      return action.payload;
     },
   },
-})
+});
 
 export const {
   getTasks,
@@ -63,5 +63,5 @@ export const {
   resetTasks,
   updateTaskOrder,
   updateCategory,
-} = tasksSlice.actions
-export default tasksSlice.reducer
+} = tasksSlice.actions;
+export default tasksSlice.reducer;

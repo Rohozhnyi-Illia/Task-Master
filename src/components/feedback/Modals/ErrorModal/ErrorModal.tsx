@@ -1,12 +1,12 @@
-import React from 'react'
-import styles from './ErrorModal.module.scss'
-import ModalBase from '../ModalBase/ModalBase'
-import { errorImg } from '@assets/index'
-import { AuthButton } from '@components/index'
+import React from 'react';
+import styles from './ErrorModal.module.scss';
+import ModalBase from '../ModalBase/ModalBase';
+import { errorImg } from '@assets/index';
+import { AuthButton } from '@components/index';
 
 interface ErrorModalProps {
-  error: string
-  onClick: () => void
+  error: string;
+  onClick: () => void;
 }
 
 const ErrorModal = ({ error, onClick }: ErrorModalProps) => {
@@ -23,7 +23,7 @@ const ErrorModal = ({ error, onClick }: ErrorModalProps) => {
         <AuthButton text="Try again" type="button" onClick={onClick} />
       </div>
     </ModalBase>
-  )
-}
+  );
+};
 
-export default ErrorModal
+export default ErrorModal;
