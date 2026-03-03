@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import { RootState } from '@store/store'
 
 const GlobalLoader = () => {
-  const isLoaderShown = useSelector((state: RootState) => state.loader.isLoaderShown)
+  const isLoaderShown: boolean = useSelector((state: RootState) => state.loader.isLoaderShown)
   const [visible, setVisible] = useState<boolean>(false)
 
   useEffect(() => {

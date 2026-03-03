@@ -1,12 +1,12 @@
 import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit'
 
-interface Item {
+export interface ToastItem {
   id: string
   message: string
 }
 
 interface ToastState {
-  items: Item[]
+  items: ToastItem[]
 }
 
 const initialState: ToastState = {
@@ -19,7 +19,7 @@ const toastSlice = createSlice({
 
   reducers: {
     showSuccess: {
-      reducer: (state, action: PayloadAction<Item>) => {
+      reducer: (state, action: PayloadAction<ToastItem>) => {
         state.items.push(action.payload)
       },
 

@@ -31,14 +31,16 @@ const NotificationList = ({ selected }: NotificationListProps) => {
     }
   }, [filteredNotifications, currentPage, totalPages])
 
-  const indexOfLastNotification = currentPage * notificationsPerPage
-  const indexOfFirstTask = indexOfLastNotification - notificationsPerPage
-  const currentNotifications = filteredNotifications.slice(
+  const indexOfLastNotification: number = currentPage * notificationsPerPage
+  const indexOfFirstTask: number = indexOfLastNotification - notificationsPerPage
+  const currentNotifications: NotificationType[] = filteredNotifications.slice(
     indexOfFirstTask,
     indexOfLastNotification,
   )
 
-  const pageNumbers = [currentPage, currentPage + 1].filter((page) => page <= totalPages)
+  const pageNumbers: number[] = [currentPage, currentPage + 1].filter(
+    (page) => page <= totalPages,
+  )
 
   return (
     <div className={styles.notificationList}>

@@ -6,7 +6,7 @@ import { RootState } from '@store/store'
 
 const GlobalErrorModal = () => {
   const dispatch = useDispatch()
-  const error = useSelector((state: RootState) => state.error.error)
+  const error: string = useSelector((state: RootState) => state.error.error)
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

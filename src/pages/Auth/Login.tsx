@@ -1,40 +1,56 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import styles from './Auth.module.scss'
 import fields from '@utils/fields/loginFields'
-import { bg } from '@assets'
-import loginSchema from '@utils/validation/login-validation'
+import { bg } from '@assets/index'
+import loginSchema, { LoginFormValues } from '@utils/validation/login-validation'
 import emailSchema from '@utils/validation/email-validation'
-import { Input, AuthButton, ErrorModal } from '@components'
+import { Input, AuthButton, ErrorModal } from '@components/index'
 import { useDispatch, useSelector } from 'react-redux'
 import { setAuth, updateEmail } from '@store/authSlice'
 import AuthService from '@services/authService'
 import { showLoader, closeLoader } from '@store/UI/loaderSlice'
 import useTheme from '../../hooks/useTheme'
+import { RootState } from '@store/store'
+import { AuthState } from '../../types/auth'
+import { EmailValue } from '@utils/validation/email-validation'
+import * as yup from 'yup'
+
+type FormErrors = {
+  email?: string
+  password?: string
+  keepLogged?: boolean
+}
+
+interface DataInterface {
+  email: string
+  password: string
+  keepLogged: boolean
+}
 
 const Login = () => {
   useTheme()
 
-  const [data, setData] = useState({
+  const [data, setData] = useState<DataInterface>({
     email: '',
     password: '',
     keepLogged: false,
   })
-  const [errors, setErrors] = useState({})
-  const [authError, setAuthError] = useState('')
-  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
-  const [emailError, setEmailError] = useState('')
-  const [isAccountActivated, setIsAccountActivated] = useState(true)
-  const isLoaderShown = useSelector((state) => state.loader.isLoaderShown)
+  const [errors, setErrors] = useState<FormErrors>({})
+  const [authError, setAuthError] = useState<string>('')
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState<boolean>(false)
+  const [emailError, setEmailError] = useState<string>('')
+  const [isAccountActivated, setIsAccountActivated] = useState<boolean>(true)
+  const isLoaderShown: boolean = useSelector((state: RootState) => state.loader.isLoaderShown)
 
-  const formId = 'login'
+  const formId: string = 'login'
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const openModalHandler = () => setIsErrorModalOpen(!isErrorModalOpen)
 
-  const onChangeHandler = (e) => {
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target
     setData((prev) => ({
       ...prev,
@@ -49,7 +65,17 @@ const Login = () => {
   }
 
   useEffect(() => {
-    const savedAuth = JSON.parse(localStorage.getItem('authState'))
+    const raw = localStorage.getItem('authState')
+    if (!raw) return
+
+    let savedAuth: AuthState | null = null
+
+    try {
+      savedAuth = JSON.parse(raw)
+    } catch (error) {
+      localStorage.removeItem('authState')
+      return
+    }
 
     if (savedAuth?.keepLogged && savedAuth?.accessToken) {
       dispatch(showLoader())
@@ -71,9 +97,12 @@ const Login = () => {
     dispatch(showLoader())
 
     try {
-      await emailSchema.validate({ email: data.email }, { abortEarly: false })
+      const validatedData: EmailValue = await emailSchema.validate(
+        { email: data.email },
+        { abortEarly: false },
+      )
 
-      const res = await AuthService.reVerifyEmail(data.email)
+      const res = await AuthService.reVerifyEmail(validatedData.email)
 
       if (!res.success) {
         setAuthError(res.error)
@@ -81,14 +110,20 @@ const Login = () => {
         return
       }
 
-      dispatch(updateEmail(data.email))
+      dispatch(updateEmail(validatedData.email))
       navigate('/verify-email')
-    } catch (err) {
-      if (err.inner) {
+    } catch (err: unknown) {
+      if (err instanceof yup.ValidationError) {
+        const newErrors: Record<string, string> = {}
+
         err.inner.forEach((e) => {
-          if (e.path === 'email') setEmailError(e.message)
+          if (e.path) {
+            newErrors[e.path] = e.message
+          }
         })
-      } else {
+
+        setErrors(newErrors)
+      } else if (err instanceof Error) {
         setAuthError(err.message)
         setIsErrorModalOpen(true)
       }
@@ -97,7 +132,7 @@ const Login = () => {
     }
   }
 
-  const onSubmitHandler = async (e) => {
+  const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setErrors({})
     setAuthError('')
@@ -106,11 +141,13 @@ const Login = () => {
     let isSuccess
 
     try {
-      await loginSchema.validate(data, { abortEarly: false })
+      const validatedData: LoginFormValues = await loginSchema.validate(data, {
+        abortEarly: false,
+      })
 
       const res = await AuthService.login({
-        email: data.email,
-        password: data.password,
+        email: validatedData.email,
+        password: validatedData.password,
       })
 
       if (!res.success) {
@@ -133,7 +170,6 @@ const Login = () => {
         email: res.data.email,
         name: res.data.name,
         accessToken: res.data.accessToken,
-        isAuth: true,
         keepLogged: !!data.keepLogged,
       }
 
@@ -145,15 +181,17 @@ const Login = () => {
 
       isSuccess = true
       navigate('/application')
-    } catch (err) {
-      if (err.inner) {
-        const newErrors = {}
+    } catch (err: unknown) {
+      if (err instanceof yup.ValidationError) {
+        const newErrors: Record<string, string> = {}
+
         err.inner.forEach((e) => {
-          newErrors[e.path] = e.message
+          if (e.path) newErrors[e.path] = e.message
         })
+
         setErrors(newErrors)
-      } else {
-        setAuthError(err.message || 'Something went wrong')
+      } else if (err instanceof Error) {
+        setAuthError(err.message)
         setIsErrorModalOpen(true)
       }
     } finally {
@@ -182,15 +220,15 @@ const Login = () => {
                 label={field.label}
                 placeholder={field.placeholder}
                 name={field.name}
-                value={data[field.name] ?? ''}
+                value={String(data[field.name as keyof DataInterface] ?? '')}
                 onChange={onChangeHandler}
                 img={field.img}
                 authOptions={field.authOptions}
-                err={
+                err={String(
                   field.name === 'email'
-                    ? emailError || errors[field.name]
-                    : errors[field.name]
-                }
+                    ? ((emailError || errors[field.name as keyof FormErrors]) ?? '')
+                    : (errors[field.name as keyof FormErrors] ?? ''),
+                )}
                 checkValue={data.keepLogged}
                 type={field.type !== 'password' ? 'text' : 'password'}
               />
@@ -217,7 +255,7 @@ const Login = () => {
                 </p>
               </div>
 
-              <AuthButton text="Log In" disabled={isLoaderShown} />
+              <AuthButton text="Log In" disabled={isLoaderShown} type="submit" />
             </div>
           </form>
         </div>

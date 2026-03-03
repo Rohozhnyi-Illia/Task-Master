@@ -1,28 +1,43 @@
-import React, { useEffect, useState } from 'react'
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import styles from './Auth.module.scss'
-import { bg } from '@assets'
+import { bg } from '@assets/index'
 import fields from '@utils/fields/verifyPasswordFields'
 import passwordVerifySchema from '@utils/validation/passwordVerify-validation'
-import { Input, AuthButton, ErrorModal, AccessModal } from '@components'
+import { Input, AuthButton, ErrorModal, AccessModal } from '@components/index'
 import { useNavigate } from 'react-router-dom'
 import AuthService from '@services/authService'
 import { showLoader, closeLoader } from '@store/UI/loaderSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '@store/store'
+import { PasswordVerifyValues } from '@utils/validation/passwordVerify-validation'
+import * as yup from 'yup'
+
+type FormErrors = {
+  newPassword?: string
+  repeatPassword?: string
+  verifyCode?: string
+}
+
+interface DataInterface {
+  newPassword: string
+  repeatPassword: string
+  verifyCode: string
+}
 
 const VerifyPassword = () => {
-  const [data, setData] = useState({
+  const [data, setData] = useState<DataInterface>({
     newPassword: '',
     repeatPassword: '',
     verifyCode: '',
   })
-  const [errors, setErrors] = useState({})
-  const [authError, setAuthError] = useState()
-  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
-  const [accessAction, setAccessAction] = useState(false)
-  const isLoaderShown = useSelector((state) => state.loader.isLoaderShown)
+  const [errors, setErrors] = useState<FormErrors>({})
+  const [authError, setAuthError] = useState<string>('')
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState<boolean>(false)
+  const [accessAction, setAccessAction] = useState<boolean>(false)
+  const isLoaderShown: boolean = useSelector((state: RootState) => state.loader.isLoaderShown)
 
-  const formId = 'verifyPassword'
+  const formId: string = 'verifyPassword'
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -30,6 +45,14 @@ const VerifyPassword = () => {
   const openModalHandler = () => {
     setIsErrorModalOpen(!isErrorModalOpen)
     return
+  }
+
+  const handleModalClick = () => {
+    if (authError === 'Email not found, please restart password reset flow') {
+      navigate('/update-password', { replace: true })
+    } else {
+      setIsErrorModalOpen(false)
+    }
   }
 
   const navigateHandler = () => {
@@ -46,7 +69,7 @@ const VerifyPassword = () => {
     }
   }, [navigate])
 
-  const onChangeHandler = (e) => {
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setData((prevData) => ({
       ...prevData,
@@ -54,20 +77,30 @@ const VerifyPassword = () => {
     }))
   }
 
-  const onSubmitHandler = async (e) => {
+  const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setAuthError('')
     setErrors({})
     dispatch(showLoader())
 
+    const sessionEmail = sessionStorage.getItem('resetEmail')
+    if (!sessionEmail) {
+      setAuthError('Email not found, please restart password reset flow')
+      setIsErrorModalOpen(true)
+      dispatch(closeLoader())
+      return
+    }
+
     try {
-      await passwordVerifySchema.validate(data, { abortEarly: false })
+      const validatedData: PasswordVerifyValues = await passwordVerifySchema.validate(data, {
+        abortEarly: false,
+      })
 
       const res = await AuthService.verifyPassword({
-        email: sessionStorage.getItem('resetEmail'),
-        newPassword: data.newPassword,
-        repeatPassword: data.repeatPassword,
-        verifyCode: data.verifyCode,
+        email: sessionEmail,
+        newPassword: validatedData.newPassword,
+        repeatPassword: validatedData.repeatPassword,
+        verifyCode: validatedData.verifyCode,
       })
 
       if (!res.success) {
@@ -78,14 +111,16 @@ const VerifyPassword = () => {
       }
 
       setAccessAction(true)
-    } catch (err) {
-      if (err.inner) {
-        const newErrors = {}
+    } catch (err: unknown) {
+      if (err instanceof yup.ValidationError) {
+        const newErrors: Record<string, string> = {}
+
         err.inner.forEach((e) => {
-          newErrors[e.path] = e.message
+          if (e.path) newErrors[e.path] = e.message
         })
+
         setErrors(newErrors)
-      } else {
+      } else if (err instanceof Error) {
         setAuthError(err.message)
         setIsErrorModalOpen(true)
       }
@@ -113,11 +148,11 @@ const VerifyPassword = () => {
                 label={field.label}
                 placeholder={field.placeholder}
                 name={field.name}
-                value={data[field.name] ?? ''}
+                value={String(data[field.name as keyof DataInterface] ?? '')}
                 onChange={onChangeHandler}
                 img={field.img}
                 authOptions={field.authOptions}
-                err={errors[field.name]}
+                err={String(errors[field.name as keyof FormErrors] ?? '')}
                 type={field.type !== 'password' ? 'text' : 'password'}
               />
             ))}
@@ -128,15 +163,14 @@ const VerifyPassword = () => {
               </p>
             </div>
 
-            <AuthButton text="Update" disabled={isLoaderShown} />
+            <AuthButton text="Update" disabled={isLoaderShown} type="submit" />
           </form>
         </div>
       </div>
 
-      {isErrorModalOpen && <ErrorModal error={authError} onClick={navigateHandler} />}
-
+      {isErrorModalOpen && <ErrorModal error={authError} onClick={handleModalClick} />}
       {accessAction && (
-        <AccessModal onClick={navigateHandler} text={'Password successfully changed'} />
+        <AccessModal onClick={navigateHandler} text="Password successfully changed" />
       )}
     </div>
   )

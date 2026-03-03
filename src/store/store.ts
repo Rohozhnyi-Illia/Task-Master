@@ -15,7 +15,6 @@ const initialAuthState = {
   email: '',
   name: '',
   accessToken: '',
-  isAuth: false,
   keepLogged: false,
 }
 

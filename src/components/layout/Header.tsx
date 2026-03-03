@@ -16,9 +16,9 @@ import { RootState } from '@store/store'
 import { Notification as NotificationType } from '../../types/notification'
 
 const Header = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const { theme, setTheme } = useTheme()
-  const isDark = theme === 'dark'
+  const isDark: boolean = theme === 'dark'
   const notificationsList: NotificationType[] =
     useSelector((state: RootState) => state.notification) || []
   const isLoaderShown: boolean = useSelector((state: RootState) => state.loader.isLoaderShown)

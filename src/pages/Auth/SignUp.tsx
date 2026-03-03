@@ -1,26 +1,40 @@
-import React, { useState } from 'react'
+import React, { ChangeEvent, FormEvent, useState } from 'react'
 import { Link } from 'react-router-dom'
 import styles from './Auth.module.scss'
 import fields from '@utils/fields/signUpFields'
-import { Input, AuthButton } from '@components'
-import { bg } from '@assets'
+import { bg } from '@assets/index'
 import signUpSchema from '@utils/validation/signUp-validation'
-import { ErrorModal, AccessModal } from '@components'
+import { ErrorModal, AccessModal, Input, AuthButton } from '@components/index'
 import AuthService from '@services/authService'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateEmail } from '@store/authSlice'
 import { showLoader, closeLoader } from '@store/UI/loaderSlice'
+import { RootState } from '@store/store'
+import { SignUpValues } from '@utils/validation/signUp-validation'
+import * as yup from 'yup'
+
+type FormErrors = {
+  name?: string
+  email?: string
+  password?: string
+}
+
+interface DataInterface {
+  name: string
+  email: string
+  password: string
+}
 
 const SignUp = () => {
-  const [data, setData] = useState({ name: '', email: '', password: '' })
-  const [errors, setErrors] = useState({})
-  const [authError, setAuthError] = useState('')
-  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
-  const [accessAction, setAccessAction] = useState(false)
-  const isLoaderShown = useSelector((state) => state.loader.isLoaderShown)
+  const [data, setData] = useState<DataInterface>({ name: '', email: '', password: '' })
+  const [errors, setErrors] = useState<FormErrors>({})
+  const [authError, setAuthError] = useState<string>('')
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState<boolean>(false)
+  const [accessAction, setAccessAction] = useState<boolean>(false)
+  const isLoaderShown: boolean = useSelector((state: RootState) => state.loader.isLoaderShown)
 
-  const formId = 'signUp'
+  const formId: string = 'signUp'
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -35,7 +49,7 @@ const SignUp = () => {
     return
   }
 
-  const onChangeHandler = (e) => {
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setData((prevData) => ({
       ...prevData,
@@ -43,19 +57,21 @@ const SignUp = () => {
     }))
   }
 
-  const onSubmitHandler = async (e) => {
+  const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setErrors({})
     setAuthError('')
     dispatch(showLoader())
 
     try {
-      await signUpSchema.validate(data, { abortEarly: false })
+      const validatedData: SignUpValues = await signUpSchema.validate(data, {
+        abortEarly: false,
+      })
 
       const res = await AuthService.register({
-        email: data.email,
-        password: data.password,
-        name: data.name,
+        email: validatedData.email,
+        password: validatedData.password,
+        name: validatedData.name,
       })
 
       if (!res.success) {
@@ -67,14 +83,16 @@ const SignUp = () => {
       sessionStorage.setItem('signUpEmail', res.data.email)
       dispatch(updateEmail(res.data.email))
       setAccessAction(true)
-    } catch (err) {
-      if (err.inner) {
-        const newErrors = {}
+    } catch (err: unknown) {
+      if (err instanceof yup.ValidationError) {
+        const newErrors: Record<string, string> = {}
+
         err.inner.forEach((e) => {
-          newErrors[e.path] = e.message
+          if (e.path) newErrors[e.path] = e.message
         })
+
         setErrors(newErrors)
-      } else {
+      } else if (err instanceof Error) {
         setAuthError(err.message)
         openModalHandler()
       }
@@ -100,11 +118,11 @@ const SignUp = () => {
                 label={field.label}
                 placeholder={field.placeholder}
                 name={field.name}
-                value={data[field.name] ?? ''}
+                value={String(data[field.name as keyof DataInterface] ?? '')}
                 onChange={onChangeHandler}
                 img={field.img}
                 authOptions={field.authOptions}
-                err={errors[field.name]}
+                err={String(errors[field.name as keyof FormErrors] ?? '')}
                 type={field.type !== 'password' ? 'text' : 'password'}
               />
             ))}
@@ -115,7 +133,7 @@ const SignUp = () => {
               </p>
             </div>
 
-            <AuthButton text="Sign Up" disabled={isLoaderShown} />
+            <AuthButton text="Sign Up" disabled={isLoaderShown} type="submit" />
           </form>
         </div>
       </div>

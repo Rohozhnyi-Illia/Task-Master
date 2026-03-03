@@ -1,5 +1,5 @@
 import { AuthState } from '../types/auth'
-import { Task } from '../types/task'
+import { TaskInterface as Task } from '../types/task'
 import { Notification } from '../types/notification'
 
 interface PersistedState {

@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AuthState } from '../types/auth'
+import { RootState } from './store'
 
 const initialState: AuthState = {
   id: '',
   email: '',
   name: '',
   accessToken: '',
-  isAuth: false,
   keepLogged: false,
 }
 
@@ -15,14 +15,11 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setAuth(state, action: PayloadAction<Partial<AuthState>>) {
-      if (!state) return
-
-      const { email, name, accessToken, id, isAuth, keepLogged } = action.payload
+      const { email, name, accessToken, id, keepLogged } = action.payload
       if (email !== undefined) state.email = email
       if (name !== undefined) state.name = name
       if (accessToken !== undefined) state.accessToken = accessToken
       if (id !== undefined) state.id = id
-      if (isAuth !== undefined) state.isAuth = isAuth
       if (keepLogged !== undefined) state.keepLogged = keepLogged
     },
 
@@ -31,7 +28,6 @@ const authSlice = createSlice({
       state.name = ''
       state.email = ''
       state.accessToken = ''
-      state.isAuth = false
       state.keepLogged = false
       localStorage.removeItem('authState')
     },
@@ -43,4 +39,5 @@ const authSlice = createSlice({
 })
 
 export const { setAuth, logout, updateEmail } = authSlice.actions
+export const selectIsAuth = (state: RootState) => Boolean(state.auth.accessToken)
 export default authSlice.reducer

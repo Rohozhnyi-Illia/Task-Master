@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { ChangeEvent, FormEvent, useState } from 'react'
 import { Link } from 'react-router-dom'
 import styles from './Auth.module.scss'
 import fields from '@utils/fields/updatePasswordFields'
-import { Input, AuthButton, ErrorModal, AccessModal } from '@components'
+import { Input, AuthButton, ErrorModal, AccessModal } from '@components/index'
 import { bg } from '../../assets'
 import passwordUpdateSchema from '@utils/validation/passwordUpdate-validation'
 import { useNavigate } from 'react-router-dom'
@@ -10,16 +10,27 @@ import AuthService from '@services/authService'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateEmail } from '@store/authSlice'
 import { showLoader, closeLoader } from '@store/UI/loaderSlice'
+import { RootState } from '@store/store'
+import { EmailValue } from '@utils/validation/email-validation'
+import * as yup from 'yup'
+
+type FormErrors = {
+  email?: string
+}
+
+interface DataInterface {
+  email: string
+}
 
 const UpdatePassword = () => {
-  const [data, setData] = useState({ email: '' })
-  const [errors, setErrors] = useState({})
-  const [authError, setAuthError] = useState('')
-  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false)
-  const [accessAction, setAccessAction] = useState(false)
-  const isLoaderShown = useSelector((state) => state.loader.isLoaderShown)
+  const [data, setData] = useState<DataInterface>({ email: '' })
+  const [errors, setErrors] = useState<FormErrors>({})
+  const [authError, setAuthError] = useState<string>('')
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState<boolean>(false)
+  const [accessAction, setAccessAction] = useState<boolean>(false)
+  const isLoaderShown: boolean = useSelector((state: RootState) => state.loader.isLoaderShown)
 
-  const formId = 'updatePassword'
+  const formId: string = 'updatePassword'
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -34,7 +45,7 @@ const UpdatePassword = () => {
     return
   }
 
-  const onChangeHandler = (e) => {
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setData((prevData) => ({
       ...prevData,
@@ -42,17 +53,19 @@ const UpdatePassword = () => {
     }))
   }
 
-  const onSubmitHandler = async (e) => {
+  const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setAuthError('')
     setErrors({})
     dispatch(showLoader())
 
     try {
-      await passwordUpdateSchema.validate(data, { abortEarly: false })
+      const validatedData: EmailValue = await passwordUpdateSchema.validate(data, {
+        abortEarly: false,
+      })
 
       const res = await AuthService.updatePassword({
-        email: data.email,
+        email: validatedData.email,
       })
 
       if (!res.success) {
@@ -61,17 +74,19 @@ const UpdatePassword = () => {
         return
       }
 
-      sessionStorage.setItem('resetEmail', data.email)
-      dispatch(updateEmail(data.email))
+      sessionStorage.setItem('resetEmail', validatedData.email)
+      dispatch(updateEmail(validatedData.email))
       setAccessAction(true)
     } catch (err) {
-      if (err.inner) {
-        const newErrors = {}
+      if (err instanceof yup.ValidationError) {
+        const newErrors: Record<string, string> = {}
+
         err.inner.forEach((e) => {
-          newErrors[e.path] = e.message
+          if (e.path) newErrors[e.path] = e.message
         })
+
         setErrors(newErrors)
-      } else {
+      } else if (err instanceof Error) {
         setAuthError(err.message)
         setIsErrorModalOpen(true)
       }
@@ -97,11 +112,11 @@ const UpdatePassword = () => {
                 label={field.label}
                 placeholder={field.placeholder}
                 name={field.name}
-                value={data[field.name] ?? ''}
+                value={String(data[field.name as keyof DataInterface] ?? '')}
                 onChange={onChangeHandler}
                 img={field.img}
                 authOptions={field.authOptions}
-                err={errors[field.name]}
+                err={String(errors[field.name as keyof FormErrors] ?? '')}
                 type={field.type || 'text'}
               />
             ))}
@@ -112,7 +127,7 @@ const UpdatePassword = () => {
               </p>
             </div>
 
-            <AuthButton text="Update" disabled={isLoaderShown} />
+            <AuthButton text="Update" disabled={isLoaderShown} type="submit" />
           </form>
         </div>
       </div>

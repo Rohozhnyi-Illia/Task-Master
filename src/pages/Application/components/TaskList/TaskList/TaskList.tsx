@@ -28,7 +28,7 @@ const TaskList = ({ keyword, selected }: TaskListProps) => {
     return matchesKeyword && matchesCategoryOrStatus
   })
 
-  const totalPages = Math.ceil(filteredTasks.length / taskPerPage)
+  const totalPages: number = Math.ceil(filteredTasks.length / taskPerPage)
 
   useEffect(() => {
     if (currentPage > totalPages && totalPages > 0) {
@@ -36,11 +36,13 @@ const TaskList = ({ keyword, selected }: TaskListProps) => {
     }
   }, [filteredTasks, currentPage, totalPages])
 
-  const indexOfLastTask = currentPage * taskPerPage
-  const indexOfFirstTask = indexOfLastTask - taskPerPage
-  const currentTasks = filteredTasks.slice(indexOfFirstTask, indexOfLastTask)
+  const indexOfLastTask: number = currentPage * taskPerPage
+  const indexOfFirstTask: number = indexOfLastTask - taskPerPage
+  const currentTasks: TaskInterface[] = filteredTasks.slice(indexOfFirstTask, indexOfLastTask)
 
-  const pageNumbers = [currentPage, currentPage + 1].filter((page) => page <= totalPages)
+  const pageNumbers: number[] = [currentPage, currentPage + 1].filter(
+    (page) => page <= totalPages,
+  )
 
   return (
     <div className={styles.taskList}>

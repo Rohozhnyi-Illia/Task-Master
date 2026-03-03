@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { Outlet, useNavigate } from 'react-router-dom'
-import { RootState } from '@store/store'
+import { selectIsAuth } from '@store/authSlice'
 
 interface ProtectPathProps {
   children: React.ReactNode
 }
 
 const ProtectPath = ({ children }: ProtectPathProps) => {
-  const isAuth: boolean = useSelector((state: RootState) => state.auth.isAuth)
+  const isAuth: boolean = useSelector(selectIsAuth)
   const navigate = useNavigate()
 
   useEffect(() => {

@@ -5,10 +5,10 @@ import { done } from '@assets/index'
 
 interface AccessModalProps {
   onClick: () => void
-  text: string
+  text?: string
 }
 
-const AccessModal = ({ onClick, text }: AccessModalProps) => {
+const AccessModal = ({ onClick, text = 'Action completed' }: AccessModalProps) => {
   return (
     <ModalBase onClose={onClick} modifier="access">
       <header className={styles.header}>
@@ -16,7 +16,7 @@ const AccessModal = ({ onClick, text }: AccessModalProps) => {
         <h4 className={styles.title}>Success</h4>
       </header>
 
-      <p className={styles.text}>{text || 'Action completed'}</p>
+      <p className={styles.text}>{text}</p>
 
       <div className={styles.buttonWrapper}>
         <AuthButton text="Continue" type="button" onClick={onClick} />

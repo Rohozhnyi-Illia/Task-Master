@@ -23,7 +23,7 @@
   }
 
   &__title {
-    @include m.text-style(v.$font-title, v.$font-weight-bold, v.$line-height-default);
+    @include m.text-style(v.$font-title, 700, 1.4);
     color: var(--text-color);
     transition: color 0.3s ease;
   }
@@ -79,7 +79,7 @@
     align-items: center;
     justify-content: center;
 
-    @include m.text-style(1.2rem, v.$font-weight-medium, v.$line-height-default);
+    @include m.text-style(1.2rem, 500, 1.4);
     background-color: var(--accent-color);
     transition: background-color 0.3s ease;
     color: #fff;
@@ -179,7 +179,9 @@
     right: 0.5rem;
     background: linear-gradient(to bottom, #cd9e15 0%, #e8c970 100%);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
-    transition: transform 0.4s ease, background 0.4s ease;
+    transition:
+      transform 0.4s ease,
+      background 0.4s ease;
   }
 
   &.dark {
@@ -245,7 +247,9 @@
       justify-content: flex-start;
 
       transform: translateX(-110%);
-      transition: transform 0.4s ease, background-color 0.3s ease;
+      transition:
+        transform 0.4s ease,
+        background-color 0.3s ease;
       z-index: 9;
 
       &.header__nav_open {

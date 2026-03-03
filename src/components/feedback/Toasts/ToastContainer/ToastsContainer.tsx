@@ -4,9 +4,10 @@ import ReactDOM from 'react-dom'
 import styles from './ToastsContainer.module.scss'
 import Toast from '../Toast/Toast'
 import { RootState } from '@store/store'
+import { ToastItem } from '@store/UI/toastSlice'
 
 const ToastsContainer = () => {
-  const toasts = useSelector((state: RootState) => state.success.items)
+  const toasts: ToastItem[] = useSelector((state: RootState) => state.success.items)
 
   if (!toasts.length) return null
 

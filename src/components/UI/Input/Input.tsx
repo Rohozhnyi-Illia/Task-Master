@@ -15,7 +15,7 @@ interface InputProps<T extends string> {
   img?: string
   authOptions?: boolean
   err: string
-  checkValue: boolean
+  checkValue?: boolean
   type: InputType
   formId: string
 }
@@ -36,9 +36,9 @@ const Input = <T extends string>(props: InputProps<T>) => {
   } = props
 
   const [showPassword, setShowPassword] = useState<boolean>(false)
-  const isPasswordField = type === 'password'
+  const isPasswordField: boolean = type === 'password'
 
-  const inputId = `${formId}-${name}`
+  const inputId: string = `${formId}-${name}`
 
   const changePasswordTypeHandler = () => {
     setShowPassword(!showPassword)

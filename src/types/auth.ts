@@ -6,7 +6,6 @@ export interface UserBase {
 
 export interface AuthState extends UserBase {
   accessToken: string
-  isAuth: boolean
   keepLogged: boolean
 }
 

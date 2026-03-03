@@ -5,7 +5,7 @@ type AuthButtonType = 'submit' | 'button' | 'reset'
 
 interface AuthButtonProps {
   text: string
-  onClick: () => void
+  onClick?: () => void
   type: AuthButtonType
   disabled?: boolean
 }
