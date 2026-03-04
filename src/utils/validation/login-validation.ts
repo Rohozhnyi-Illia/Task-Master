@@ -1,4 +1,4 @@
-import * as yup from 'yup'
+import * as yup from 'yup';
 
 const loginSchema = yup.object().shape({
   email: yup.string().trim().email('Enter a valid email').required('Email is required'),
@@ -8,7 +8,7 @@ const loginSchema = yup.object().shape({
     .trim()
     .min(8, 'Password must be at least 8 characters long')
     .required('Password is required'),
-})
+});
 
-export type LoginFormValues = yup.InferType<typeof loginSchema>
-export default loginSchema
+export type LoginFormValues = yup.InferType<typeof loginSchema>;
+export default loginSchema;

@@ -1,5 +1,5 @@
-import { mail, verify } from '../../assets'
-import { Field } from '../../types/forms'
+import { mail, verify } from '../../assets';
+import { Field } from '../../types/forms';
 
 const FIELDS: Field[] = [
   {
@@ -14,6 +14,6 @@ const FIELDS: Field[] = [
     placeholder: 'Enter Verify Code...',
     img: verify,
   },
-]
+];
 
-export default FIELDS
+export default FIELDS;

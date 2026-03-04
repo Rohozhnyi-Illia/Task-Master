@@ -1,4 +1,4 @@
-import * as yup from 'yup'
+import * as yup from 'yup';
 
 const emailVerifySchema = yup.object().shape({
   email: yup.string().trim().email('Enter a valid email').required('Email is required'),
@@ -8,8 +8,8 @@ const emailVerifySchema = yup.object().shape({
     .trim()
     .required('Verification code is required')
     .matches(/^[A-Za-z0-9]{6}$/, 'Verification code must be exactly 6 letters or numbers'),
-})
+});
 
-export type EmailVerifyValues = yup.InferType<typeof emailVerifySchema>
+export type EmailVerifyValues = yup.InferType<typeof emailVerifySchema>;
 
-export default emailVerifySchema
+export default emailVerifySchema;

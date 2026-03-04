@@ -1,6 +1,6 @@
-import api from './api'
-import parseError from '@utils/helpers/parseError'
-import { ServiceResponse } from '../types/shared'
+import api from './api';
+import parseError from '@utils/helpers/parseError';
+import { ServiceResponse } from '../types/shared';
 import {
   RegisterResponse,
   VerifyEmailResponse,
@@ -14,7 +14,7 @@ import {
   LoginData,
   UpdatePasswordData,
   VerifyPasswordData,
-} from '../types/auth'
+} from '../types/auth';
 
 const authService = class AuthServcie {
   async register({
@@ -27,11 +27,11 @@ const authService = class AuthServcie {
         email,
         password,
         name,
-      })
-      return data
+      });
+      return data;
     } catch (error) {
-      const message = parseError(error)
-      return { success: false, error: message }
+      const message = parseError(error);
+      return { success: false, error: message };
     }
   }
 
@@ -40,17 +40,14 @@ const authService = class AuthServcie {
     verifyCode,
   }: VerifyEmailData): Promise<ServiceResponse<VerifyEmailResponse>> {
     try {
-      const { data } = await api.post<ServiceResponse<VerifyEmailResponse>>(
-        '/auth/verify-email',
-        {
-          email,
-          verifyCode,
-        },
-      )
-      return data
+      const { data } = await api.post<ServiceResponse<VerifyEmailResponse>>('/auth/verify-email', {
+        email,
+        verifyCode,
+      });
+      return data;
     } catch (error) {
-      const message = parseError(error)
-      return { success: false, error: message }
+      const message = parseError(error);
+      return { success: false, error: message };
     }
   }
 
@@ -59,11 +56,11 @@ const authService = class AuthServcie {
       const { data } = await api.post<ServiceResponse<ReVerifyEmailResponse>>(
         '/auth/re-verify-email',
         { email },
-      )
-      return data
+      );
+      return data;
     } catch (error) {
-      const message = parseError(error)
-      return { success: false, error: message }
+      const message = parseError(error);
+      return { success: false, error: message };
     }
   }
 
@@ -72,21 +69,21 @@ const authService = class AuthServcie {
       const { data } = await api.post<ServiceResponse<LoginResponse>>('/auth/login', {
         email,
         password,
-      })
-      return data
+      });
+      return data;
     } catch (error) {
-      const message = parseError(error)
-      return { success: false, error: message }
+      const message = parseError(error);
+      return { success: false, error: message };
     }
   }
 
   async logout(): Promise<ServiceResponse<LogoutResponse>> {
     try {
-      const { data } = await api.post<ServiceResponse<LogoutResponse>>('/auth/logout')
-      return data
+      const { data } = await api.post<ServiceResponse<LogoutResponse>>('/auth/logout');
+      return data;
     } catch (error) {
-      const message = parseError(error)
-      return { success: false, error: message }
+      const message = parseError(error);
+      return { success: false, error: message };
     }
   }
 
@@ -97,11 +94,11 @@ const authService = class AuthServcie {
       const { data } = await api.post<ServiceResponse<UpdatePasswordResponse>>(
         '/auth/update-password',
         { email },
-      )
-      return data
+      );
+      return data;
     } catch (error) {
-      const message = parseError(error)
-      return { success: false, error: message }
+      const message = parseError(error);
+      return { success: false, error: message };
     }
   }
 
@@ -120,15 +117,15 @@ const authService = class AuthServcie {
           repeatPassword,
           verifyCode,
         },
-      )
+      );
 
-      return data
+      return data;
     } catch (error) {
-      const message = parseError(error)
-      return { success: false, error: message }
+      const message = parseError(error);
+      return { success: false, error: message };
     }
   }
-}
+};
 
-const AuthService = new authService()
-export default AuthService
+const AuthService = new authService();
+export default AuthService;

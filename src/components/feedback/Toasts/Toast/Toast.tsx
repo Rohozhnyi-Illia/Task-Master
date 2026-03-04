@@ -1,30 +1,30 @@
-import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { clearSuccess } from '@store/UI/toastSlice'
-import { FaCheckCircle } from 'react-icons/fa'
-import { FaCircleXmark } from 'react-icons/fa6'
-import styles from './Toast.module.scss'
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { clearSuccess } from '@store/UI/toastSlice';
+import { FaCheckCircle } from 'react-icons/fa';
+import { FaCircleXmark } from 'react-icons/fa6';
+import styles from './Toast.module.scss';
 
 interface ToastProps {
-  id: string
-  message: string
+  id: string;
+  message: string;
 }
 
 const Toast = ({ id, message }: ToastProps) => {
-  const dispatch = useDispatch()
-  const [visible, setVisible] = useState<boolean>(false)
+  const dispatch = useDispatch();
+  const [visible, setVisible] = useState<boolean>(false);
 
   useEffect(() => {
-    setVisible(true)
+    setVisible(true);
     const timer = setTimeout(() => {
-      setVisible(false)
-      setTimeout(() => dispatch(clearSuccess(id)), 300)
-    }, 5000)
+      setVisible(false);
+      setTimeout(() => dispatch(clearSuccess(id)), 300);
+    }, 5000);
 
-    return () => clearTimeout(timer)
-  }, [id, dispatch])
+    return () => clearTimeout(timer);
+  }, [id, dispatch]);
 
-  if (!message) return null
+  if (!message) return null;
 
   return (
     <div className={`${styles.toast} ${visible ? styles.show : ''}`}>
@@ -38,7 +38,7 @@ const Toast = ({ id, message }: ToastProps) => {
         <FaCircleXmark />
       </button>
     </div>
-  )
-}
+  );
+};
 
-export default Toast
+export default Toast;

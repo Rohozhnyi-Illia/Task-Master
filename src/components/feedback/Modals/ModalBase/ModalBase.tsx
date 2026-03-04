@@ -1,11 +1,11 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import styles from './ModalBase.module.scss'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import styles from './ModalBase.module.scss';
 
 interface ModalBaseProps {
-  children: React.ReactNode
-  onClose: () => void
-  modifier: string
+  children: React.ReactNode;
+  onClose: () => void;
+  modifier: string;
 }
 
 const ModalBase = ({ children, onClose, modifier = '' }: ModalBaseProps) => {
@@ -19,6 +19,6 @@ const ModalBase = ({ children, onClose, modifier = '' }: ModalBaseProps) => {
       </div>
     </div>,
     document.body,
-  )
-}
-export default ModalBase
+  );
+};
+export default ModalBase;

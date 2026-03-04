@@ -1,4 +1,4 @@
-import * as yup from 'yup'
+import * as yup from 'yup';
 
 const passwordVerifySchema = yup.object().shape({
   verifyCode: yup
@@ -20,8 +20,8 @@ const passwordVerifySchema = yup.object().shape({
     .string()
     .oneOf([yup.ref('newPassword')], 'Passwords must match')
     .required('Repeat password is required'),
-})
+});
 
-export type PasswordVerifyValues = yup.InferType<typeof passwordVerifySchema>
+export type PasswordVerifyValues = yup.InferType<typeof passwordVerifySchema>;
 
-export default passwordVerifySchema
+export default passwordVerifySchema;

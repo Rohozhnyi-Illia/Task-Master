@@ -1,19 +1,19 @@
-import { AxiosError } from 'axios'
+import { AxiosError } from 'axios';
 
 const parseError = (error: unknown): string => {
   if (error && typeof error === 'object' && 'response' in error) {
-    const axiosError = error as AxiosError<{ error?: string; message?: string }>
+    const axiosError = error as AxiosError<{ error?: string; message?: string }>;
     return (
       axiosError.response?.data?.error ||
       axiosError.response?.data?.message ||
       axiosError.message ||
       'Error'
-    )
+    );
   }
 
-  if (error instanceof Error) return error.message
+  if (error instanceof Error) return error.message;
 
-  return 'Error'
-}
+  return 'Error';
+};
 
-export default parseError
+export default parseError;

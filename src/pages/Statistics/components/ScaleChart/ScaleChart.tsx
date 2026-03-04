@@ -1,24 +1,24 @@
-import React from 'react'
-import styles from './ScaleChart.module.scss'
-import { CategoryType } from '../../../../types/task'
+import React from 'react';
+import styles from './ScaleChart.module.scss';
+import { CategoryType } from '../../../../types/task';
 
 interface ScaleChartProps {
-  category: CategoryType
-  totalQuantity: number
-  completedQuantity: number
+  category: CategoryType;
+  totalQuantity: number;
+  completedQuantity: number;
 }
 
 const ScaleChart = (props: ScaleChartProps) => {
-  const { category, totalQuantity, completedQuantity } = props
+  const { category, totalQuantity, completedQuantity } = props;
   const completedPercent: number =
-    totalQuantity > 0 ? Math.round((completedQuantity / totalQuantity) * 100) : 0
+    totalQuantity > 0 ? Math.round((completedQuantity / totalQuantity) * 100) : 0;
 
   const getColor = (category: CategoryType) => {
-    if (category === 'High') return '#b32929'
-    if (category === 'Middle') return '#e79805'
-    if (category === 'Critical') return '#999999'
-    return '#4386dfff'
-  }
+    if (category === 'High') return '#b32929';
+    if (category === 'Middle') return '#e79805';
+    if (category === 'Critical') return '#999999';
+    return '#4386dfff';
+  };
 
   return (
     <div className={styles.scaleWrapper}>
@@ -43,7 +43,7 @@ const ScaleChart = (props: ScaleChartProps) => {
         <p className={styles.scaleWrapper__scaleParcent}>({completedPercent}%)</p>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ScaleChart
+export default ScaleChart;

@@ -1,15 +1,15 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
-import ReactDOM from 'react-dom'
-import styles from './ToastsContainer.module.scss'
-import Toast from '../Toast/Toast'
-import { RootState } from '@store/store'
-import { ToastItem } from '@store/UI/toastSlice'
+import React from 'react';
+import { useSelector } from 'react-redux';
+import ReactDOM from 'react-dom';
+import styles from './ToastsContainer.module.scss';
+import Toast from '../Toast/Toast';
+import { RootState } from '@store/store';
+import { ToastItem } from '@store/UI/toastSlice';
 
 const ToastsContainer = () => {
-  const toasts: ToastItem[] = useSelector((state: RootState) => state.success.items)
+  const toasts: ToastItem[] = useSelector((state: RootState) => state.success.items);
 
-  if (!toasts.length) return null
+  if (!toasts.length) return null;
 
   return ReactDOM.createPortal(
     <div className={styles.toasts__container}>
@@ -18,7 +18,7 @@ const ToastsContainer = () => {
       ))}
     </div>,
     document.body,
-  )
-}
+  );
+};
 
-export default ToastsContainer
+export default ToastsContainer;

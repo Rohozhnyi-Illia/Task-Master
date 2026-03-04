@@ -1,48 +1,46 @@
-import React, { useState, useEffect } from 'react'
-import styles from './TaskList.module.scss'
-import Task from '../Task/Task'
-import TaskMobile from '../TaskMobile/TaskMobile'
-import { useSelector } from 'react-redux'
-import { Pagination } from '@components/index'
-import { NoData } from '@components/index'
-import { RootState } from '@store/store'
-import { FilterOption } from '@utils/fields/filterOptions'
-import { TaskInterface } from '../../../../../types/task'
+import React, { useState, useEffect } from 'react';
+import styles from './TaskList.module.scss';
+import Task from '../Task/Task';
+import TaskMobile from '../TaskMobile/TaskMobile';
+import { useSelector } from 'react-redux';
+import { Pagination } from '@components/index';
+import { NoData } from '@components/index';
+import { RootState } from '@store/store';
+import { FilterOption } from '@utils/fields/filterOptions';
+import { TaskInterface } from '../../../../../types/task';
 
 interface TaskListProps {
-  keyword: string
-  selected: FilterOption | undefined
+  keyword: string;
+  selected: FilterOption | undefined;
 }
 
 const TaskList = ({ keyword, selected }: TaskListProps) => {
-  const tasks: TaskInterface[] = useSelector((state: RootState) => state.tasks)
-  const [currentPage, setCurrentPage] = useState<number>(1)
-  const taskPerPage: number = 10
+  const tasks: TaskInterface[] = useSelector((state: RootState) => state.tasks);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const taskPerPage = 10;
 
   const filteredTasks = tasks.filter((task) => {
-    const matchesKeyword = !keyword || task.task.toLowerCase().includes(keyword.toLowerCase())
+    const matchesKeyword = !keyword || task.task.toLowerCase().includes(keyword.toLowerCase());
 
     const matchesCategoryOrStatus =
-      !selected || selected === 'All' || task.category === selected || task.status === selected
+      !selected || selected === 'All' || task.category === selected || task.status === selected;
 
-    return matchesKeyword && matchesCategoryOrStatus
-  })
+    return matchesKeyword && matchesCategoryOrStatus;
+  });
 
-  const totalPages: number = Math.ceil(filteredTasks.length / taskPerPage)
+  const totalPages: number = Math.ceil(filteredTasks.length / taskPerPage);
 
   useEffect(() => {
     if (currentPage > totalPages && totalPages > 0) {
-      setCurrentPage(1)
+      setCurrentPage(1);
     }
-  }, [filteredTasks, currentPage, totalPages])
+  }, [filteredTasks, currentPage, totalPages]);
 
-  const indexOfLastTask: number = currentPage * taskPerPage
-  const indexOfFirstTask: number = indexOfLastTask - taskPerPage
-  const currentTasks: TaskInterface[] = filteredTasks.slice(indexOfFirstTask, indexOfLastTask)
+  const indexOfLastTask: number = currentPage * taskPerPage;
+  const indexOfFirstTask: number = indexOfLastTask - taskPerPage;
+  const currentTasks: TaskInterface[] = filteredTasks.slice(indexOfFirstTask, indexOfLastTask);
 
-  const pageNumbers: number[] = [currentPage, currentPage + 1].filter(
-    (page) => page <= totalPages,
-  )
+  const pageNumbers: number[] = [currentPage, currentPage + 1].filter((page) => page <= totalPages);
 
   return (
     <div className={styles.taskList}>
@@ -103,7 +101,7 @@ const TaskList = ({ keyword, selected }: TaskListProps) => {
         />
       )}
     </div>
-  )
-}
+  );
+};
 
-export default TaskList
+export default TaskList;

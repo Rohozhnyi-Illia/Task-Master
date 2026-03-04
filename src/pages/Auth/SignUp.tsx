@@ -1,105 +1,105 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react'
-import { Link } from 'react-router-dom'
-import styles from './Auth.module.scss'
-import fields from '@utils/fields/signUpFields'
-import { bg } from '@assets/index'
-import signUpSchema from '@utils/validation/signUp-validation'
-import { ErrorModal, AccessModal, Input, AuthButton } from '@components/index'
-import AuthService from '@services/authService'
-import { useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { updateEmail } from '@store/authSlice'
-import { showLoader, closeLoader } from '@store/UI/loaderSlice'
-import { RootState } from '@store/store'
-import { SignUpValues } from '@utils/validation/signUp-validation'
-import * as yup from 'yup'
+import React, { ChangeEvent, FormEvent, useState } from 'react';
+import { Link } from 'react-router-dom';
+import styles from './Auth.module.scss';
+import fields from '@utils/fields/signUpFields';
+import { bg } from '@assets/index';
+import signUpSchema from '@utils/validation/signUp-validation';
+import { ErrorModal, AccessModal, Input, AuthButton } from '@components/index';
+import AuthService from '@services/authService';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateEmail } from '@store/authSlice';
+import { showLoader, closeLoader } from '@store/UI/loaderSlice';
+import { RootState } from '@store/store';
+import { SignUpValues } from '@utils/validation/signUp-validation';
+import * as yup from 'yup';
 
 type FormErrors = {
-  name?: string
-  email?: string
-  password?: string
-}
+  name?: string;
+  email?: string;
+  password?: string;
+};
 
 interface DataInterface {
-  name: string
-  email: string
-  password: string
+  name: string;
+  email: string;
+  password: string;
 }
 
 const SignUp = () => {
-  const [data, setData] = useState<DataInterface>({ name: '', email: '', password: '' })
-  const [errors, setErrors] = useState<FormErrors>({})
-  const [authError, setAuthError] = useState<string>('')
-  const [isErrorModalOpen, setIsErrorModalOpen] = useState<boolean>(false)
-  const [accessAction, setAccessAction] = useState<boolean>(false)
-  const isLoaderShown: boolean = useSelector((state: RootState) => state.loader.isLoaderShown)
+  const [data, setData] = useState<DataInterface>({ name: '', email: '', password: '' });
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [authError, setAuthError] = useState<string>('');
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState<boolean>(false);
+  const [accessAction, setAccessAction] = useState<boolean>(false);
+  const isLoaderShown: boolean = useSelector((state: RootState) => state.loader.isLoaderShown);
 
-  const formId: string = 'signUp'
+  const formId = 'signUp';
 
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const openModalHandler = () => {
-    setIsErrorModalOpen(!isErrorModalOpen)
-  }
+    setIsErrorModalOpen(!isErrorModalOpen);
+  };
 
   const navigateHandler = () => {
-    navigate('/verify-email', { replace: true })
-    setAccessAction(false)
-    return
-  }
+    navigate('/verify-email', { replace: true });
+    setAccessAction(false);
+    return;
+  };
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setData((prevData) => ({
       ...prevData,
       [name]: value,
-    }))
-  }
+    }));
+  };
 
   const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setErrors({})
-    setAuthError('')
-    dispatch(showLoader())
+    e.preventDefault();
+    setErrors({});
+    setAuthError('');
+    dispatch(showLoader());
 
     try {
       const validatedData: SignUpValues = await signUpSchema.validate(data, {
         abortEarly: false,
-      })
+      });
 
       const res = await AuthService.register({
         email: validatedData.email,
         password: validatedData.password,
         name: validatedData.name,
-      })
+      });
 
       if (!res.success) {
-        setAuthError(res.error)
-        openModalHandler()
-        return
+        setAuthError(res.error);
+        openModalHandler();
+        return;
       }
 
-      sessionStorage.setItem('signUpEmail', res.data.email)
-      dispatch(updateEmail(res.data.email))
-      setAccessAction(true)
+      sessionStorage.setItem('signUpEmail', res.data.email);
+      dispatch(updateEmail(res.data.email));
+      setAccessAction(true);
     } catch (err: unknown) {
       if (err instanceof yup.ValidationError) {
-        const newErrors: Record<string, string> = {}
+        const newErrors: Record<string, string> = {};
 
         err.inner.forEach((e) => {
-          if (e.path) newErrors[e.path] = e.message
-        })
+          if (e.path) newErrors[e.path] = e.message;
+        });
 
-        setErrors(newErrors)
+        setErrors(newErrors);
       } else if (err instanceof Error) {
-        setAuthError(err.message)
-        openModalHandler()
+        setAuthError(err.message);
+        openModalHandler();
       }
     } finally {
-      dispatch(closeLoader())
+      dispatch(closeLoader());
     }
-  }
+  };
 
   return (
     <div className={styles.auth} style={{ backgroundImage: `url(${bg})` }}>
@@ -138,9 +138,7 @@ const SignUp = () => {
         </div>
       </div>
 
-      {isErrorModalOpen && authError && (
-        <ErrorModal error={authError} onClick={openModalHandler} />
-      )}
+      {isErrorModalOpen && authError && <ErrorModal error={authError} onClick={openModalHandler} />}
 
       {accessAction && (
         <AccessModal
@@ -149,7 +147,7 @@ const SignUp = () => {
         />
       )}
     </div>
-  )
-}
+  );
+};
 
-export default SignUp
+export default SignUp;

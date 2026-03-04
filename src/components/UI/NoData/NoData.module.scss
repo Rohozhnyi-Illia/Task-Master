@@ -23,7 +23,7 @@
     text-align: center;
     @include m.text-style(v.$font-title, v.$font-weight-bold, v.$line-height-default);
     letter-spacing: 0.08rem;
-    color: var(--accent-color);
+    color: var(--text-color);
     animation: fadeSlideIn 0.6s ease-out forwards;
   }
 }

@@ -1,4 +1,4 @@
-import * as yup from 'yup'
+import * as yup from 'yup';
 
 const signUpSchema = yup.object().shape({
   email: yup.string().trim().email('Enter a valid email').required('Email is required'),
@@ -22,8 +22,8 @@ const signUpSchema = yup.object().shape({
     .matches(/[0-9]/, 'Password must contain at least one number')
     .matches(/[@$!%*?&#]/, 'Password must contain at least one special character (!@#$%^&*)')
     .required('Password is required'),
-})
+});
 
-export type SignUpValues = yup.InferType<typeof signUpSchema>
+export type SignUpValues = yup.InferType<typeof signUpSchema>;
 
-export default signUpSchema
+export default signUpSchema;

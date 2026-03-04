@@ -1,9 +1,9 @@
-import React from 'react'
-import { noData } from '@assets/index'
-import styles from './NoData.module.scss'
+import React from 'react';
+import { noData } from '@assets/index';
+import styles from './NoData.module.scss';
 
 interface NoDataProps {
-  text: string
+  text: string;
 }
 
 const NoData = ({ text }: NoDataProps) => {
@@ -12,7 +12,7 @@ const NoData = ({ text }: NoDataProps) => {
       <img src={noData} alt="no data" />
       <h2>{text}</h2>
     </div>
-  )
-}
+  );
+};
 
-export default NoData
+export default NoData;

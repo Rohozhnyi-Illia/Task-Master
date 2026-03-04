@@ -7,6 +7,6 @@ export const FILTER_OPTIONS = [
   'Done',
   'InProgress',
   'Archived',
-] as const
+] as const;
 
-export type FilterOption = (typeof FILTER_OPTIONS)[number]
+export type FilterOption = (typeof FILTER_OPTIONS)[number];

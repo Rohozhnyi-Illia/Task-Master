@@ -1,12 +1,12 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
 
 interface AppState {
-  firstAppLoadDone: boolean
+  firstAppLoadDone: boolean;
 }
 
 const initialState: AppState = {
   firstAppLoadDone: false,
-}
+};
 
 const appSlice = createSlice({
   name: 'App',
@@ -14,14 +14,14 @@ const appSlice = createSlice({
 
   reducers: {
     setFirstAppLoadDone(state) {
-      state.firstAppLoadDone = true
+      state.firstAppLoadDone = true;
     },
 
     resetFirstAppLoadDone(state) {
-      state.firstAppLoadDone = false
+      state.firstAppLoadDone = false;
     },
   },
-})
+});
 
-export const { setFirstAppLoadDone, resetFirstAppLoadDone } = appSlice.actions
-export default appSlice.reducer
+export const { setFirstAppLoadDone, resetFirstAppLoadDone } = appSlice.actions;
+export default appSlice.reducer;

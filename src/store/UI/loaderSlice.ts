@@ -1,12 +1,12 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
 
 interface LoaderState {
-  isLoaderShown: boolean
+  isLoaderShown: boolean;
 }
 
 const initialState: LoaderState = {
   isLoaderShown: false,
-}
+};
 
 const loaderSlice = createSlice({
   name: 'loader',
@@ -14,13 +14,13 @@ const loaderSlice = createSlice({
 
   reducers: {
     showLoader: (state) => {
-      state.isLoaderShown = true
+      state.isLoaderShown = true;
     },
     closeLoader: (state) => {
-      state.isLoaderShown = false
+      state.isLoaderShown = false;
     },
   },
-})
+});
 
-export const { showLoader, closeLoader } = loaderSlice.actions
-export default loaderSlice.reducer
+export const { showLoader, closeLoader } = loaderSlice.actions;
+export default loaderSlice.reducer;

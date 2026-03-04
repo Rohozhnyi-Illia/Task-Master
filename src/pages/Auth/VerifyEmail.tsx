@@ -1,132 +1,132 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
-import styles from './Auth.module.scss'
-import fields from '@utils/fields/verifyEmailFields'
-import { bg } from '@assets/index'
-import verifyEmailSchema from '@utils/validation/emailVerify-validation'
-import emailSchema from '@utils/validation/email-validation'
-import { ErrorModal, AccessModal, Input, AuthButton } from '@components/index'
-import { setAuth } from '@store/authSlice'
-import { useDispatch, useSelector } from 'react-redux'
-import AuthService from '@services/authService'
-import { useNavigate } from 'react-router-dom'
-import { showLoader, closeLoader } from '@store/UI/loaderSlice'
-import { RootState } from '@store/store'
-import { EmailVerifyValues } from '@utils/validation/emailVerify-validation'
-import { EmailValue } from '@utils/validation/email-validation'
-import * as yup from 'yup'
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import styles from './Auth.module.scss';
+import fields from '@utils/fields/verifyEmailFields';
+import { bg } from '@assets/index';
+import verifyEmailSchema from '@utils/validation/emailVerify-validation';
+import emailSchema from '@utils/validation/email-validation';
+import { ErrorModal, AccessModal, Input, AuthButton } from '@components/index';
+import { setAuth } from '@store/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import AuthService from '@services/authService';
+import { useNavigate } from 'react-router-dom';
+import { showLoader, closeLoader } from '@store/UI/loaderSlice';
+import { RootState } from '@store/store';
+import { EmailVerifyValues } from '@utils/validation/emailVerify-validation';
+import { EmailValue } from '@utils/validation/email-validation';
+import * as yup from 'yup';
 
 type FormErrors = {
-  email?: string
-  verifyCode?: string
-}
+  email?: string;
+  verifyCode?: string;
+};
 
 interface DataInterface {
-  email: string
-  verifyCode: string
+  email: string;
+  verifyCode: string;
 }
 
 const VerifyEmail = () => {
-  const [data, setData] = useState<DataInterface>({ email: '', verifyCode: '' })
-  const [errors, setErrors] = useState<FormErrors>({})
-  const [authError, setAuthError] = useState<string>('')
-  const [successMessage, setSuccessMessage] = useState<string>('')
-  const [accessAction, setAccessAction] = useState<boolean>(false)
-  const [emailError, setEmailError] = useState<string>('')
-  const email: string = useSelector((state: RootState) => state.auth.email)
-  const isLoaderShown: boolean = useSelector((state: RootState) => state.loader.isLoaderShown)
+  const [data, setData] = useState<DataInterface>({ email: '', verifyCode: '' });
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [authError, setAuthError] = useState<string>('');
+  const [successMessage, setSuccessMessage] = useState<string>('');
+  const [accessAction, setAccessAction] = useState<boolean>(false);
+  const [emailError, setEmailError] = useState<string>('');
+  const email: string = useSelector((state: RootState) => state.auth.email);
+  const isLoaderShown: boolean = useSelector((state: RootState) => state.loader.isLoaderShown);
 
-  const formId: string = 'verifyEmail'
+  const formId = 'verifyEmail';
 
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const emailFromSession = sessionStorage.getItem('signUpEmail')
+    const emailFromSession = sessionStorage.getItem('signUpEmail');
     if (!email && !emailFromSession) {
-      navigate('/login', { replace: true })
-      return
+      navigate('/login', { replace: true });
+      return;
     } else if (emailFromSession) {
-      setData((prev) => ({ ...prev, email: emailFromSession }))
+      setData((prev) => ({ ...prev, email: emailFromSession }));
     }
-  }, [email, navigate])
+  }, [email, navigate]);
 
   const navigateHandler = () => {
-    setAccessAction(false)
-    sessionStorage.removeItem('signUpEmail')
-    dispatch(showLoader())
-    navigate('/application', { replace: true })
-  }
+    setAccessAction(false);
+    sessionStorage.removeItem('signUpEmail');
+    dispatch(showLoader());
+    navigate('/application', { replace: true });
+  };
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setData((prevData) => ({
       ...prevData,
       [name]: value,
-    }))
-  }
+    }));
+  };
 
   const resendHandler = async () => {
-    setErrors({})
-    setAuthError('')
-    setSuccessMessage('')
-    dispatch(showLoader())
+    setErrors({});
+    setAuthError('');
+    setSuccessMessage('');
+    dispatch(showLoader());
 
     try {
       const validatedData: EmailValue = await emailSchema.validate(
         { email: data.email },
         { abortEarly: false },
-      )
+      );
 
       if (!validatedData.email) {
-        setAuthError('Enter your email address')
-        return
+        setAuthError('Enter your email address');
+        return;
       }
 
-      const res = await AuthService.reVerifyEmail(validatedData.email)
+      const res = await AuthService.reVerifyEmail(validatedData.email);
 
       if (res.success) {
-        setSuccessMessage('A new verification code has been sent to your email.')
+        setSuccessMessage('A new verification code has been sent to your email.');
       } else {
-        setAuthError(res.error || 'Something went wrong')
+        setAuthError(res.error || 'Something went wrong');
       }
     } catch (err: unknown) {
       if (err instanceof yup.ValidationError) {
         err.inner.forEach((e) => {
-          if (e.path === 'email') setEmailError(e.message)
-        })
+          if (e.path === 'email') setEmailError(e.message);
+        });
       } else if (err instanceof Error) {
-        setAuthError(err.message)
+        setAuthError(err.message);
       }
     } finally {
-      dispatch(closeLoader())
+      dispatch(closeLoader());
     }
-  }
+  };
 
   const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setErrors({})
-    setAuthError('')
-    dispatch(showLoader())
+    e.preventDefault();
+    setErrors({});
+    setAuthError('');
+    dispatch(showLoader());
 
     try {
       const validatedData: EmailVerifyValues = await verifyEmailSchema.validate(data, {
         abortEarly: false,
-      })
+      });
 
       if (!validatedData.verifyCode) {
-        setAuthError('Enter verification code')
-        return
+        setAuthError('Enter verification code');
+        return;
       }
 
       const res = await AuthService.verifyEmail({
         email: validatedData.email,
         verifyCode: validatedData.verifyCode,
-      })
+      });
 
       if (!res.success) {
-        setAuthError(res.error)
-        setData((prev) => ({ ...prev, verifyCode: '' }))
-        return
+        setAuthError(res.error);
+        setData((prev) => ({ ...prev, verifyCode: '' }));
+        return;
       }
 
       dispatch(
@@ -136,25 +136,25 @@ const VerifyEmail = () => {
           name: res.data.name,
           accessToken: res.data.accessToken,
         }),
-      )
+      );
 
-      setAccessAction(true)
+      setAccessAction(true);
     } catch (err) {
       if (err instanceof yup.ValidationError) {
-        const newErrors: Record<string, string> = {}
+        const newErrors: Record<string, string> = {};
 
         err.inner.forEach((e) => {
-          if (e.path) newErrors[e.path] = e.message
-        })
+          if (e.path) newErrors[e.path] = e.message;
+        });
 
-        setErrors(newErrors)
+        setErrors(newErrors);
       } else if (err instanceof Error) {
-        setAuthError(err.message)
+        setAuthError(err.message);
       }
     } finally {
-      dispatch(closeLoader())
+      dispatch(closeLoader());
     }
-  }
+  };
 
   return (
     <div className={styles.auth} style={{ backgroundImage: `url(${bg})` }}>
@@ -213,7 +213,7 @@ const VerifyEmail = () => {
       )}
       {accessAction && <AccessModal onClick={navigateHandler} text="" />}
     </div>
-  )
-}
+  );
+};
 
-export default VerifyEmail
+export default VerifyEmail;

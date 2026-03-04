@@ -1,11 +1,11 @@
-export type ISODataType = string
+export type ISODataType = string;
 
 export interface ModelBase {
-  updatedAt: ISODataType
-  createdAt: ISODataType
-  user: string
-  __v: number
-  _id: string
+  updatedAt: ISODataType;
+  createdAt: ISODataType;
+  user: string;
+  __v: number;
+  _id: string;
 }
 
-export type ServiceResponse<T> = { success: true; data: T } | { success: false; error: string }
+export type ServiceResponse<T> = { success: true; data: T } | { success: false; error: string };

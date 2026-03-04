@@ -1,167 +1,167 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { trash, calendar } from '@assets/index'
-import styles from './Task.module.scss'
-import { useDispatch } from 'react-redux'
-import TaskService from '@services/taskService'
-import { deleteTasks, updateStatus, restoreTask, updateCategory } from '@store/tasksSlice'
-import { showError } from '@store/UI/errorSlice'
-import { showSuccess } from '@store/UI/toastSlice'
-import { FaAngleDown } from 'react-icons/fa6'
-import DropdownPortal from '../DropdownPortal/DropdownPortal'
-import { createPortal } from 'react-dom'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { trash, calendar } from '@assets/index';
+import styles from './Task.module.scss';
+import { useDispatch } from 'react-redux';
+import TaskService from '@services/taskService';
+import { deleteTasks, updateStatus, restoreTask, updateCategory } from '@store/tasksSlice';
+import { showError } from '@store/UI/errorSlice';
+import { showSuccess } from '@store/UI/toastSlice';
+import { FaAngleDown } from 'react-icons/fa6';
+import DropdownPortal from '../DropdownPortal/DropdownPortal';
+import { createPortal } from 'react-dom';
 import {
   CATEGORIES_OPTIONS,
   STATUS_OPTIONS,
   TaskInterface,
   CategoryType,
   StatusType,
-} from '../../../../../types/task'
+} from '../../../../../types/task';
 
 interface TaskProps {
-  task: TaskInterface
+  task: TaskInterface;
 }
 
 const Task = ({ task }: TaskProps) => {
-  const [isStatusDropdownOpen, setIsStatusDropdownOpen] = useState<boolean>(false)
-  const [isDeleteMenuOpen, setIsDeleteMenuOpen] = useState<boolean>(false)
-  const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState<boolean>(false)
-  const [position, setPosition] = useState<{ top: number; left: number }>({ top: 0, left: 0 })
+  const [isStatusDropdownOpen, setIsStatusDropdownOpen] = useState<boolean>(false);
+  const [isDeleteMenuOpen, setIsDeleteMenuOpen] = useState<boolean>(false);
+  const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState<boolean>(false);
+  const [position, setPosition] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
 
-  const categoryWrapperRef = useRef<HTMLDivElement>(null)
-  const statusWrapperRef = useRef<HTMLDivElement>(null)
-  const deleteWrapperRef = useRef<HTMLDivElement>(null)
-  const deleteDropdownRef = useRef<HTMLDivElement>(null)
+  const categoryWrapperRef = useRef<HTMLDivElement>(null);
+  const statusWrapperRef = useRef<HTMLDivElement>(null);
+  const deleteWrapperRef = useRef<HTMLDivElement>(null);
+  const deleteDropdownRef = useRef<HTMLDivElement>(null);
 
-  const dispatch = useDispatch()
-  const taskId: string = task._id
-  const isCompleted: boolean = task.status === 'Done'
-  const displayDate: string = task.deadline.split('T')[0]
+  const dispatch = useDispatch();
+  const taskId: string = task._id;
+  const isCompleted: boolean = task.status === 'Done';
+  const displayDate: string = task.deadline.split('T')[0];
 
   const toggleStatusDropdownHandler = () => {
-    setIsStatusDropdownOpen((prev) => !prev)
-  }
+    setIsStatusDropdownOpen((prev) => !prev);
+  };
 
   const toggleCategoryDropdownHandler = () => {
-    setIsCategoryDropdownOpen((prev) => !prev)
-  }
+    setIsCategoryDropdownOpen((prev) => !prev);
+  };
 
-  const closeStatusDropdownHandler = () => setIsStatusDropdownOpen(false)
-  const closeCategoryDropdownHandler = () => setIsCategoryDropdownOpen(false)
+  const closeStatusDropdownHandler = () => setIsStatusDropdownOpen(false);
+  const closeCategoryDropdownHandler = () => setIsCategoryDropdownOpen(false);
 
   const completeHandler = async () => {
-    const prevStatus = task.status
-    const newStatus = isCompleted ? 'Active' : 'Done'
+    const prevStatus = task.status;
+    const newStatus = isCompleted ? 'Active' : 'Done';
 
-    dispatch(updateStatus({ id: taskId, status: newStatus }))
+    dispatch(updateStatus({ id: taskId, status: newStatus }));
 
-    const res = await TaskService.updateStatus(taskId, newStatus)
+    const res = await TaskService.updateStatus(taskId, newStatus);
 
     if (!res.success) {
-      dispatch(updateStatus({ id: taskId, status: prevStatus }))
-      dispatch(showError(res.error))
-      return
+      dispatch(updateStatus({ id: taskId, status: prevStatus }));
+      dispatch(showError(res.error));
+      return;
     }
 
-    dispatch(showSuccess(isCompleted ? 'The task is active again' : 'The task was completed'))
-  }
+    dispatch(showSuccess(isCompleted ? 'The task is active again' : 'The task was completed'));
+  };
 
   const changeStatusHandler = async (newStatus: StatusType) => {
-    const prevStatus = task.status
+    const prevStatus = task.status;
 
     if (newStatus === prevStatus) {
-      dispatch(showError('This status is already active'))
-      return
+      dispatch(showError('This status is already active'));
+      return;
     }
 
     if (newStatus === 'Done') {
-      await completeHandler()
-      return
+      await completeHandler();
+      return;
     }
 
-    dispatch(updateStatus({ id: taskId, status: newStatus }))
+    dispatch(updateStatus({ id: taskId, status: newStatus }));
 
-    const res = await TaskService.updateStatus(taskId, newStatus)
+    const res = await TaskService.updateStatus(taskId, newStatus);
 
     if (!res.success) {
-      dispatch(updateStatus({ id: taskId, status: prevStatus }))
-      dispatch(showError(res.error))
-      return
+      dispatch(updateStatus({ id: taskId, status: prevStatus }));
+      dispatch(showError(res.error));
+      return;
     }
 
-    dispatch(showSuccess('Status has been updated'))
-  }
+    dispatch(showSuccess('Status has been updated'));
+  };
 
   const changeCategoryHandler = async (newCategory: CategoryType) => {
-    const prevCategory = task.category
+    const prevCategory = task.category;
 
     if (newCategory === prevCategory) {
-      dispatch(showError('This category is already active'))
-      return
+      dispatch(showError('This category is already active'));
+      return;
     }
 
-    dispatch(updateCategory({ id: taskId, category: newCategory }))
+    dispatch(updateCategory({ id: taskId, category: newCategory }));
 
-    const res = await TaskService.updateCategory(taskId, newCategory)
+    const res = await TaskService.updateCategory(taskId, newCategory);
     if (!res.success) {
-      dispatch(updateCategory({ id: taskId, category: prevCategory }))
-      dispatch(showError(res.error))
-      return
+      dispatch(updateCategory({ id: taskId, category: prevCategory }));
+      dispatch(showError(res.error));
+      return;
     }
 
-    dispatch(updateCategory({ id: taskId, category: newCategory }))
-    dispatch(showSuccess('Category has been updated'))
-  }
+    dispatch(updateCategory({ id: taskId, category: newCategory }));
+    dispatch(showSuccess('Category has been updated'));
+  };
 
   const confirmDeleteHandler = async () => {
-    const deleted = task
-    dispatch(deleteTasks(taskId))
+    const deleted = task;
+    dispatch(deleteTasks(taskId));
 
-    const res = await TaskService.deleteTasks(taskId)
+    const res = await TaskService.deleteTasks(taskId);
 
     if (!res.success) {
-      dispatch(restoreTask(deleted))
-      dispatch(showError(res.error))
-      return
+      dispatch(restoreTask(deleted));
+      dispatch(showError(res.error));
+      return;
     }
 
-    dispatch(showSuccess(`The task has been deleted`))
-  }
+    dispatch(showSuccess('The task has been deleted'));
+  };
 
   useEffect(() => {
     const keyHandler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        setIsDeleteMenuOpen(false)
+        setIsDeleteMenuOpen(false);
       }
-    }
+    };
 
-    document.addEventListener('keydown', keyHandler)
-    return () => document.removeEventListener('keydown', keyHandler)
-  }, [setIsDeleteMenuOpen, deleteDropdownRef])
+    document.addEventListener('keydown', keyHandler);
+    return () => document.removeEventListener('keydown', keyHandler);
+  }, [setIsDeleteMenuOpen, deleteDropdownRef]);
 
   const getStatusClass = (status: StatusType) => {
     switch (status?.toLowerCase()) {
       case 'done':
-        return styles.done
+        return styles.done;
       case 'inprogress':
-        return styles.inprogress
+        return styles.inprogress;
       case 'archived':
-        return styles.archived
+        return styles.archived;
       default:
-        return ''
+        return '';
     }
-  }
+  };
 
   useLayoutEffect(() => {
-    if (!isDeleteMenuOpen) return
-    if (!deleteWrapperRef.current) return
+    if (!isDeleteMenuOpen) return;
+    if (!deleteWrapperRef.current) return;
 
-    const rect = deleteWrapperRef.current.getBoundingClientRect()
+    const rect = deleteWrapperRef.current.getBoundingClientRect();
 
     setPosition({
       top: rect.bottom + window.scrollY,
       left: rect.left + window.scrollX,
-    })
-  }, [isDeleteMenuOpen])
+    });
+  }, [isDeleteMenuOpen]);
 
   return (
     <tr className={`${styles.task} ${getStatusClass(task.status)}`}>
@@ -222,10 +222,7 @@ const Task = ({ task }: TaskProps) => {
 
       <td>
         <div ref={deleteWrapperRef} className={styles.task__deleteWrapper}>
-          <button
-            className={styles.deleteBtn}
-            onClick={() => setIsDeleteMenuOpen((prev) => !prev)}
-          >
+          <button className={styles.deleteBtn} onClick={() => setIsDeleteMenuOpen((prev) => !prev)}>
             <img src={trash} alt="delete" />
           </button>
 
@@ -247,7 +244,7 @@ const Task = ({ task }: TaskProps) => {
         </div>
       </td>
     </tr>
-  )
-}
+  );
+};
 
-export default Task
+export default Task;

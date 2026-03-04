@@ -1,5 +1,5 @@
-import React from 'react'
-import { Bar } from 'react-chartjs-2'
+import React from 'react';
+import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,37 +10,37 @@ import {
   Legend,
   ChartOptions,
   ChartData,
-} from 'chart.js'
-import styles from './BarChart.module.scss'
-import { TaskInterface } from '../../../../types/task'
+} from 'chart.js';
+import styles from './BarChart.module.scss';
+import { TaskInterface } from '../../../../types/task';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 interface BarChartProps {
-  tasks: TaskInterface[]
+  tasks: TaskInterface[];
 }
 
 const BarChart = ({ tasks }: BarChartProps) => {
-  const today = new Date()
-  const last7DaysISO = []
-  const last7DaysLabels = []
+  const today = new Date();
+  const last7DaysISO = [];
+  const last7DaysLabels = [];
 
   for (let i = 6; i >= 0; i--) {
-    const date = new Date()
-    date.setDate(today.getDate() - i)
+    const date = new Date();
+    date.setDate(today.getDate() - i);
 
-    last7DaysISO.push(date.toISOString().split('T')[0])
-    last7DaysLabels.push(date.toLocaleString('en-US', { day: 'numeric', month: 'long' }))
+    last7DaysISO.push(date.toISOString().split('T')[0]);
+    last7DaysLabels.push(date.toLocaleString('en-US', { day: 'numeric', month: 'long' }));
   }
 
   const counts = last7DaysISO.map((date) => {
-    const count = tasks.filter((task) => task.createdAt.startsWith(date)).length
-    return count > 10 ? 10 : count
-  })
+    const count = tasks.filter((task) => task.createdAt.startsWith(date)).length;
+    return count > 10 ? 10 : count;
+  });
 
   const tooltipCounts = last7DaysISO.map((date) => {
-    return tasks.filter((task) => task.createdAt.startsWith(date)).length
-  })
+    return tasks.filter((task) => task.createdAt.startsWith(date)).length;
+  });
 
   const data: ChartData<'bar', number[], string> = {
     labels: last7DaysLabels,
@@ -51,7 +51,7 @@ const BarChart = ({ tasks }: BarChartProps) => {
         borderRadius: 5,
       },
     ],
-  }
+  };
 
   const options: ChartOptions<'bar'> = {
     responsive: true,
@@ -76,7 +76,7 @@ const BarChart = ({ tasks }: BarChartProps) => {
         bodyColor: '#fff',
         callbacks: {
           label: function (context) {
-            return `Tasks: ${tooltipCounts[context.dataIndex]}`
+            return `Tasks: ${tooltipCounts[context.dataIndex]}`;
           },
         },
       },
@@ -95,18 +95,18 @@ const BarChart = ({ tasks }: BarChartProps) => {
         ticks: {
           stepSize: 1,
           callback: function (value) {
-            return value === 10 ? '10+' : value
+            return value === 10 ? '10+' : value;
           },
         },
       },
     },
-  }
+  };
 
   return (
     <div className={styles.chartContainer}>
       <Bar data={data} options={options} />
     </div>
-  )
-}
+  );
+};
 
-export default BarChart
+export default BarChart;

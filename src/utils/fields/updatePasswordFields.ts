@@ -1,5 +1,5 @@
-import { mail } from '../../assets'
-import { Field } from '../../types/forms'
+import { mail } from '../../assets';
+import { Field } from '../../types/forms';
 
 const FIELDS: Field[] = [
   {
@@ -8,6 +8,6 @@ const FIELDS: Field[] = [
     placeholder: 'Enter Your Email...',
     img: mail,
   },
-]
+];
 
-export default FIELDS
+export default FIELDS;
