@@ -1,6 +1,6 @@
 import React, { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import ProtectedPath from './services/ProtectedPath';
+import ProtectPath from './services/ProtectPath';
 import { GlobalLoader, GlobalErrorModal, ToastsContainer, SuspenseLoader } from './components';
 import useTheme from './hooks/useTheme';
 
@@ -13,6 +13,7 @@ const Application = lazy(() => import('./pages/Application/Application'));
 const VerifyPassword = lazy(() => import('./pages/Auth/VerifyPassword'));
 const VerifyEmail = lazy(() => import('./pages/Auth/VerifyEmail'));
 const Notifications = lazy(() => import('./pages/Notifications/NotificationsPage'));
+const NotFound = lazy(() => import('./pages/NotFound/NotFound'));
 
 function App() {
   useTheme();
@@ -50,16 +51,19 @@ function App() {
 
           <Route
             element={
-              <ProtectedPath>
+              <ProtectPath>
                 <HeaderLayout />
-              </ProtectedPath>
+              </ProtectPath>
             }
           >
             <Route path="/statistics" element={<Statistics />} />
             <Route path="/application" element={<Application />} />
             <Route path="/notifications" element={<Notifications />} />
           </Route>
+
+          <Route path="*" element={<NotFound />} />
         </Routes>
+
         <GlobalErrorModal />
         <ToastsContainer />
         <GlobalLoader />

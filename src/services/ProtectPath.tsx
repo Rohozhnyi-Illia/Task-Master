@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import { selectIsAuth } from '@store/authSlice';
 
 interface ProtectPathProps {
@@ -9,13 +9,10 @@ interface ProtectPathProps {
 
 const ProtectPath = ({ children }: ProtectPathProps) => {
   const isAuth: boolean = useSelector(selectIsAuth);
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!isAuth) {
-      navigate('/login', { replace: true });
-    }
-  }, [isAuth, navigate]);
+  if (!isAuth) {
+    return <Navigate to="/login" replace />;
+  }
 
   return children ? <>{children}</> : <Outlet />;
 };

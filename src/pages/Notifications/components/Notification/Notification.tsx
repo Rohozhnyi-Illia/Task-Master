@@ -61,7 +61,7 @@ const Notification = ({ type, id, message }: NotificationProps) => {
         return;
       }
 
-      dispatch(showSuccess('Notification has been deleted'));
+      dispatch(showSuccess('Notification deleted'));
     } catch (error) {
       if (error instanceof Error) {
         if (backup) {

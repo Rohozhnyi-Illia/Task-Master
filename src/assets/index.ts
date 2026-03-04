@@ -19,3 +19,4 @@ export { default as trash } from './images/trash.svg';
 export { default as done } from './images/done.svg';
 export { default as errorImg } from './images/error.svg';
 export { default as verify } from './images/verify.svg';
+export { default as notFound } from './images/not_found.webp';
