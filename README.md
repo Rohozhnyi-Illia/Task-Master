@@ -120,6 +120,7 @@ npm run build # production build
 - **Application** — main dashboard with tasks and notifications
 - **StatsPage** — overview of completed tasks
 - **NotificationsPage** — shows messages about upcoming deadlines and overdue tasks
+- **NotFound** — 404 Not Found page for invalid routes
 
 ## API Services
 
