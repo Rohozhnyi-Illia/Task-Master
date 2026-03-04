@@ -56,8 +56,14 @@ Designed and implemented with a focus on real-world authentication flows, state 
 - Responsive design for mobile and desktop
 - Consistent layout with shared Header component for all main pages (excluding auth pages)
 - Validation of forms, deadlines, and data
+- 404 Not Found page
 - Custom favicon, app branding, and custom domain setup
 - Drag & drop provides intuitive task organization
+
+### Code Quality
+
+- ESLint + Prettier setup for consistent code style and formatting
+- Linting and formatting integrated in development workflow
 
 ---
 
@@ -67,6 +73,7 @@ Designed and implemented with a focus on real-world authentication flows, state 
 - **HTTP / API:** Axios with interceptors
 - **Drag & Drop:** react-beautiful-dnd
 - **Validation:** Yup
+- **Code Quality:** ESLint, Prettier
 
 ---
 
@@ -78,6 +85,7 @@ Designed and implemented with a focus on real-world authentication flows, state 
 - JWT authentication with automatic token refresh
 - UI state separated from business data in Redux
 - Drag & drop integrated with Redux for state persistence
+- ESLint + Prettier ensure consistent and clean code
 
 ---
 
