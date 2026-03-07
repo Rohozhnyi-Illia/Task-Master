@@ -69,7 +69,7 @@ Designed and implemented with a focus on real-world authentication flows, state 
 
 ## Technologies
 
-- **Frontend:** React 19, Redux Toolkit, React Router, SCSS, Webpack
+- **Frontend:** React + **TypeScript**, Redux Toolkit, React Router, SCSS, Webpack
 - **HTTP / API:** Axios with interceptors
 - **Drag & Drop:** react-beautiful-dnd
 - **Validation:** Yup
@@ -79,6 +79,7 @@ Designed and implemented with a focus on real-world authentication flows, state 
 
 ## Architecture Notes
 
+- All components, pages, and services have been migrated to TypeScript.
 - Organized by feature: each page has its own folder with components and styles, plus shared components for cross-page reuse
 - API logic isolated in services layer
 - Centralized UI feedback system (loaders, error modals, success toasts)
