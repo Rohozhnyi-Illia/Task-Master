@@ -2,11 +2,6 @@
 @use '@styles/mixins.scss' as m;
 
 .empty {
-  position: absolute;
-  left: 50%;
-  top: 60%;
-  transform: translate(-50%, -60%);
-
   width: 100%;
   min-height: 200px;
   flex: 1;

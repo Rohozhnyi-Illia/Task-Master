@@ -1,5 +1,6 @@
 export const FILTER_OPTIONS = [
   'All',
+  'Critical',
   'High',
   'Middle',
   'Low',

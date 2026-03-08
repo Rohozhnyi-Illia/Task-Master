@@ -211,7 +211,9 @@ const VerifyEmail = () => {
       {successMessage && (
         <AccessModal onClick={() => setSuccessMessage('')} text={successMessage} />
       )}
-      {accessAction && <AccessModal onClick={navigateHandler} text="" />}
+      {accessAction && (
+        <AccessModal onClick={navigateHandler} text="Your email has been successfully verified" />
+      )}
     </div>
   );
 };
