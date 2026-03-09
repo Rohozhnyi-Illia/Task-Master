@@ -38,7 +38,7 @@
 
     th,
     td {
-      padding: 1.2rem 1rem;
+      padding: clamp(0.5rem, 0.6vw, 1rem);
       text-align: center;
       vertical-align: middle;
       border: 1px solid #d3d3d3;
@@ -63,6 +63,13 @@
       border-bottom-right-radius: v.$radius-xl;
     }
   }
+
+  &__empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
 }
 
 @media screen and (max-width: 1024.1px) {
@@ -77,11 +84,6 @@
 
   .taskList__tableWrapper {
     display: none;
-  }
-
-  .taskList__content {
-    flex: 0 0 auto;
-    min-height: auto;
   }
 }
 

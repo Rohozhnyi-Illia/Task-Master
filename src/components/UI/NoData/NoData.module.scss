@@ -12,6 +12,7 @@
 
   img {
     animation: float 2s ease-in-out infinite;
+    height: clamp(28rem, 30vw, 42rem);
   }
 
   h2 {
