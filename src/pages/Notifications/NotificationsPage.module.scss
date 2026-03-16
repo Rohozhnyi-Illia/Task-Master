@@ -22,17 +22,16 @@
   }
 
   &__title {
-    @include m.text-style(v.$font-title, v.$font-weight-bold, v.$line-height-default);
+    @include m.text-style(v.$font-title, v.$font-weight-bold, 1.2);
     color: var(--text-color);
-    letter-spacing: 0.05rem;
-    transition: color 0.4s ease;
+    letter-spacing: 0.03rem;
+    margin-bottom: 0.25rem;
   }
 
   &__subtitle {
-    margin-top: 1rem;
-    @include m.text-style(v.$font-size-md, v.$font-weight-medium, v.$line-height-default);
+    margin-top: 0;
+    @include m.text-style(v.$font-size-md, v.$font-weight-medium, 1.5);
     color: var(--text-color);
-    transition: color 0.3s ease;
   }
 
   &__controls {

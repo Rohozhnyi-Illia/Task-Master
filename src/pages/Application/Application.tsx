@@ -73,25 +73,29 @@ const Application = () => {
           <header className={styles.application__header}>
             <h3 className={styles.application__title}>Task List</h3>
 
-            <div className={styles.application__search}>
-              <input
-                type="text"
-                className={styles.application__search_input}
-                placeholder="Keyword"
-                onChange={keywordValueHandler}
-                value={keywordValue}
-              />
-              <img src={search} alt="search" className={styles.application__search_icon} />
-            </div>
+            {tasks.length > 0 && (
+              <div className={styles.application__search}>
+                <input
+                  type="text"
+                  className={styles.application__search_input}
+                  placeholder="Keyword"
+                  onChange={keywordValueHandler}
+                  value={keywordValue}
+                />
+                <img src={search} alt="search" className={styles.application__search_icon} />
+              </div>
+            )}
 
-            <div className={styles.application__categories}>
-              <CategorySelect<FilterOption>
-                label="Select a category"
-                options={FILTER_OPTIONS}
-                onChange={(val) => setSelected(val)}
-                selected={selected}
-              />
-            </div>
+            {tasks.length > 0 && (
+              <div className={styles.application__categories}>
+                <CategorySelect<FilterOption>
+                  label="Select a category"
+                  options={FILTER_OPTIONS}
+                  onChange={(val) => setSelected(val)}
+                  selected={selected}
+                />
+              </div>
+            )}
 
             <AddButton
               className={styles.application__newTaskBtn}
