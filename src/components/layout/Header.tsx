@@ -32,19 +32,14 @@ const Header = () => {
 
   const logoutHandler = async () => {
     dispatch(showLoader());
-    const res = await AuthService.logout();
+    await AuthService.logout().catch(() => void {});
 
-    if (res.success) {
-      dispatch(resetFirstAppLoadDone());
-      dispatch(resetTasks());
-      dispatch(deleteAllNotifications());
-      dispatch(logout());
+    dispatch(resetFirstAppLoadDone());
+    dispatch(resetTasks());
+    dispatch(deleteAllNotifications());
+    dispatch(logout());
 
-      navigate('/login', { replace: true });
-    } else {
-      dispatch(showError(res.error));
-    }
-
+    navigate('/login', { replace: true });
     dispatch(closeLoader());
   };
 
