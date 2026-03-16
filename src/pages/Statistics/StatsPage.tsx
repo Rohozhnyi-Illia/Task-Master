@@ -48,7 +48,7 @@ const StatsPage = () => {
     <Suspense fallback={<SuspenseLoader />}>
       <div className={styles.stats}>
         <div className="container">
-          <GreetingBadge name={name} />
+          <GreetingBadge name={name} subtitle="Here’s a snapshot of your productivity" />
 
           <div className={styles.stats__container}>
             <div className={styles.stats__scalesWrapper}>

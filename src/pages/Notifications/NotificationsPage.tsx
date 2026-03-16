@@ -74,7 +74,7 @@ const NotificationsPage = () => {
     <div className={styles.notifications}>
       <div className="container">
         <div className={styles.notifications__wrapper}>
-          <GreetingBadge name={name} />
+          <GreetingBadge name={name} subtitle="Check your notifications" />
 
           {notifications.length > 0 && (
             <div className={styles.notifications__controls}>

@@ -3,13 +3,14 @@ import styles from './GreetingBadge.module.scss';
 
 interface GreetingBadgeProps {
   name: string;
+  subtitle: string;
 }
 
-const GreetingBadge = ({ name }: GreetingBadgeProps) => {
+const GreetingBadge = ({ name, subtitle }: GreetingBadgeProps) => {
   return (
     <div className={styles.badge}>
       <h2 className={styles.badge__title}>Hello, {name} 👋</h2>
-      <h4 className={styles.badge__subtitle}>Check your notifications.</h4>
+      <h4 className={styles.badge__subtitle}>{subtitle}.</h4>
     </div>
   );
 };
