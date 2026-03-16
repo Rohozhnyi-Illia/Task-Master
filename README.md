@@ -181,6 +181,7 @@ Frontend communicates with TaskMaster-Backend through Axios services:
 
 ## Notes
 
+- Project migrated from JavaScript to **TypeScript** for type safety and maintainability
 - Added email verification for registration and password recovery
 - Backend must be running for frontend to function correctly
 - Pagination improves performance on task-heavy dashboards

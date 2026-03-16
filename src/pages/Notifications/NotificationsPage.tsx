@@ -14,6 +14,7 @@ import { showSuccess } from '@store/UI/toastSlice';
 import NotificationActionButton from './components/NotificationActionButton/NotificationActionButton';
 import { RootState } from '@store/store';
 import { Notification, NotificationFilterType } from '../../types/notification';
+import { GreetingBadge } from '@components/index';
 
 const NotificationsPage = () => {
   const [selected, setSelected] = useState<NotificationFilterType | undefined>(undefined);
@@ -73,8 +74,7 @@ const NotificationsPage = () => {
     <div className={styles.notifications}>
       <div className="container">
         <div className={styles.notifications__wrapper}>
-          <h2 className={styles.notifications__title}>Hello, {name}</h2>
-          <h4 className={styles.notifications__subtitle}>Check your notifications.</h4>
+          <GreetingBadge name={name} />
 
           {notifications.length > 0 && (
             <div className={styles.notifications__controls}>

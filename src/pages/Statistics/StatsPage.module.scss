@@ -10,23 +10,9 @@
   background-color: var(--bg-color);
   transition: background-color 0.3s ease;
 
-  &__title {
-    @include m.text-style(v.$font-title, v.$font-weight-bold, 1.2);
-    color: var(--text-color);
-    letter-spacing: 0.03rem;
-    margin-bottom: 0.25rem;
-  }
-
-  &__subtitle {
-    margin-top: 0;
-    @include m.text-style(v.$font-size-md, v.$font-weight-medium, 1.5);
-    color: var(--text-color);
-  }
-
   &__container {
-    margin-top: 2rem;
     width: 100%;
-
+    margin-top: 1.5rem;
     display: flex;
     align-items: stretch;
     justify-content: space-around;

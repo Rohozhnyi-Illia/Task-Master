@@ -21,21 +21,8 @@
     min-height: 0;
   }
 
-  &__title {
-    @include m.text-style(v.$font-title, v.$font-weight-bold, 1.2);
-    color: var(--text-color);
-    letter-spacing: 0.03rem;
-    margin-bottom: 0.25rem;
-  }
-
-  &__subtitle {
-    margin-top: 0;
-    @include m.text-style(v.$font-size-md, v.$font-weight-medium, 1.5);
-    color: var(--text-color);
-  }
-
   &__controls {
-    margin-top: 2rem;
+    margin-top: 1.5rem;
   }
 
   &__controlsWrapper {

@@ -73,6 +73,7 @@ const authService = class AuthServcie {
       return data;
     } catch (error) {
       const message = parseError(error);
+      console.log('Parsed error:', message);
       return { success: false, error: message };
     }
   }

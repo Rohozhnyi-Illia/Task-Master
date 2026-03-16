@@ -13,3 +13,4 @@ export { default as SuspenseLoader } from './UI/Loaders/SuspenseLoader/SuspenseL
 export { default as Pagination } from './UI/Pagination/Pagination';
 export { default as CategorySelect } from './UI/CategorySelect/CategorySelect';
 export { default as NoData } from './UI/NoData/NoData';
+export { default as GreetingBadge } from './UI/GreetingBadge/GreetingBadge';

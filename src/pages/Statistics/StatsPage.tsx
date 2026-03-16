@@ -5,6 +5,7 @@ import ScaleChart from './components/ScaleChart/ScaleChart';
 import { CATEGORIES_OPTIONS, CategoryType, TaskInterface } from '../../types/task';
 import { SuspenseLoader } from '@components/index';
 import { RootState } from '@store/store';
+import { GreetingBadge } from '@components/index';
 
 const CircleChart = lazy(() => import('./components/CircleChart/CircleChart'));
 const BarChart = lazy(() => import('./components/BarChart/BarChart'));
@@ -47,8 +48,7 @@ const StatsPage = () => {
     <Suspense fallback={<SuspenseLoader />}>
       <div className={styles.stats}>
         <div className="container">
-          <h2 className={styles.stats__title}>Hello, {name}</h2>
-          <h4 className={styles.stats__subtitle}>Here’s a snapshot of your productivity.</h4>
+          <GreetingBadge name={name} />
 
           <div className={styles.stats__container}>
             <div className={styles.stats__scalesWrapper}>

@@ -5,6 +5,7 @@ html[data-theme='light'] {
   --bg-color: #ffffff;
   --header-shadow: rgba(0, 0, 0, 0.15);
   --focus-color: #140e56;
+  --badge-bg: rgba(20, 14, 86, 0.25);
 }
 
 html[data-theme='dark'] {
@@ -14,6 +15,7 @@ html[data-theme='dark'] {
   --nav-color: #292929;
   --header-shadow: rgba(194, 194, 194, 0.1);
   --focus-color: #c20f70;
+  --badge-bg: rgba(194, 15, 112, 0.35);
 }
 
 $color-accent: #851150;

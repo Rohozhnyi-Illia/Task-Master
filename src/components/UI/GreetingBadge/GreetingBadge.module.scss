@@ -1,0 +1,27 @@
+@use '@styles/variables.scss' as v;
+@use '@styles/mixins.scss' as m;
+
+.badge {
+  padding: 1rem;
+  border-radius: v.$radius-xl;
+  text-align: center;
+  background-color: var(--badge-bg);
+  color: var(--text-color);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+  border-radius: v.$radius-xl;
+
+  &__title {
+    @include m.text-style(v.$font-title, v.$font-weight-bold, 1.2);
+    color: var(--text-color);
+    letter-spacing: 0.03rem;
+    margin-bottom: 0.25rem;
+  }
+
+  &__subtitle {
+    margin-top: 0;
+    @include m.text-style(v.$font-size-md, v.$font-weight-medium, 1.5);
+    color: var(--text-color);
+  }
+}
