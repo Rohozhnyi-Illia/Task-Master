@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { clearSuccess } from '@store/UI/toastSlice';
-import { FaCheckCircle } from 'react-icons/fa';
-import { FaCircleXmark } from 'react-icons/fa6';
+import { CircleCheck, CircleXmark } from '@assets/index';
 import styles from './Toast.module.scss';
 
 interface ToastProps {
@@ -29,13 +28,13 @@ const Toast = ({ id, message }: ToastProps) => {
   return (
     <div className={`${styles.toast} ${visible ? styles.show : ''}`}>
       <div>
-        <FaCheckCircle className={styles.toast__icon} />
+        <img src={CircleCheck} className={styles.toast__icon} />
       </div>
 
       <p className={styles.toast__text}>{message}</p>
 
       <button className={styles.toast__xmark} onClick={() => dispatch(clearSuccess(id))}>
-        <FaCircleXmark />
+        <img src={CircleXmark} />
       </button>
     </div>
   );

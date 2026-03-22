@@ -47,6 +47,10 @@ const Container = ({ isDragAndDropOpen, openDropAndDownHandler }: ContainerProps
   const onDragEnd = async (result: DropResult) => {
     if (!result.destination) return;
 
+    if (result.source.index === result.destination.index) {
+      return;
+    }
+
     const newTasks = Array.from(tasks);
     const [movedTask] = newTasks.splice(result.source.index, 1);
     newTasks.splice(result.destination.index, 0, movedTask);

@@ -81,10 +81,12 @@ const Login = () => {
       dispatch(showLoader());
       dispatch(setAuth(savedAuth));
       navigate('/application');
-    } else if (savedAuth?.email) {
+    } else if (savedAuth && savedAuth.email) {
+      const email = savedAuth.email;
+
       setData((prev) => ({
         ...prev,
-        email: savedAuth.email,
+        email,
         keepLogged: true,
       }));
     }
@@ -153,7 +155,7 @@ const Login = () => {
       if (!res.success) {
         if (res.error === 'Email not activated') {
           await AuthService.reVerifyEmail(data.email);
-          setAuthError('Your email is not verified. Please check your inbox.');
+          setAuthError('Your email is not verified. Please check your inbox');
           openModalHandler();
           setIsAccountActivated(false);
           dispatch(updateEmail(data.email));

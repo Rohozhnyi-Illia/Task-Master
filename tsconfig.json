@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["jest", "@testing-library/jest-dom", "node"],
     "baseUrl": "src",
     "paths": {
       "@components/*": ["components/*"],
@@ -24,6 +25,6 @@
     "skipLibCheck": true,
     "noEmit": true
   },
-  "include": ["src/**/*", "declaration.d.ts"],
+  "include": ["src/**/*", "declaration.d.ts", "jest.setup.ts"],
   "exclude": ["node_modules", "build"]
 }

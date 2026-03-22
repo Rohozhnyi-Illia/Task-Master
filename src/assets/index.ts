@@ -20,3 +20,7 @@ export { default as done } from './images/done.svg';
 export { default as errorImg } from './images/error.svg';
 export { default as verify } from './images/verify.svg';
 export { default as notFound } from './images/not_found.webp';
+export { default as EyeOpen } from './images/eye-open.svg';
+export { default as EyeClose } from './images/eye-close.svg';
+export { default as CircleCheck } from './images/circle-check.svg';
+export { default as CircleXmark } from './images/xmark-circle.svg';

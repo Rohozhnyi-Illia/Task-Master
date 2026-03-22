@@ -2,7 +2,7 @@ import React, { ChangeEvent, useState } from 'react';
 import styles from './Input.module.scss';
 import { Link } from 'react-router-dom';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
-import { IoIosEye, IoMdEyeOff } from 'react-icons/io';
+import { EyeClose, EyeOpen } from '@assets/index';
 
 type InputType = 'text' | 'email' | 'password';
 
@@ -70,7 +70,7 @@ const Input = <T extends string>(props: InputProps<T>) => {
             onClick={changePasswordTypeHandler}
             aria-label={showPassword ? 'Hide password' : 'Show password'}
           >
-            {showPassword ? <IoMdEyeOff /> : <IoIosEye />}
+            {showPassword ? <img src={EyeClose} /> : <img src={EyeOpen} />}
           </button>
         )}
       </div>

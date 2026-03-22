@@ -10,7 +10,7 @@ interface ModalBaseProps {
 
 const ModalBase = ({ children, onClose, modifier = '' }: ModalBaseProps) => {
   return ReactDOM.createPortal(
-    <div className={styles.modal} onClick={onClose}>
+    <div className={styles.modal} onClick={onClose} data-testid="error-modal">
       <div
         className={`${styles.modal__content} ${modifier ? styles[modifier] : ''}`}
         onClick={(e) => e.stopPropagation()}

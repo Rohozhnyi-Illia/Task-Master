@@ -26,7 +26,7 @@
     flex-shrink: 0;
     width: 3.5rem;
     height: 3.5rem;
-    background-color: #c4ffc4;
+    background-color: #affaaf;
     border-radius: 50%;
 
     display: flex;
@@ -37,8 +37,8 @@
   }
 
   &__icon {
-    color: white;
-    font-size: 2rem;
+    width: 2.5rem;
+    height: 2.5rem;
     transition: color 0.4s ease;
   }
 
@@ -60,18 +60,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition:
-      transform 0.3s ease,
-      color 0.3s ease;
-
-    svg {
-      font-size: 1.8rem;
-      color: #aaa;
+    transition: transform 0.3s ease;
+    img {
+      height: 2rem;
+      width: 2rem;
       transition: color 0.3s ease;
     }
 
-    &:hover svg {
-      color: #555;
+    &:hover img {
       transform: scale(1.1);
     }
   }

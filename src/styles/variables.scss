@@ -5,7 +5,7 @@ html[data-theme='light'] {
   --bg-color: #ffffff;
   --header-shadow: rgba(0, 0, 0, 0.15);
   --focus-color: #140e56;
-  --badge-bg: rgba(20, 14, 86, 0.25);
+  --badge-bg: linear-gradient(90deg, #d8d5e6 0%, #f1e5f3 100%);
 }
 
 html[data-theme='dark'] {
@@ -15,7 +15,7 @@ html[data-theme='dark'] {
   --nav-color: #292929;
   --header-shadow: rgba(194, 194, 194, 0.1);
   --focus-color: #c20f70;
-  --badge-bg: rgba(194, 15, 112, 0.35);
+  --badge-bg: linear-gradient(90deg, rgba(155, 0, 85, 0.8) 0%, rgba(252, 0, 143, 0.7) 100%);
 }
 
 $color-accent: #851150;

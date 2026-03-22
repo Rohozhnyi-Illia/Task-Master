@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Task, StatusType, CategoryType } from '../types/task';
+import { TaskInterface as Task, StatusType, CategoryType } from '../types/task';
 
 const initialState: Task[] = [];
 

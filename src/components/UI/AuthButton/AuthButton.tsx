@@ -12,7 +12,13 @@ interface AuthButtonProps {
 
 const AuthButton = ({ text, onClick, type = 'submit', disabled }: AuthButtonProps) => {
   return (
-    <button disabled={disabled} className={styles.auth__button} onClick={onClick} type={type}>
+    <button
+      disabled={disabled}
+      className={styles.auth__button}
+      onClick={onClick}
+      type={type}
+      data-testid="auth-button"
+    >
       {text}
     </button>
   );

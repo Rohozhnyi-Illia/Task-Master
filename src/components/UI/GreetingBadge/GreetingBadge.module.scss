@@ -5,10 +5,10 @@
   padding: 1rem;
   border-radius: v.$radius-xl;
   text-align: center;
-  background-color: var(--badge-bg);
+  background: var(--badge-bg);
   color: var(--text-color);
   transition:
-    background-color 0.3s ease,
+    background 0.3s ease,
     color 0.3s ease;
   border-radius: v.$radius-xl;
 
