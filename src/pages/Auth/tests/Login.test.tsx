@@ -95,7 +95,7 @@ describe('Login page', () => {
       });
     });
 
-    const modal = await screen.findByTestId('error-modal');
+    const modal = await screen.findByTestId('modal-base');
     expect(modal).toBeInTheDocument();
     expect(modal).toHaveTextContent(/Incorrect password/i);
   });
@@ -122,7 +122,7 @@ describe('Login page', () => {
       });
     });
 
-    const modal = await screen.findByTestId('error-modal');
+    const modal = await screen.findByTestId('modal-base');
     expect(modal).toBeInTheDocument();
     expect(modal).toHaveTextContent(/Your email is not verified. Please check your inbox/i);
 
@@ -153,7 +153,7 @@ describe('Login page', () => {
       }),
     );
 
-    const modal = await screen.findByTestId('error-modal');
+    const modal = await screen.findByTestId('modal-base');
     expect(modal).toBeInTheDocument();
     expect(modal).toHaveTextContent(/Account already activated/i);
   });
@@ -249,5 +249,45 @@ describe('Login page', () => {
 
     const emailInput = screen.getByLabelText(/E-mail/i, { selector: 'input' });
     expect(emailInput).toHaveValue('demo@taskmaster.app');
+  });
+
+  test('Updates state in redux store after login', async () => {
+    const store = configureStore({
+      reducer: {
+        auth: authReducer,
+        loader: loaderReducer,
+      },
+    });
+
+    render(
+      <Provider store={store}>
+        <MemoryRouter>
+          <Login />
+        </MemoryRouter>
+      </Provider>,
+    );
+
+    (AuthService.login as jest.Mock).mockResolvedValue({
+      success: true,
+      data: {
+        id: '1',
+        email: 'demo@taskmaster.app',
+        name: 'Demo',
+        accessToken: 'token',
+      },
+    });
+
+    const emailInput = screen.getByLabelText(/E-mail/i, { selector: 'input' });
+    await userEvent.clear(emailInput);
+    await userEvent.type(emailInput, 'demo@taskmaster.app');
+    await userEvent.type(screen.getByLabelText(/Password/i, { selector: 'input' }), 'Demo1234$');
+    await userEvent.click(screen.getByRole('button', { name: /log in/i }));
+
+    await waitFor(() => {
+      expect(store.getState().auth.email).toBe('demo@taskmaster.app');
+      expect(store.getState().auth.id).toBe('1');
+      expect(store.getState().auth.name).toBe('Demo');
+      expect(store.getState().auth.accessToken).toBe('token');
+    });
   });
 });
