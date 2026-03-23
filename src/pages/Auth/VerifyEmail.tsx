@@ -87,7 +87,7 @@ const VerifyEmail = () => {
       if (res.success) {
         setSuccessMessage('A new verification code has been sent to your email.');
       } else {
-        setAuthError(res.error || 'Something went wrong');
+        setAuthError(res.error);
       }
     } catch (err: unknown) {
       if (err instanceof yup.ValidationError) {

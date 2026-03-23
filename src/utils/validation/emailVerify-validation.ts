@@ -6,8 +6,8 @@ const emailVerifySchema = yup.object().shape({
   verifyCode: yup
     .string()
     .trim()
-    .required('Verification code is required')
-    .matches(/^[A-Za-z0-9]{6}$/, 'Verification code must be exactly 6 letters or numbers'),
+    .matches(/^[A-Za-z0-9]{6}$/, 'Verification code must be exactly 6 letters or numbers')
+    .required('Verification code is required'),
 });
 
 export type EmailVerifyValues = yup.InferType<typeof emailVerifySchema>;
