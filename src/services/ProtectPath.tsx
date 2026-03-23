@@ -3,18 +3,15 @@ import { useSelector } from 'react-redux';
 import { Navigate, Outlet } from 'react-router-dom';
 import { selectIsAuth } from '@store/authSlice';
 
-interface ProtectPathProps {
-  children: React.ReactNode;
-}
-
-const ProtectPath = ({ children }: ProtectPathProps) => {
+const ProtectPath = () => {
   const isAuth: boolean = useSelector(selectIsAuth);
+  console.log(isAuth);
 
   if (!isAuth) {
     return <Navigate to="/login" replace />;
   }
 
-  return children ? <>{children}</> : <Outlet />;
+  return <Outlet />;
 };
 
 export default ProtectPath;

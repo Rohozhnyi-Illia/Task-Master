@@ -49,16 +49,12 @@ function App() {
           <Route path="/verify-password" element={<VerifyPassword />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
 
-          <Route
-            element={
-              <ProtectPath>
-                <HeaderLayout />
-              </ProtectPath>
-            }
-          >
-            <Route path="/statistics" element={<Statistics />} />
-            <Route path="/application" element={<Application />} />
-            <Route path="/notifications" element={<Notifications />} />
+          <Route element={<ProtectPath />}>
+            <Route element={<HeaderLayout />}>
+              <Route path="/statistics" element={<Statistics />} />
+              <Route path="/application" element={<Application />} />
+              <Route path="/notifications" element={<Notifications />} />
+            </Route>
           </Route>
 
           <Route path="*" element={<NotFound />} />
