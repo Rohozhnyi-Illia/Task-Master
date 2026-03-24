@@ -36,6 +36,7 @@ const VerifyPassword = () => {
   const [isErrorModalOpen, setIsErrorModalOpen] = useState<boolean>(false);
   const [accessAction, setAccessAction] = useState<boolean>(false);
   const isLoaderShown: boolean = useSelector((state: RootState) => state.loader.isLoaderShown);
+  const sessionEmail = sessionStorage.getItem('resetEmail');
 
   const formId = 'verifyPassword';
 
@@ -63,8 +64,7 @@ const VerifyPassword = () => {
   };
 
   useEffect(() => {
-    const emailFromSession = sessionStorage.getItem('resetEmail');
-    if (!emailFromSession) {
+    if (!sessionEmail) {
       navigate('/update-password', { replace: true });
     }
   }, [navigate]);
@@ -83,7 +83,6 @@ const VerifyPassword = () => {
     setErrors({});
     dispatch(showLoader());
 
-    const sessionEmail = sessionStorage.getItem('resetEmail');
     if (!sessionEmail) {
       setAuthError('Email not found, please restart password reset flow');
       setIsErrorModalOpen(true);
