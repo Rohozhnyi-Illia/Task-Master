@@ -68,6 +68,8 @@ describe('Verify email page', () => {
     expect(modal).toBeInTheDocument();
     await userEvent.click(authButton);
     expect(navigate).toHaveBeenCalledWith('/application', { replace: true });
+
+    expect(sessionStorage.getItem('signUpEmail')).toBeNull();
   });
 
   test('Shows validation errors if fields are empty', async () => {
@@ -145,5 +147,15 @@ describe('Verify email page', () => {
     await waitFor(() => {
       expect(navigate).toHaveBeenCalledWith('/login', { replace: true });
     });
+  });
+
+  test('Shows validation error if only verify code is entered', async () => {
+    renderWithStore();
+
+    await userEvent.type(screen.getByLabelText(/Verify Code/i, { selector: 'input' }), '123456');
+
+    await userEvent.click(screen.getByRole('button', { name: /Confirm/i }));
+
+    expect(await screen.findByText(/Email is required/i)).toBeInTheDocument();
   });
 });

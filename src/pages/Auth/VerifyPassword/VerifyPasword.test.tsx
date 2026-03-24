@@ -69,7 +69,9 @@ describe('VerifyPassword page', () => {
 
     const authButton = await within(modal).findByTestId('auth-button');
     await userEvent.click(authButton);
+
     expect(navigate).toHaveBeenCalledWith('/login', { replace: true });
+    expect(sessionStorage.getItem('resetEmail')).toBeNull();
   });
 
   test('Shows validation errors if fields are empty', async () => {
@@ -150,5 +152,17 @@ describe('VerifyPassword page', () => {
     await userEvent.click(authButton);
 
     expect(navigate).toHaveBeenCalledWith('/update-password', { replace: true });
+  });
+
+  test('Shows validation errors if only verify code is entered', async () => {
+    sessionStorage.setItem('resetEmail', 'demo@taskmaster.app');
+    renderWithStore();
+
+    await userEvent.type(screen.getByLabelText(/Verify Code/i, { selector: 'input' }), 'demo12');
+
+    await userEvent.click(screen.getByRole('button', { name: /Update/i }));
+
+    expect(await screen.findByText(/Password is required/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Repeat password is required/i)).toBeInTheDocument();
   });
 });
