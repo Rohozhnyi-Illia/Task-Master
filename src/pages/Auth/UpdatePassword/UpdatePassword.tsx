@@ -1,9 +1,9 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
-import styles from './Auth.module.scss';
+import styles from '../Auth.module.scss';
 import fields from '@utils/fields/updatePasswordFields';
 import { Input, AuthButton, ErrorModal, AccessModal } from '@components/index';
-import { bg } from '../../assets';
+import { bg } from '../../../assets';
 import passwordUpdateSchema from '@utils/validation/passwordUpdate-validation';
 import { useNavigate } from 'react-router-dom';
 import AuthService from '@services/authService';

@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { configureStore } from '@reduxjs/toolkit';
-import ProtectPath from '@services/ProtectPath';
+import ProtectPath from '@services/ProtectedPath/ProtectPath';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Outlet, Route, Routes } from 'react-router-dom';
 

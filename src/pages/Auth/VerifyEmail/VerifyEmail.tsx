@@ -1,5 +1,5 @@
 import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import styles from './Auth.module.scss';
+import styles from '../Auth.module.scss';
 import fields from '@utils/fields/verifyEmailFields';
 import { bg } from '@assets/index';
 import verifyEmailSchema from '@utils/validation/emailVerify-validation';

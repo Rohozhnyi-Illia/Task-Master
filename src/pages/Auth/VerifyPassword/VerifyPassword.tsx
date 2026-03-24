@@ -1,53 +1,73 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import styles from './Auth.module.scss';
-import fields from '@utils/fields/signUpFields';
+import styles from '../Auth.module.scss';
 import { bg } from '@assets/index';
-import signUpSchema from '@utils/validation/signUp-validation';
-import { ErrorModal, AccessModal, Input, AuthButton } from '@components/index';
-import AuthService from '@services/authService';
+import fields from '@utils/fields/verifyPasswordFields';
+import passwordVerifySchema from '@utils/validation/passwordVerify-validation';
+import { Input, AuthButton, ErrorModal, AccessModal } from '@components/index';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateEmail } from '@store/authSlice';
+import AuthService from '@services/authService';
 import { showLoader, closeLoader } from '@store/UI/loaderSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@store/store';
-import { SignUpValues } from '@utils/validation/signUp-validation';
+import { PasswordVerifyValues } from '@utils/validation/passwordVerify-validation';
 import * as yup from 'yup';
 
 type FormErrors = {
-  name?: string;
-  email?: string;
-  password?: string;
+  newPassword?: string;
+  repeatPassword?: string;
+  verifyCode?: string;
 };
 
 interface DataInterface {
-  name: string;
-  email: string;
-  password: string;
+  newPassword: string;
+  repeatPassword: string;
+  verifyCode: string;
 }
 
-const SignUp = () => {
-  const [data, setData] = useState<DataInterface>({ name: '', email: '', password: '' });
+const VerifyPassword = () => {
+  const [data, setData] = useState<DataInterface>({
+    newPassword: '',
+    repeatPassword: '',
+    verifyCode: '',
+  });
   const [errors, setErrors] = useState<FormErrors>({});
   const [authError, setAuthError] = useState<string>('');
   const [isErrorModalOpen, setIsErrorModalOpen] = useState<boolean>(false);
   const [accessAction, setAccessAction] = useState<boolean>(false);
   const isLoaderShown: boolean = useSelector((state: RootState) => state.loader.isLoaderShown);
 
-  const formId = 'signUp';
+  const formId = 'verifyPassword';
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const openModalHandler = () => {
     setIsErrorModalOpen(!isErrorModalOpen);
+    return;
+  };
+
+  const handleModalClick = () => {
+    if (authError === 'Email not found, please restart password reset flow') {
+      navigate('/update-password', { replace: true });
+    } else {
+      setIsErrorModalOpen(false);
+    }
   };
 
   const navigateHandler = () => {
-    navigate('/verify-email', { replace: true });
     setAccessAction(false);
+    sessionStorage.removeItem('resetEmail');
+    navigate('/login', { replace: true });
     return;
   };
+
+  useEffect(() => {
+    const emailFromSession = sessionStorage.getItem('resetEmail');
+    if (!emailFromSession) {
+      navigate('/update-password', { replace: true });
+    }
+  }, [navigate]);
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -59,29 +79,37 @@ const SignUp = () => {
 
   const onSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setErrors({});
     setAuthError('');
+    setErrors({});
     dispatch(showLoader());
 
+    const sessionEmail = sessionStorage.getItem('resetEmail');
+    if (!sessionEmail) {
+      setAuthError('Email not found, please restart password reset flow');
+      setIsErrorModalOpen(true);
+      dispatch(closeLoader());
+      return;
+    }
+
     try {
-      const validatedData: SignUpValues = await signUpSchema.validate(data, {
+      const validatedData: PasswordVerifyValues = await passwordVerifySchema.validate(data, {
         abortEarly: false,
       });
 
-      const res = await AuthService.register({
-        email: validatedData.email,
-        password: validatedData.password,
-        name: validatedData.name,
+      const res = await AuthService.verifyPassword({
+        email: sessionEmail,
+        newPassword: validatedData.newPassword,
+        repeatPassword: validatedData.repeatPassword,
+        verifyCode: validatedData.verifyCode,
       });
 
       if (!res.success) {
         setAuthError(res.error);
         openModalHandler();
+        setAccessAction(false);
         return;
       }
 
-      sessionStorage.setItem('signUpEmail', res.data.email);
-      dispatch(updateEmail(res.data.email));
       setAccessAction(true);
     } catch (err: unknown) {
       if (err instanceof yup.ValidationError) {
@@ -94,7 +122,7 @@ const SignUp = () => {
         setErrors(newErrors);
       } else if (err instanceof Error) {
         setAuthError(err.message);
-        openModalHandler();
+        setIsErrorModalOpen(true);
       }
     } finally {
       dispatch(closeLoader());
@@ -106,14 +134,16 @@ const SignUp = () => {
       <div className={styles.auth__container}>
         <div className={styles.auth__container_wrapper}>
           <div className={styles.auth__header}>
-            <h2 className={styles.auth__headerTitle}>Sign Up</h2>
-            <p className={styles.auth__headerSubtitle}>Let’s get started</p>
+            <h2 className={styles.auth__headerTitle}>Verify Password</h2>
+            <p className={styles.auth__headerSubtitle}>
+              Enter the 6-digit code we sent to your email
+            </p>
           </div>
 
           <form className={styles.auth__form} onSubmit={onSubmitHandler}>
             {fields.map((field) => (
               <Input
-                key={field.name}
+                key={field.label}
                 formId={formId}
                 label={field.label}
                 placeholder={field.placeholder}
@@ -129,25 +159,21 @@ const SignUp = () => {
 
             <div className={styles.auth__footer}>
               <p className={styles.auth__signupLink}>
-                Already have an account? <Link to={'/login'}>Log In</Link>
+                Remembered your password? <Link to={'/login'}>Log In</Link>
               </p>
             </div>
 
-            <AuthButton text="Sign Up" disabled={isLoaderShown} type="submit" />
+            <AuthButton text="Update" disabled={isLoaderShown} type="submit" />
           </form>
         </div>
       </div>
 
-      {isErrorModalOpen && authError && <ErrorModal error={authError} onClick={openModalHandler} />}
-
+      {isErrorModalOpen && <ErrorModal error={authError} onClick={handleModalClick} />}
       {accessAction && (
-        <AccessModal
-          text={'An email activation code has been sent to your email address.'}
-          onClick={navigateHandler}
-        />
+        <AccessModal onClick={navigateHandler} text="Password successfully changed" />
       )}
     </div>
   );
 };
 
-export default SignUp;
+export default VerifyPassword;

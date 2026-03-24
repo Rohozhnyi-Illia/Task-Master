@@ -1,6 +1,6 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import styles from './Auth.module.scss';
+import styles from '../Auth.module.scss';
 import fields from '@utils/fields/loginFields';
 import { bg } from '@assets/index';
 import loginSchema, { LoginFormValues } from '@utils/validation/login-validation';
@@ -10,9 +10,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setAuth, updateEmail } from '@store/authSlice';
 import AuthService from '@services/authService';
 import { showLoader, closeLoader } from '@store/UI/loaderSlice';
-import useTheme from '../../hooks/useTheme';
+import useTheme from '../../../hooks/useTheme';
 import { RootState } from '@store/store';
-import { AuthState } from '../../types/auth';
+import { AuthState } from '../../../types/auth';
 import { EmailValue } from '@utils/validation/email-validation';
 import * as yup from 'yup';
 

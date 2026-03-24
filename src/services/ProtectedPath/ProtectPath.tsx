@@ -5,7 +5,6 @@ import { selectIsAuth } from '@store/authSlice';
 
 const ProtectPath = () => {
   const isAuth: boolean = useSelector(selectIsAuth);
-  console.log(isAuth);
 
   if (!isAuth) {
     return <Navigate to="/login" replace />;

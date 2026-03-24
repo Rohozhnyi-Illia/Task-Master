@@ -1,17 +1,17 @@
 import React, { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import ProtectPath from './services/ProtectPath';
+import ProtectPath from './services/ProtectedPath/ProtectPath';
 import { GlobalLoader, GlobalErrorModal, ToastsContainer, SuspenseLoader } from './components';
 import useTheme from './hooks/useTheme';
 
-const Login = lazy(() => import('./pages/Auth/Login'));
-const UpdatePassword = lazy(() => import('./pages/Auth/UpdatePassword'));
-const SignUp = lazy(() => import('./pages/Auth/SignUp'));
+const Login = lazy(() => import('./pages/Auth/Login/Login'));
+const UpdatePassword = lazy(() => import('./pages/Auth/UpdatePassword/UpdatePassword'));
+const SignUp = lazy(() => import('./pages/Auth/SignUp/SignUp'));
 const Statistics = lazy(() => import('./pages/Statistics/StatsPage'));
 const HeaderLayout = lazy(() => import('./layout/HeaderLayout'));
 const Application = lazy(() => import('./pages/Application/Application'));
-const VerifyPassword = lazy(() => import('./pages/Auth/VerifyPassword'));
-const VerifyEmail = lazy(() => import('./pages/Auth/VerifyEmail'));
+const VerifyPassword = lazy(() => import('./pages/Auth/VerifyPassword/VerifyPassword'));
+const VerifyEmail = lazy(() => import('./pages/Auth/VerifyEmail/VerifyEmail'));
 const Notifications = lazy(() => import('./pages/Notifications/NotificationsPage'));
 const NotFound = lazy(() => import('./pages/NotFound/NotFound'));
 
