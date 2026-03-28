@@ -24,3 +24,5 @@ export { default as EyeOpen } from './images/eye-open.svg';
 export { default as EyeClose } from './images/eye-close.svg';
 export { default as CircleCheck } from './images/circle-check.svg';
 export { default as CircleXmark } from './images/xmark-circle.svg';
+export { default as DragAndDrop } from './images/drag-horizontal-light.svg';
+export { default as AngleDown } from './images/angle-down.svg';

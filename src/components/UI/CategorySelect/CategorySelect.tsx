@@ -65,19 +65,25 @@ const CategorySelect = <T extends string>({
   };
 
   return (
-    <div className={styles.select} id={id} onKeyDown={keyDownHandler}>
+    <div
+      className={styles.select}
+      id={id}
+      onKeyDown={keyDownHandler}
+      data-testid="category-select-component"
+    >
       <div
         className={`${styles.select__trigger} ${isOpen ? styles.open : ''}`}
         onClick={toggleOpen}
         tabIndex={0}
         ref={selectRef}
+        data-testid="category-select-trigger"
       >
         <span>{selected || label}</span>
         <div className={styles.select__arrow}></div>
       </div>
 
       {isOpen && (
-        <ul className={styles.select__options}>
+        <ul className={styles.select__options} data-testid="category-options">
           {options.map((opt, index) => (
             <li
               key={opt}

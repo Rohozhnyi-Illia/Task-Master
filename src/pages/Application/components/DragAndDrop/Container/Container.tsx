@@ -80,7 +80,12 @@ const Container = ({ isDragAndDropOpen, openDropAndDownHandler }: ContainerProps
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="tasks">
           {(provided) => (
-            <div className={styles.taskList} ref={provided.innerRef} {...provided.droppableProps}>
+            <div
+              className={styles.taskList}
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              data-testid="drag-and-drop-container"
+            >
               {tasks.map((task, index) => (
                 <Draggable key={task._id} draggableId={task._id} index={index}>
                   {(provided, snapshot) => (

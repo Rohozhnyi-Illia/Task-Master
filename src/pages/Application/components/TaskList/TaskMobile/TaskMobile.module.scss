@@ -131,9 +131,10 @@
     @include m.text-style(1.4rem, v.$font-weight-medium, 1.4);
     color: #333;
 
-    svg {
+    img {
       transition: transform 0.2s ease;
-      font-size: 14px;
+      width: 2.4rem;
+      height: 2.4rem;
       opacity: 0.6;
     }
 
@@ -157,7 +158,7 @@
     justify-content: center;
     cursor: pointer;
 
-    svg {
+    img {
       width: 1.9rem;
       height: 1.9rem;
       opacity: 0.6;

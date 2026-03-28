@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import styles from './Application.module.scss';
-import { search } from '@assets/index';
+import { search, DragAndDrop } from '@assets/index';
 import { CategorySelect } from '@components/index';
 import AddButton from './components/AddButton/AddButton';
 import TaskList from './components/TaskList/TaskList/TaskList';
@@ -11,7 +11,6 @@ import { getTasks } from '@store/tasksSlice';
 import { showError } from '@store/UI/errorSlice';
 import { showLoader, closeLoader } from '@store/UI/loaderSlice';
 import { setFirstAppLoadDone } from '@store/appSlice';
-import { RxDragHandleHorizontal } from 'react-icons/rx';
 import DragAndDropContainer from './components/DragAndDrop/Container/Container';
 import { FILTER_OPTIONS, FilterOption } from '@utils/fields/filterOptions';
 import { RootState } from '@store/store';
@@ -74,7 +73,7 @@ const Application = () => {
             <h3 className={styles.application__title}>Task List</h3>
 
             {tasks.length > 0 && (
-              <div className={styles.application__search}>
+              <div className={styles.application__search} data-testid="keyword-input">
                 <input
                   type="text"
                   className={styles.application__search_input}
@@ -87,7 +86,7 @@ const Application = () => {
             )}
 
             {tasks.length > 0 && (
-              <div className={styles.application__categories}>
+              <div className={styles.application__categories} data-testid="category-select">
                 <CategorySelect<FilterOption>
                   label="Select a category"
                   options={FILTER_OPTIONS}
@@ -101,13 +100,18 @@ const Application = () => {
               className={styles.application__newTaskBtn}
               onClick={openModalHandler}
               type="button"
+              data-testid="add-button"
             />
           </header>
 
           {tasks.length > 1 && (
             <div className={styles.drag}>
-              <button className={styles.drag__button} onClick={openDropAndDownHandler}>
-                <RxDragHandleHorizontal />
+              <button
+                className={styles.drag__button}
+                onClick={openDropAndDownHandler}
+                data-testid="drag-and-drop-button"
+              >
+                <img src={DragAndDrop} alt="" />
               </button>
 
               <p className={styles.drag__text}>Change the order</p>

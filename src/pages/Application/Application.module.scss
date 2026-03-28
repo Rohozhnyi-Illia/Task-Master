@@ -153,9 +153,8 @@
       justify-content: center;
       cursor: pointer;
 
-      svg {
-        color: var(--text-color);
-        font-size: 3rem;
+      img {
+        width: 3rem;
       }
 
       &:hover + .drag__text {

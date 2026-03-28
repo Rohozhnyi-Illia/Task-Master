@@ -6,7 +6,7 @@ import TaskService from '@services/taskService';
 import { deleteTasks, updateStatus, restoreTask, updateCategory } from '@store/tasksSlice';
 import { showError } from '@store/UI/errorSlice';
 import { showSuccess } from '@store/UI/toastSlice';
-import { FaAngleDown } from 'react-icons/fa6';
+import { AngleDown } from '@assets/index';
 import DropdownPortal from '../DropdownPortal/DropdownPortal';
 import { createPortal } from 'react-dom';
 import {
@@ -164,7 +164,7 @@ const Task = ({ task }: TaskProps) => {
   }, [isDeleteMenuOpen]);
 
   return (
-    <tr className={`${styles.task} ${getStatusClass(task.status)}`}>
+    <tr className={`${styles.task} ${getStatusClass(task.status)}`} data-testid="task-row">
       <td>
         <input type="checkbox" checked={isCompleted} onChange={completeHandler} />
       </td>
@@ -180,7 +180,11 @@ const Task = ({ task }: TaskProps) => {
           onClick={toggleStatusDropdownHandler}
         >
           {task.status}
-          <FaAngleDown style={{ rotate: isStatusDropdownOpen ? '180deg' : '0deg' }} />
+          <img
+            src={AngleDown}
+            alt=""
+            style={{ rotate: isStatusDropdownOpen ? '180deg' : '0deg' }}
+          />
         </div>
 
         <DropdownPortal
@@ -199,7 +203,11 @@ const Task = ({ task }: TaskProps) => {
           onClick={toggleCategoryDropdownHandler}
         >
           {task.category}
-          <FaAngleDown style={{ rotate: isCategoryDropdownOpen ? '180deg' : '0deg' }} />
+          <img
+            src={AngleDown}
+            alt=""
+            style={{ rotate: isCategoryDropdownOpen ? '180deg' : '0deg' }}
+          />
         </div>
 
         <DropdownPortal

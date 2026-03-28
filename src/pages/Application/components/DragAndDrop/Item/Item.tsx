@@ -1,5 +1,4 @@
 import React from 'react';
-import { RxDragHandleHorizontal } from 'react-icons/rx';
 import styles from './Item.module.scss';
 
 interface ItemProps {
@@ -8,11 +7,8 @@ interface ItemProps {
 
 const Item = ({ task }: ItemProps) => {
   return (
-    <div className={styles.item}>
+    <div className={styles.item} data-testid="drag-and-drop-item">
       <p className={styles.item__text}>{task}</p>
-      <button className={styles.item__button}>
-        <RxDragHandleHorizontal />
-      </button>
     </div>
   );
 };

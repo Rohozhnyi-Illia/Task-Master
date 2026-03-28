@@ -6,8 +6,7 @@ import TaskService from '@services/taskService';
 import { deleteTasks, updateStatus, restoreTask } from '@store/tasksSlice';
 import { showError } from '@store/UI/errorSlice';
 import { showSuccess } from '@store/UI/toastSlice';
-import { FaAngleDown } from 'react-icons/fa6';
-import { FaTrash } from 'react-icons/fa';
+import { AngleDown, trash } from '@assets/index';
 import { updateCategory } from '@store/tasksSlice';
 import {
   STATUS_OPTIONS,
@@ -126,7 +125,10 @@ const TaskMobile = ({ task }: TaskProps) => {
   };
 
   return (
-    <div className={`${styles.taskMobile} ${getStatusClass(task.status)}`}>
+    <div
+      className={`${styles.taskMobile} ${getStatusClass(task.status)}`}
+      data-testid="task-mobile"
+    >
       <div className={styles.taskMobile__header}>
         <div
           ref={categoryRef}
@@ -138,7 +140,11 @@ const TaskMobile = ({ task }: TaskProps) => {
         >
           <div className={styles.taskMobile__trigger}>
             <div className={styles.taskMobile__category}>{task.category}</div>
-            <FaAngleDown />
+            <img
+              src={AngleDown}
+              alt=""
+              style={{ rotate: isCategoryDropdownOpen ? '180deg' : '0deg' }}
+            />
           </div>
 
           {isCategoryDropdownOpen && (
@@ -178,7 +184,11 @@ const TaskMobile = ({ task }: TaskProps) => {
         >
           <div className={styles.taskMobile__trigger}>
             <p>{task.status}</p>
-            <FaAngleDown />
+            <img
+              src={AngleDown}
+              alt=""
+              style={{ rotate: isStatusDropdownOpen ? '180deg' : '0deg' }}
+            />
           </div>
 
           {isStatusDropdownOpen && (
@@ -197,7 +207,7 @@ const TaskMobile = ({ task }: TaskProps) => {
             className={styles.taskMobile__deleteButton}
             onClick={() => setIsDeleteMenuOpen((prev) => !prev)}
           >
-            <FaTrash />
+            <img src={trash} alt="" />
           </button>
 
           <div

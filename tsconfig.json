@@ -25,6 +25,6 @@
     "skipLibCheck": true,
     "noEmit": true
   },
-  "include": ["src/**/*", "declaration.d.ts", "jest.setup.ts"],
+  "include": ["src/**/*", "declaration.d.ts", "jest.setup.tsx"],
   "exclude": ["node_modules", "build"]
 }

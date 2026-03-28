@@ -43,10 +43,10 @@ const TaskList = ({ keyword, selected }: TaskListProps) => {
   const pageNumbers: number[] = [currentPage, currentPage + 1].filter((page) => page <= totalPages);
 
   return (
-    <div className={styles.taskList}>
+    <div className={styles.taskList} data-testid="task-list">
       <div className={styles.taskList__content}>
         {filteredTasks.length > 0 && (
-          <div className={styles.taskList__tableWrapper}>
+          <div className={styles.taskList__tableWrapper} data-testid="task-list-table">
             <table className={styles.taskList__table}>
               <colgroup>
                 <col style={{ width: '100px' }} />
@@ -84,9 +84,9 @@ const TaskList = ({ keyword, selected }: TaskListProps) => {
         )}
 
         {filteredTasks.length > 0 && (
-          <div className={styles.taskList__cardWrapper}>
+          <div className={styles.taskList__cardWrapper} data-testid="task-list-card-wrapper">
             {currentTasks.map((task) => (
-              <TaskMobile key={task._id} task={task} />
+              <TaskMobile key={task._id} task={task} data-testid="task-mobile" />
             ))}
           </div>
         )}

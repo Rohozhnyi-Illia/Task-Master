@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import styles from './AddModal.module.scss';
 import { CategorySelect, ErrorMessage } from '@components/index';
 import AddButton from '../AddButton/AddButton';
-import { FaCircleXmark } from 'react-icons/fa6';
+import { CircleXmark } from '@assets/index';
 import addTaskSchema from '@utils/validation/addTask-validation';
 import TaskService from '@services/taskService';
 import { createTask } from '@store/tasksSlice';
@@ -191,11 +191,12 @@ const AddModal = ({ openModalHandler, isAddModalOpen }: AddModalProps) => {
         }
       }}
       ref={modalRef}
+      data-testid="add-modal"
     >
       <fieldset disabled={isLoaderShown}>
         <form className={styles.addModal__content} onSubmit={onSubmitHandler}>
           <button className={styles.addModal__button} onClick={openModalHandler} type="button">
-            <FaCircleXmark />
+            <img src={CircleXmark} alt="" />
           </button>
 
           <div>

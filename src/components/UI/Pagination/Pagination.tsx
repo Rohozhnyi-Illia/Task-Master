@@ -27,7 +27,7 @@ const Pagination = (props: PaginationProps) => {
   };
 
   return (
-    <div className={styles.pagination} tabIndex={0}>
+    <div className={styles.pagination} tabIndex={0} data-testid="pagination">
       <div className={styles.pagination__back}>
         <button onClick={backHandler} disabled={currentPage === 1}>
           <img src={back} alt="back" />

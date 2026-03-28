@@ -8,7 +8,7 @@ interface NoDataProps {
 
 const NoData = ({ text }: NoDataProps) => {
   return (
-    <div className={styles.empty}>
+    <div className={styles.empty} data-testid="empty-block">
       <img src={noData} alt="no data" />
       <h2>{text}</h2>
     </div>
