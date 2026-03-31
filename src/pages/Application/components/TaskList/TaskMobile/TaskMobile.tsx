@@ -148,7 +148,10 @@ const TaskMobile = ({ task }: TaskProps) => {
           </div>
 
           {isCategoryDropdownOpen && (
-            <ul className={styles.taskMobile__categoryList}>
+            <ul
+              className={styles.taskMobile__categoryList}
+              data-testid="task-mobile-category-dropdown"
+            >
               {CATEGORIES_OPTIONS.map((category) => (
                 <li key={category} onClick={() => changeCategoryHandler(category)}>
                   {category}
@@ -192,7 +195,7 @@ const TaskMobile = ({ task }: TaskProps) => {
           </div>
 
           {isStatusDropdownOpen && (
-            <ul className={styles.taskMobile__statusList}>
+            <ul className={styles.taskMobile__statusList} data-testid="task-mobile-status-dropdown">
               {STATUS_OPTIONS.map((status) => (
                 <li key={status} onClick={() => changeStatusHandler(status)}>
                   {status}
@@ -206,6 +209,7 @@ const TaskMobile = ({ task }: TaskProps) => {
           <button
             className={styles.taskMobile__deleteButton}
             onClick={() => setIsDeleteMenuOpen((prev) => !prev)}
+            data-testid="task-mobile-delete-button"
           >
             <img src={trash} alt="" />
           </button>
@@ -214,6 +218,7 @@ const TaskMobile = ({ task }: TaskProps) => {
             className={`${styles.taskMobile__deleteMenu} ${
               isDeleteMenuOpen ? styles.taskMobile__deleteMenu_open : ''
             }`}
+            data-testid="task-mobile-delete-menu"
           >
             <p>Delete task?</p>
             <div>

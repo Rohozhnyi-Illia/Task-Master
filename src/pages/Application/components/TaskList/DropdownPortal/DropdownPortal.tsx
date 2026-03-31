@@ -72,6 +72,7 @@ const DropdownPortal = <T extends string>({
       ref={dropdownRef}
       tabIndex={0}
       className={styles.dropdown}
+      role="listbox"
       style={{
         top: pos.top,
         left: pos.left,

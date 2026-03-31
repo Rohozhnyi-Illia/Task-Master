@@ -230,7 +230,11 @@ const Task = ({ task }: TaskProps) => {
 
       <td>
         <div ref={deleteWrapperRef} className={styles.task__deleteWrapper}>
-          <button className={styles.deleteBtn} onClick={() => setIsDeleteMenuOpen((prev) => !prev)}>
+          <button
+            className={styles.deleteBtn}
+            onClick={() => setIsDeleteMenuOpen((prev) => !prev)}
+            data-testid="task-delete-button"
+          >
             <img src={trash} alt="delete" />
           </button>
 
@@ -240,6 +244,7 @@ const Task = ({ task }: TaskProps) => {
                 ref={deleteDropdownRef}
                 className={styles.task__deleteMenu}
                 style={{ top: position.top, left: position.left }}
+                data-testid="task-delete-menu"
               >
                 <p>Are you sure you want to delete?</p>
                 <div>
