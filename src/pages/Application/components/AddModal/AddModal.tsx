@@ -196,7 +196,7 @@ const AddModal = ({ openModalHandler, isAddModalOpen }: AddModalProps) => {
       <fieldset disabled={isLoaderShown}>
         <form className={styles.addModal__content} onSubmit={onSubmitHandler}>
           <button className={styles.addModal__button} onClick={openModalHandler} type="button">
-            <img src={CircleXmark} alt="" />
+            <img src={CircleXmark} alt="close modal window" />
           </button>
 
           <div>
