@@ -184,14 +184,16 @@ describe('TaskMobile unit tests', () => {
     const deleteButton = within(taskMobile).getByTestId('task-mobile-delete-button');
 
     await userEvent.click(deleteButton);
+
     const deleteMenu = await screen.findByTestId('task-mobile-delete-menu');
-    expect(deleteMenu).toBeInTheDocument();
 
     const noButton = within(deleteMenu).getByRole('button', { name: /No/i });
     await userEvent.click(noButton);
 
     await waitFor(() => {
-      expect(screen.queryByTestId('task-mobile-delete-menu')).not.toBeInTheDocument();
+      expect(screen.getByTestId('task-mobile-delete-menu')).not.toHaveClass(
+        'taskMobile__deleteMenu_open',
+      );
     });
   });
 });

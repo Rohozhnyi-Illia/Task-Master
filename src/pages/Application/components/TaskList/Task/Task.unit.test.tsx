@@ -183,4 +183,20 @@ describe('Task unit tests', () => {
       );
     });
   });
+
+  test('delete menu opens and closes', async () => {
+    renderTask();
+    const task = await screen.findByTestId('task-row');
+    const deleteButton = within(task).getByTestId('task-delete-button');
+
+    await userEvent.click(deleteButton);
+
+    const deleteMenu = await screen.findByTestId('task-delete-menu');
+    const noButton = within(deleteMenu).getByRole('button', { name: /No/i });
+    await userEvent.click(noButton);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('task-delete-menu')).not.toBeInTheDocument();
+    });
+  });
 });

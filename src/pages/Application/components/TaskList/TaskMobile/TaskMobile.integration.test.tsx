@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import { mockTasks } from '../../../../../../__mocks__/tasks';
-import TaskList from './TaskList';
+import TaskList from '../TaskList/TaskList';
 import { FilterOption } from '@utils/fields/filterOptions';
 import { TaskInterface } from '../../../../../types/task';
 import { GlobalErrorModal } from '@components/index';
@@ -32,7 +32,7 @@ const renderTaskList = (tasks: TaskInterface[], keyword: string, selected: Filte
   );
 };
 
-describe('Task integration tests', () => {
+describe('TaskMobile integration tests', () => {
   test('completion of the task', async () => {
     (TaskService.updateStatus as jest.Mock).mockResolvedValue({
       success: true,
@@ -55,7 +55,7 @@ describe('Task integration tests', () => {
     renderTaskList(mockTasks, '', 'All');
 
     const taskList = await screen.findByTestId('task-list');
-    const tasks = await within(taskList).findAllByTestId('task-row');
+    const tasks = await within(taskList).findAllByTestId('task-mobile');
     const firstTask = tasks[0];
     const checkbox = within(firstTask).getByRole('checkbox');
 
@@ -94,13 +94,13 @@ describe('Task integration tests', () => {
     renderTaskList(mockTasks, '', 'All');
 
     const taskList = await screen.findByTestId('task-list');
-    const tasks = await within(taskList).findAllByTestId('task-row');
+    const tasks = await within(taskList).findAllByTestId('task-mobile');
     const firstTask = tasks[0];
     const statusTrigger = within(firstTask).getByText(/Active/i);
 
     await userEvent.click(statusTrigger);
 
-    const dropdown = await screen.findByRole('listbox');
+    const dropdown = within(firstTask).getByTestId('task-mobile-status-dropdown');
     const option = within(dropdown).getByText('InProgress');
 
     await userEvent.click(option);
@@ -133,13 +133,13 @@ describe('Task integration tests', () => {
     renderTaskList(mockTasks, '', 'All');
 
     const taskList = await screen.findByTestId('task-list');
-    const tasks = await within(taskList).findAllByTestId('task-row');
+    const tasks = await within(taskList).findAllByTestId('task-mobile');
     const firstTask = tasks[0];
     const categoryTrigger = within(firstTask).getByText(/High/i);
 
     await userEvent.click(categoryTrigger);
 
-    const dropdown = await screen.findByRole('listbox');
+    const dropdown = within(firstTask).getByTestId('task-mobile-category-dropdown');
     const option = within(dropdown).getByText('Low');
 
     await userEvent.click(option);
@@ -159,7 +159,7 @@ describe('Task integration tests', () => {
     renderTaskList(mockTasks, '', 'All');
 
     const taskList = await screen.findByTestId('task-list');
-    const tasks = await within(taskList).findAllByTestId('task-row');
+    const tasks = await within(taskList).findAllByTestId('task-mobile');
     const firstTask = tasks[0];
     const checkbox = within(firstTask).getByRole('checkbox');
 
@@ -192,13 +192,13 @@ describe('Task integration tests', () => {
     renderTaskList(mockTasks, '', 'All');
 
     const taskList = await screen.findByTestId('task-list');
-    let tasks = await within(taskList).findAllByTestId('task-row');
+    let tasks = await within(taskList).findAllByTestId('task-mobile');
     const firstTask = tasks[0];
 
-    const deleteButton = await within(firstTask).findByTestId('task-delete-button');
+    const deleteButton = await within(firstTask).findByTestId('task-mobile-delete-button');
     await userEvent.click(deleteButton);
 
-    const deleteMenu = await screen.findByTestId('task-delete-menu');
+    const deleteMenu = within(firstTask).getByTestId('task-mobile-delete-menu');
     const confirmButton = within(deleteMenu).getByRole('button', { name: /Yes/i });
 
     await userEvent.click(confirmButton);
@@ -207,7 +207,7 @@ describe('Task integration tests', () => {
       expect(TaskService.deleteTasks).toHaveBeenCalledWith('task-1');
     });
 
-    tasks = await within(taskList).findAllByTestId('task-row');
+    tasks = await within(taskList).findAllByTestId('task-mobile');
     expect(tasks).toHaveLength(2);
   });
 });
