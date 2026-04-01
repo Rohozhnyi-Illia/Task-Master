@@ -111,6 +111,25 @@ describe('TaskMobile integration tests', () => {
     });
   });
 
+  test('Change the status to current', async () => {
+    renderTaskList(mockTasks, '', 'All');
+
+    const taskList = await screen.findByTestId('task-list');
+    const tasks = await within(taskList).findAllByTestId('task-mobile');
+    const firstTask = tasks[0];
+    const statusTrigger = within(firstTask).getByText(/Active/i);
+
+    await userEvent.click(statusTrigger);
+
+    const dropdown = within(firstTask).getByTestId('task-mobile-status-dropdown');
+    const option = within(dropdown).getByText('Active');
+    await userEvent.click(option);
+
+    const modal = await screen.findByTestId('modal-base');
+    expect(modal).toBeInTheDocument();
+    expect(modal).toHaveTextContent(/This status is already active/i);
+  });
+
   test('Update Category', async () => {
     (TaskService.updateCategory as jest.Mock).mockResolvedValue({
       success: true,
@@ -148,6 +167,26 @@ describe('TaskMobile integration tests', () => {
       expect(TaskService.updateCategory).toHaveBeenCalledWith('task-1', 'Low');
       expect(firstTask).toHaveTextContent(/Low/i);
     });
+  });
+
+  test('Change the category to the current one', async () => {
+    renderTaskList(mockTasks, '', 'All');
+
+    const taskList = await screen.findByTestId('task-list');
+    const tasks = await within(taskList).findAllByTestId('task-mobile');
+    const firstTask = tasks[0];
+    const categoryTrigger = within(firstTask).getByText(/High/i);
+
+    await userEvent.click(categoryTrigger);
+
+    const dropdown = within(firstTask).getByTestId('task-mobile-category-dropdown');
+    const option = within(dropdown).getByText('High');
+
+    await userEvent.click(option);
+
+    const modal = await screen.findByTestId('modal-base');
+    expect(modal).toBeInTheDocument();
+    expect(modal).toHaveTextContent(/This category is already active/i);
   });
 
   test('Shows error modal if error', async () => {

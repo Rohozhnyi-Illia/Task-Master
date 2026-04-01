@@ -59,7 +59,7 @@ const TaskMobile = ({ task }: TaskProps) => {
   };
 
   const changeStatusHandler = async (status: StatusType) => {
-    if (status === task.status) return dispatch(showError('Status is already active'));
+    if (status === task.status) return dispatch(showError('This status is already active'));
     if (status === 'Done') {
       await completeHandler();
       setIsStatusDropdownOpen(false);
