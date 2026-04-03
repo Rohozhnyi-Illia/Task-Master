@@ -1,4 +1,4 @@
-import { render, screen, waitFor, within } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import Application from '../../Application';
 import { configureStore } from '@reduxjs/toolkit';
 import taskReducer from '@store/tasksSlice';
@@ -53,6 +53,56 @@ describe('Add Modal integration tests', () => {
     });
   });
 
+  test('Closes modal on Escape', async () => {
+    renderWithStore();
+
+    const addButton = await screen.findByTestId('add-button');
+    await userEvent.click(addButton);
+
+    const addModal = await screen.findByTestId('add-modal');
+    expect(addModal).toBeInTheDocument();
+
+    fireEvent.keyDown(document, { key: 'Escape' });
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('add-modal')).not.toBeInTheDocument();
+    });
+  });
+
+  test('Closes modal when clicking on overlay', async () => {
+    renderWithStore();
+
+    const addButton = await screen.findByTestId('add-button');
+    await userEvent.click(addButton);
+
+    const addModal = await screen.findByTestId('add-modal');
+    expect(addModal).toBeInTheDocument();
+
+    await userEvent.click(addModal);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('add-modal')).not.toBeInTheDocument();
+    });
+  });
+
+  test('Does NOT close modal when clicking inside content', async () => {
+    renderWithStore();
+
+    const addButton = await screen.findByTestId('add-button');
+    await userEvent.click(addButton);
+
+    const addModal = await screen.findByTestId('add-modal');
+    expect(addModal).toBeInTheDocument();
+
+    const textarea = within(addModal).getByPlaceholderText('Write text...');
+
+    await userEvent.click(textarea);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('add-modal')).toBeInTheDocument();
+    });
+  });
+
   test('Task created successfully', async () => {
     renderWithStore();
 
@@ -78,7 +128,7 @@ describe('Add Modal integration tests', () => {
     await userEvent.click(addButton);
     const addModal = await screen.findByTestId('add-modal');
 
-    const textarea = screen.getByPlaceholderText('Write text...');
+    const textarea = within(addModal).getByPlaceholderText('Write text...');
     await userEvent.type(textarea, 'Task 4');
     expect(textarea).toHaveValue('Task 4');
 

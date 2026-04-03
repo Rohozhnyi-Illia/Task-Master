@@ -100,7 +100,7 @@ describe('TaskMobile integration tests', () => {
 
     await userEvent.click(statusTrigger);
 
-    const dropdown = within(firstTask).getByTestId('task-mobile-status-dropdown');
+    const dropdown = await screen.findByRole('listbox');
     const option = within(dropdown).getByText('InProgress');
 
     await userEvent.click(option);
@@ -121,7 +121,7 @@ describe('TaskMobile integration tests', () => {
 
     await userEvent.click(statusTrigger);
 
-    const dropdown = within(firstTask).getByTestId('task-mobile-status-dropdown');
+    const dropdown = await screen.findByRole('listbox');
     const option = within(dropdown).getByText('Active');
     await userEvent.click(option);
 
@@ -158,7 +158,7 @@ describe('TaskMobile integration tests', () => {
 
     await userEvent.click(categoryTrigger);
 
-    const dropdown = within(firstTask).getByTestId('task-mobile-category-dropdown');
+    const dropdown = await screen.findByRole('listbox');
     const option = within(dropdown).getByText('Low');
 
     await userEvent.click(option);
@@ -179,7 +179,7 @@ describe('TaskMobile integration tests', () => {
 
     await userEvent.click(categoryTrigger);
 
-    const dropdown = within(firstTask).getByTestId('task-mobile-category-dropdown');
+    const dropdown = await screen.findByRole('listbox');
     const option = within(dropdown).getByText('High');
 
     await userEvent.click(option);

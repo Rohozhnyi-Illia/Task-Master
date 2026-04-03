@@ -22,6 +22,12 @@
     align-items: center;
   }
 
+  &__logo {
+    display: flex;
+    align-items: center;
+    column-gap: 0.5rem;
+  }
+
   &__title {
     @include m.text-style(v.$font-title, 700, 1.4);
     color: var(--text-color);

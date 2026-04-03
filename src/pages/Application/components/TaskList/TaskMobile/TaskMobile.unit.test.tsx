@@ -82,7 +82,7 @@ describe('TaskMobile unit tests', () => {
 
     await userEvent.click(statusTrigger);
 
-    const dropdown = within(task).getByTestId('task-mobile-status-dropdown');
+    const dropdown = await screen.findByRole('listbox');
     const option = within(dropdown).getByText('InProgress');
 
     await userEvent.click(option);
@@ -124,7 +124,7 @@ describe('TaskMobile unit tests', () => {
 
     await userEvent.click(categoryTrigger);
 
-    const dropdown = within(task).getByTestId('task-mobile-category-dropdown');
+    const dropdown = await screen.findByRole('listbox');
     const option = within(dropdown).getByText('Low');
 
     await userEvent.click(option);
