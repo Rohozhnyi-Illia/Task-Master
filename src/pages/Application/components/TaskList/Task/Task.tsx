@@ -163,6 +163,30 @@ const Task = ({ task }: TaskProps) => {
     });
   }, [isDeleteMenuOpen]);
 
+  useEffect(() => {
+    const close = () => closeStatusDropdownHandler();
+
+    window.addEventListener('scroll', close, { passive: true });
+    window.addEventListener('resize', close);
+
+    return () => {
+      window.removeEventListener('scroll', close);
+      window.removeEventListener('resize', close);
+    };
+  }, []);
+
+  useEffect(() => {
+    const close = () => closeCategoryDropdownHandler();
+
+    window.addEventListener('scroll', close, { passive: true });
+    window.addEventListener('resize', close);
+
+    return () => {
+      window.removeEventListener('scroll', close);
+      window.removeEventListener('resize', close);
+    };
+  }, []);
+
   return (
     <tr className={`${styles.task} ${getStatusClass(task.status)}`} data-testid="task-row">
       <td>

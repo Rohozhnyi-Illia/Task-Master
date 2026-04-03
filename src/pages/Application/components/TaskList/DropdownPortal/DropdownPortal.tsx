@@ -26,12 +26,13 @@ const DropdownPortal = <T extends string>({
   });
 
   useLayoutEffect(() => {
-    if (!isOpen || !anchorRef.current) return;
+    if (!isOpen || !anchorRef.current || !dropdownRef.current) return;
 
     const rectangle = anchorRef.current.getBoundingClientRect();
+    const dropdownRect = dropdownRef.current.getBoundingClientRect();
 
     setPos({
-      top: rectangle.top + window.scrollY - 150,
+      top: rectangle.top + window.scrollY - dropdownRect.height,
       left: rectangle.left + window.scrollX,
       width: rectangle.width,
     });

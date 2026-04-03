@@ -15,6 +15,7 @@ import {
   CATEGORIES_OPTIONS,
   CategoryType,
 } from '../../../../../types/task';
+import DropdownPortal from '../DropdownPortal/DropdownPortal';
 
 interface TaskProps {
   task: TaskInterface;
@@ -28,10 +29,14 @@ const TaskMobile = ({ task }: TaskProps) => {
   const statusRef = useRef<HTMLDivElement>(null);
   const categoryRef = useRef<HTMLDivElement>(null);
   const deleteRef = useRef<HTMLDivElement>(null);
-  const displayDate: string = task.deadline.split('T')[0];
+
+  const dispatch = useDispatch();
   const taskId: string = task._id;
   const isCompleted: boolean = task.status === 'Done';
-  const dispatch = useDispatch();
+  const displayDate: string = task.deadline.split('T')[0];
+
+  const closeStatusDropdownHandler = () => setIsStatusDropdownOpen(false);
+  const closeCategoryDropdownHandler = () => setIsCategoryDropdownOpen(false);
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -124,6 +129,30 @@ const TaskMobile = ({ task }: TaskProps) => {
     }
   };
 
+  useEffect(() => {
+    const close = () => closeStatusDropdownHandler();
+
+    window.addEventListener('scroll', close, { passive: true });
+    window.addEventListener('resize', close);
+
+    return () => {
+      window.removeEventListener('scroll', close);
+      window.removeEventListener('resize', close);
+    };
+  }, []);
+
+  useEffect(() => {
+    const close = () => closeCategoryDropdownHandler();
+
+    window.addEventListener('scroll', close, { passive: true });
+    window.addEventListener('resize', close);
+
+    return () => {
+      window.removeEventListener('scroll', close);
+      window.removeEventListener('resize', close);
+    };
+  }, []);
+
   return (
     <div
       className={`${styles.taskMobile} ${getStatusClass(task.status)}`}
@@ -147,18 +176,13 @@ const TaskMobile = ({ task }: TaskProps) => {
             />
           </div>
 
-          {isCategoryDropdownOpen && (
-            <ul
-              className={styles.taskMobile__categoryList}
-              data-testid="task-mobile-category-dropdown"
-            >
-              {CATEGORIES_OPTIONS.map((category) => (
-                <li key={category} onClick={() => changeCategoryHandler(category)}>
-                  {category}
-                </li>
-              ))}
-            </ul>
-          )}
+          <DropdownPortal
+            isOpen={isCategoryDropdownOpen}
+            anchorRef={categoryRef}
+            options={CATEGORIES_OPTIONS}
+            onSelect={changeCategoryHandler}
+            onClose={closeCategoryDropdownHandler}
+          />
         </div>
         <input type="checkbox" checked={isCompleted} onChange={completeHandler} />
       </div>
@@ -194,15 +218,13 @@ const TaskMobile = ({ task }: TaskProps) => {
             />
           </div>
 
-          {isStatusDropdownOpen && (
-            <ul className={styles.taskMobile__statusList} data-testid="task-mobile-status-dropdown">
-              {STATUS_OPTIONS.map((status) => (
-                <li key={status} onClick={() => changeStatusHandler(status)}>
-                  {status}
-                </li>
-              ))}
-            </ul>
-          )}
+          <DropdownPortal
+            isOpen={isStatusDropdownOpen}
+            anchorRef={statusRef}
+            options={STATUS_OPTIONS}
+            onSelect={changeStatusHandler}
+            onClose={closeStatusDropdownHandler}
+          />
         </div>
 
         <div ref={deleteRef} className={styles.taskMobile__actions}>
