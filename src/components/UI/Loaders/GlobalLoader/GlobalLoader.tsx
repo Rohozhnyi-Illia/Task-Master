@@ -25,7 +25,10 @@ const GlobalLoader = () => {
   if (!visible) return null;
 
   return createPortal(
-    <div className={`${styles.loader__container} ${isLoaderShown ? styles.show : styles.hide}`}>
+    <div
+      className={`${styles.loader__container} ${isLoaderShown ? styles.show : styles.hide}`}
+      data-testid="global-loader"
+    >
       <div className={styles.loader}></div>
     </div>,
     document.body,

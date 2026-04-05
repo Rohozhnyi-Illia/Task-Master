@@ -12,7 +12,7 @@ const ToastsContainer = () => {
   if (!toasts.length) return null;
 
   return ReactDOM.createPortal(
-    <div className={styles.toasts__container}>
+    <div className={styles.toasts__container} data-testid="toast-container">
       {toasts.map((toast) => (
         <Toast key={toast.id} {...toast} />
       ))}

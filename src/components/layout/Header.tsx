@@ -74,7 +74,7 @@ const Header = () => {
   }, []);
 
   return (
-    <header className={styles.header} ref={headerRef}>
+    <header className={styles.header} ref={headerRef} data-testid="header">
       <div className="container">
         <div className={styles.header__wrapper}>
           <div className={styles.header__logo}>
@@ -90,7 +90,7 @@ const Header = () => {
                   className={styles.header__icon_wrapper}
                   onClick={() => modalOpenHandler()}
                 >
-                  <img src={home} alt="home" className={styles.header__icon} />
+                  <img src={home} alt="application" className={styles.header__icon} />
                 </Link>
               </li>
 
@@ -103,7 +103,7 @@ const Header = () => {
                   <img src={notification} alt="notifications" className={styles.header__icon} />
                   {notificationsList.length > 0 && (
                     <div className={styles.header__notification_quantity}>
-                      <p>{notificationsList.length}</p>
+                      <p data-testid="task-count-badge">{notificationsList.length}</p>
                     </div>
                   )}
                 </Link>
@@ -115,7 +115,7 @@ const Header = () => {
                   className={styles.header__icon_wrapper}
                   onClick={() => modalOpenHandler()}
                 >
-                  <img src={stats} alt="stats" className={styles.header__icon} />
+                  <img src={stats} alt="statistics" className={styles.header__icon} />
                 </Link>
               </li>
 
@@ -124,6 +124,7 @@ const Header = () => {
                   className={`${styles.themeToggle} ${isDark ? styles.dark : ''}`}
                   onClick={toggleTheme}
                   aria-pressed={isDark}
+                  aria-label="Toggle theme"
                 >
                   <img src={sun} alt="sun" className={styles.themeToggle__icon_sun} />
                   <img src={moon} alt="moon" className={styles.themeToggle__icon_moon} />
@@ -136,6 +137,7 @@ const Header = () => {
                   className={styles.header__icon_wrapper}
                   disabled={isLoaderShown}
                   onClick={!isLoaderShown ? logoutHandler : undefined}
+                  aria-label="Logout"
                 >
                   <img src={exit} alt="logout" className={styles.header__icon} />
                 </button>
@@ -146,6 +148,7 @@ const Header = () => {
           <div
             className={`${styles.header__burger} ${isModalOpen ? styles.header__burger_open : ''}`}
             onClick={modalOpenHandler}
+            data-testid="burger-menu"
           >
             <span></span>
             <span></span>

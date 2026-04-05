@@ -26,14 +26,18 @@ const Toast = ({ id, message }: ToastProps) => {
   if (!message) return null;
 
   return (
-    <div className={`${styles.toast} ${visible ? styles.show : ''}`}>
+    <div className={`${styles.toast} ${visible ? styles.show : ''}`} data-testid="toast">
       <div>
         <img src={CircleCheck} className={styles.toast__icon} />
       </div>
 
       <p className={styles.toast__text}>{message}</p>
 
-      <button className={styles.toast__xmark} onClick={() => dispatch(clearSuccess(id))}>
+      <button
+        className={styles.toast__xmark}
+        onClick={() => dispatch(clearSuccess(id))}
+        aria-label="Close toast"
+      >
         <img src={CircleXmark} />
       </button>
     </div>
