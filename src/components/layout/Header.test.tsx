@@ -141,6 +141,11 @@ describe('Layout header', () => {
 
     expect(html).toHaveAttribute('data-theme', 'dark');
     expect(themeToggle).toHaveAttribute('aria-pressed', 'true');
+
+    await userEvent.click(themeToggle);
+
+    expect(html).toHaveAttribute('data-theme', 'light');
+    expect(themeToggle).toHaveAttribute('aria-pressed', 'false');
   });
 
   test('Navigation to the notifications page', async () => {

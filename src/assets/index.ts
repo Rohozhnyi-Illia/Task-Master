@@ -27,3 +27,4 @@ export { default as CircleXmark } from './images/xmark-circle.svg';
 export { default as DragAndDrop } from './images/drag-horizontal-light.svg';
 export { default as AngleDown } from './images/angle-down.svg';
 export { default as Logo } from './images/Logo.png';
+export { default as Return } from './images/return.svg';
