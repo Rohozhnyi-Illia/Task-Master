@@ -12,6 +12,7 @@ import { mockNotifications } from '../../../__mocks__/notifications';
 import styles from './Header.module.scss';
 import GlobalErrorModal from '@components/feedback/Modals/GlobalErrorModal/GlobalErrorModal';
 import errorReducer from '@store/UI/errorSlice';
+import tasksReducer from '@store/tasksSlice';
 
 const navigate = jest.fn();
 
@@ -201,5 +202,85 @@ describe('Layout header', () => {
     await userEvent.click(burger);
 
     expect(nav.className).toMatch(/open/i);
+  });
+
+  test('Logout with token', async () => {
+    (NotificationService.getUserNotifications as jest.Mock).mockResolvedValue({
+      success: true,
+      data: mockNotifications,
+    });
+
+    const store = configureStore({
+      reducer: {
+        notification: notificationReducer,
+        auth: () => ({ accessToken: 'mock-token' }),
+        loader: loaderReducer,
+        error: errorReducer,
+        tasks: tasksReducer,
+      },
+    });
+
+    render(
+      <Provider store={store}>
+        <MemoryRouter>
+          <Header />
+          <GlobalErrorModal />
+        </MemoryRouter>
+      </Provider>,
+    );
+
+    const header = await screen.findByTestId('header');
+    const logoutButton = within(header).getByRole('button', { name: /Logout/i });
+
+    await userEvent.click(logoutButton);
+
+    waitFor(() => {
+      const state = store.getState();
+
+      expect(navigate).toHaveBeenCalledWith('/login', { replace: true });
+      expect(state.auth).toEqual({});
+      expect(state.tasks).toEqual([]);
+      expect(state.notification).toEqual([]);
+    });
+  });
+
+  test('Logout without a token', async () => {
+    (NotificationService.getUserNotifications as jest.Mock).mockResolvedValue({
+      success: false,
+      error: 'Internal server error',
+    });
+
+    const store = configureStore({
+      reducer: {
+        notification: notificationReducer,
+        auth: () => ({ accessToken: '' }),
+        loader: loaderReducer,
+        error: errorReducer,
+        tasks: tasksReducer,
+      },
+    });
+
+    render(
+      <Provider store={store}>
+        <MemoryRouter>
+          <Header />
+          <GlobalErrorModal />
+        </MemoryRouter>
+      </Provider>,
+    );
+
+    const header = await screen.findByTestId('header');
+    const logoutButton = within(header).getByRole('button', { name: /Logout/i });
+
+    await userEvent.click(logoutButton);
+
+    waitFor(() => {
+      const state = store.getState();
+
+      expect(navigate).toHaveBeenCalledWith('/login', { replace: true });
+      expect(state.auth).toEqual({});
+      expect(state.tasks).toEqual([]);
+      expect(state.notification).toEqual([]);
+    });
   });
 });
