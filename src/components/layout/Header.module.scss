@@ -23,12 +23,18 @@
   }
 
   &__logo {
+    position: relative;
     display: flex;
     align-items: center;
     column-gap: 0.5rem;
+
+    img {
+      width: 3.8rem;
+    }
   }
 
   &__title {
+    padding-left: 4.2rem;
     @include m.text-style(v.$font-title, 700, 1.4);
     color: var(--text-color);
     transition: color 0.3s ease;
@@ -145,6 +151,25 @@
       z-index: 10;
     }
   }
+}
+
+.logoImg__visible {
+  opacity: 1;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  transition: opacity 0.3s ease;
+}
+
+.logoImg__hidden {
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  pointer-events: none;
+  transition: opacity 0.3s ease;
 }
 
 .themeToggle {

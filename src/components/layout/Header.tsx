@@ -14,7 +14,7 @@ import { resetFirstAppLoadDone } from '@store/appSlice';
 import { resetTasks } from '@store/tasksSlice';
 import { RootState } from '@store/store';
 import { Notification as NotificationType } from '../../types/notification';
-import { Logo } from '@assets/index';
+import { logoDark, logoLight } from '@assets/index';
 
 const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -78,7 +78,16 @@ const Header = () => {
       <div className="container">
         <div className={styles.header__wrapper}>
           <div className={styles.header__logo}>
-            <img src={Logo} alt="Logo" />
+            <img
+              src={logoDark}
+              alt="Logo"
+              className={`${isDark ? styles.logoImg__visible : styles.logoImg__hidden}`}
+            />
+            <img
+              src={logoLight}
+              alt="Logo"
+              className={`${isDark ? styles.logoImg__hidden : styles.logoImg__visible}`}
+            />
             <h2 className={styles.header__title}>TaskMaster</h2>
           </div>
 
