@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './TaskList.module.scss';
 import Task from '../Task/Task';
-import TaskMobile from '../TaskMobile/TaskMobile';
+import TaskMobile from '../../TaskMobile/TaskMobile';
 import { useSelector } from 'react-redux';
 import { Pagination } from '@components/index';
 import { NoData } from '@components/index';
@@ -11,7 +11,7 @@ import { TaskInterface } from '../../../../../types/task';
 
 interface TaskListProps {
   keyword: string;
-  selected: FilterOption | undefined;
+  selected: FilterOption;
 }
 
 const TaskList = ({ keyword, selected }: TaskListProps) => {

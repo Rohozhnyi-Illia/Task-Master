@@ -1,6 +1,6 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { mockTasks } from '../../../../../../__mocks__/tasks';
+import { mockTasks } from '../../../../../__mocks__/tasks';
 import TaskMobile from './TaskMobile';
 import TaskService from '@services/taskService';
 import { useDispatch } from 'react-redux';
@@ -193,6 +193,86 @@ describe('TaskMobile unit tests', () => {
     await waitFor(() => {
       expect(screen.getByTestId('task-mobile-delete-menu')).not.toHaveClass(
         'taskMobile__deleteMenu_open',
+      );
+    });
+  });
+
+  test('rollback on status update error', async () => {
+    (TaskService.updateStatus as jest.Mock).mockResolvedValue({
+      success: false,
+      error: 'Error updating status',
+    });
+
+    renderTask();
+
+    const task = await screen.findByTestId('task-mobile');
+    const checkbox = within(task).getByRole('checkbox');
+
+    await userEvent.click(checkbox);
+
+    await waitFor(() => {
+      expect(mockDispatch).toHaveBeenCalledWith(
+        expect.objectContaining({ payload: { id: 'task-1', status: 'Done' } }),
+      );
+
+      expect(mockDispatch).toHaveBeenCalledWith(
+        expect.objectContaining({ payload: { id: 'task-1', status: 'Active' } }),
+      );
+    });
+  });
+
+  test('rollback on category update error', async () => {
+    (TaskService.updateCategory as jest.Mock).mockResolvedValue({
+      success: false,
+      error: 'Error updating category',
+    });
+
+    renderTask();
+
+    const task = await screen.findByTestId('task-mobile');
+    const categoryTrigger = within(task).getByText(/High/i);
+
+    await userEvent.click(categoryTrigger);
+
+    const dropdown = await screen.findByRole('listbox');
+    const option = within(dropdown).getByText('Low');
+
+    await userEvent.click(option);
+
+    await waitFor(() => {
+      expect(mockDispatch).toHaveBeenCalledWith(
+        expect.objectContaining({ payload: { id: 'task-1', category: 'Low' } }),
+      );
+
+      expect(mockDispatch).toHaveBeenCalledWith(
+        expect.objectContaining({ payload: { id: 'task-1', category: 'High' } }),
+      );
+    });
+  });
+
+  test('rollback on task delete error', async () => {
+    (TaskService.deleteTasks as jest.Mock).mockResolvedValue({
+      success: false,
+      error: 'Error deleting task',
+    });
+
+    renderTask();
+
+    const task = await screen.findByTestId('task-mobile');
+    const deleteButton = within(task).getByTestId('task-mobile-delete-button');
+
+    await userEvent.click(deleteButton);
+
+    const deleteMenu = within(task).getByTestId('task-mobile-delete-menu');
+    const confirmButton = within(deleteMenu).getByRole('button', { name: /Yes/i });
+
+    await userEvent.click(confirmButton);
+
+    await waitFor(() => {
+      expect(mockDispatch).toHaveBeenCalledWith(expect.objectContaining({ payload: 'task-1' }));
+
+      expect(mockDispatch).toHaveBeenCalledWith(
+        expect.objectContaining({ payload: expect.objectContaining({ _id: 'task-1' }) }),
       );
     });
   });

@@ -1,6 +1,5 @@
 import React from 'react';
 import styles from './Notification.module.scss';
-import { FaCheck, FaTrash, FaExclamationCircle, FaClock, FaBell } from 'react-icons/fa';
 import capitalize from '@utils/helpers/capitalize';
 import NotificationService from '@services/notificationService';
 import {
@@ -13,11 +12,12 @@ import { showError } from '@store/UI/errorSlice';
 import { showSuccess } from '@store/UI/toastSlice';
 import { Notification as NotificationType } from '../../../../types/notification';
 import { RootState } from '@store/store';
+import { circleInfo, clockInfo, bellInfo, trash, check } from '@assets/index';
 
 const typeIcon = {
-  overdue: <FaExclamationCircle />,
-  warning: <FaClock />,
-  reminder: <FaBell />,
+  overdue: circleInfo,
+  warning: clockInfo,
+  reminder: bellInfo,
 };
 
 interface NotificationProps {
@@ -37,41 +37,30 @@ const Notification = ({ type, id, message }: NotificationProps) => {
   const readHandler = async () => {
     dispatch(readNotification({ id, markAsRead: true }));
 
-    try {
-      const res = await NotificationService.markAsRead(id);
-      if (!res.success) dispatch(showError(res.error));
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        dispatch(readNotification({ id, markAsRead: false }));
-        dispatch(showError(error.message));
-      } else {
-        dispatch(showError('Something wrong'));
-      }
+    const res = await NotificationService.markAsRead(id);
+
+    if (!res.success) {
+      dispatch(readNotification({ id, markAsRead: false }));
+      dispatch(showError(res.error));
+      return;
     }
+
+    dispatch(showSuccess('Notification read'));
   };
 
   const deleteHandler = async () => {
     const backup = notification;
     dispatch(deleteNotification(id));
 
-    try {
-      const res = await NotificationService.deleteNotification(id);
-      if (!res.success) {
-        dispatch(showError(res.error));
-        return;
-      }
+    const res = await NotificationService.deleteNotification(id);
 
-      dispatch(showSuccess('Notification deleted'));
-    } catch (error) {
-      if (error instanceof Error) {
-        if (backup) {
-          dispatch(restoreNotification(backup));
-        }
-        dispatch(showError(error.message));
-      } else {
-        dispatch(showError('Something wrong'));
-      }
+    if (!res.success) {
+      if (backup) dispatch(restoreNotification(backup));
+      dispatch(showError(res.error));
+      return;
     }
+
+    dispatch(showSuccess('Notification deleted'));
   };
 
   const highlightTask = (message: string) => {
@@ -90,23 +79,28 @@ const Notification = ({ type, id, message }: NotificationProps) => {
   return (
     <div
       className={`${styles.notification} ${styles[type]} ${isRead ? styles.read : styles.unread}`}
-      onClick={!isRead ? readHandler : undefined}
+      data-testid="notification"
     >
-      <div className={styles.icon}>{typeIcon[type]}</div>
+      <div className={styles.icon}>
+        <img src={typeIcon[type]} alt="" />
+      </div>
 
       <div className={styles.content}>
         <span className={styles.label}>{capitalize(type)}</span>
-        <p className={styles.text}>{highlightTask(message)}</p>
+        <p className={styles.text} data-testid="notification-text">
+          {highlightTask(message)}
+        </p>
       </div>
 
-      <div className={styles.actions} onClick={(e) => e.stopPropagation()}>
+      <div className={styles.actions}>
         {!isRead && (
-          <button aria-label="Mark as read">
-            <FaCheck />
+          <button aria-label="Mark as read" onClick={readHandler}>
+            <img src={check} alt="" />
           </button>
         )}
+
         <button onClick={deleteHandler} aria-label="Delete">
-          <FaTrash />
+          <img src={trash} alt="" />
         </button>
       </div>
     </div>

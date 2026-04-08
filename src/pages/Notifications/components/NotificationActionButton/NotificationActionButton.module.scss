@@ -18,4 +18,8 @@
 
   cursor: pointer;
   @include m.hover-effect();
+
+  img {
+    width: 1.8rem;
+  }
 }

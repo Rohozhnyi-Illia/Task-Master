@@ -129,7 +129,7 @@ describe('Application page', () => {
       expect(TaskService.getAllTasks).toHaveBeenCalled();
     });
 
-    const categorySelect = screen.queryByTestId('category-select');
+    const categorySelect = screen.queryByTestId('category-select-component');
     const keywordInput = screen.queryByTestId('keyword-input');
 
     expect(categorySelect).not.toBeInTheDocument();
@@ -148,7 +148,7 @@ describe('Application page', () => {
       expect(TaskService.getAllTasks).toHaveBeenCalled();
     });
 
-    const categorySelect = await screen.findByTestId('category-select');
+    const categorySelect = await screen.findByTestId('category-select-component');
     const keywordInput = await screen.findByTestId('keyword-input');
 
     expect(categorySelect).toBeInTheDocument();

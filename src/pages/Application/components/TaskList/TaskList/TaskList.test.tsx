@@ -30,6 +30,9 @@ describe('TaskList', () => {
 
     const tasks = await within(taskList).findAllByTestId('task-row');
     expect(tasks).toHaveLength(3);
+    expect(tasks[0]).toBeInTheDocument();
+    expect(tasks[1]).toBeInTheDocument();
+    expect(tasks[2]).toBeInTheDocument();
   });
 
   test('Displaying cards on mobile devices after receipt', async () => {
@@ -40,6 +43,9 @@ describe('TaskList', () => {
 
     const tasks = await within(taskList).findAllByTestId('task-mobile');
     expect(tasks).toHaveLength(3);
+    expect(tasks[0]).toBeInTheDocument();
+    expect(tasks[1]).toBeInTheDocument();
+    expect(tasks[2]).toBeInTheDocument();
   });
 
   test('Filter tasks by keyword', async () => {

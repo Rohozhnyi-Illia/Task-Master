@@ -1,6 +1,6 @@
 import React from 'react';
-import { FaTrash } from 'react-icons/fa';
 import styles from './NotificationActionButton.module.scss';
+import { trashWhite } from '@assets/index';
 
 interface NotificationActionButtonProps {
   text: string;
@@ -8,9 +8,13 @@ interface NotificationActionButtonProps {
 }
 
 const NotificationActionButton = ({ text, onClick }: NotificationActionButtonProps) => (
-  <button className={styles.notifications__button} onClick={onClick}>
+  <button
+    className={styles.notifications__button}
+    onClick={onClick}
+    data-testid="notification-action-button"
+  >
     <p>{text}</p>
-    <FaTrash />
+    <img src={trashWhite} alt="" />
   </button>
 );
 

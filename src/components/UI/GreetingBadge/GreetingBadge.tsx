@@ -8,7 +8,7 @@ interface GreetingBadgeProps {
 
 const GreetingBadge = ({ name, subtitle }: GreetingBadgeProps) => {
   return (
-    <div className={styles.badge}>
+    <div className={styles.badge} data-testid="greeting-badge">
       <h2 className={styles.badge__title}>Hello, {name} 👋</h2>
       <h4 className={styles.badge__subtitle}>{subtitle}.</h4>
     </div>

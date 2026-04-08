@@ -1,6 +1,7 @@
 import { ISODataType, ModelBase } from './shared';
 
-export type NotificationFilterType = 'All' | 'Warning' | 'Reminder' | 'Overdue';
+export const NOTIFICATION_FILTERS = ['', 'All', 'Warning', 'Reminder', 'Overdue'] as const;
+export type NotificationFilterType = (typeof NOTIFICATION_FILTERS)[number];
 
 interface NotificationBase extends ModelBase {
   task: string;

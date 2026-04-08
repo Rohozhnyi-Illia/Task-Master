@@ -8,7 +8,7 @@ import { RootState } from '@store/store';
 import { Notification as NotificationType } from '../../../../types/notification';
 
 interface NotificationListProps {
-  selected: NotificationFilterType | undefined;
+  selected: NotificationFilterType;
 }
 
 const NotificationList = ({ selected }: NotificationListProps) => {
@@ -39,7 +39,7 @@ const NotificationList = ({ selected }: NotificationListProps) => {
   const pageNumbers: number[] = [currentPage, currentPage + 1].filter((page) => page <= totalPages);
 
   return (
-    <div className={styles.notificationList}>
+    <div className={styles.notificationList} data-testid="notification-list">
       <div className={styles.notificationWrapper}>
         {filteredNotifications.length > 0 ? (
           currentNotifications.map((notification) => (

@@ -199,4 +199,83 @@ describe('Task unit tests', () => {
       expect(screen.queryByTestId('task-delete-menu')).not.toBeInTheDocument();
     });
   });
+
+  test('rollback on status update error', async () => {
+    (TaskService.updateStatus as jest.Mock).mockResolvedValue({
+      success: false,
+      error: 'Error updating status',
+    });
+
+    renderTask();
+
+    const task = await screen.findByTestId('task-row');
+    const checkbox = within(task).getByRole('checkbox');
+
+    await userEvent.click(checkbox);
+
+    await waitFor(() => {
+      expect(mockDispatch).toHaveBeenCalledWith(
+        expect.objectContaining({ payload: { id: 'task-1', status: 'Done' } }),
+      );
+
+      expect(mockDispatch).toHaveBeenCalledWith(
+        expect.objectContaining({ payload: { id: 'task-1', status: 'Active' } }),
+      );
+    });
+  });
+
+  test('rollback on category update error', async () => {
+    (TaskService.updateCategory as jest.Mock).mockResolvedValue({
+      success: false,
+      error: 'Error updating category',
+    });
+
+    renderTask();
+
+    const task = await screen.findByTestId('task-row');
+    const categoryTrigger = within(task).getByText(/High/i);
+
+    await userEvent.click(categoryTrigger);
+
+    const dropdown = await screen.findByRole('listbox');
+    const option = within(dropdown).getByText('Low');
+
+    await userEvent.click(option);
+
+    await waitFor(() => {
+      expect(mockDispatch).toHaveBeenCalledWith(
+        expect.objectContaining({ payload: { id: 'task-1', category: 'Low' } }),
+      );
+      expect(mockDispatch).toHaveBeenCalledWith(
+        expect.objectContaining({ payload: { id: 'task-1', category: 'High' } }),
+      );
+    });
+  });
+
+  test('rollback on task delete error', async () => {
+    (TaskService.deleteTasks as jest.Mock).mockResolvedValue({
+      success: false,
+      error: 'Error deleting task',
+    });
+
+    renderTask();
+
+    const task = await screen.findByTestId('task-row');
+    const deleteButton = within(task).getByTestId('task-delete-button');
+
+    await userEvent.click(deleteButton);
+
+    const deleteMenu = await screen.findByTestId('task-delete-menu');
+    const confirmButton = within(deleteMenu).getByRole('button', { name: /Yes/i });
+
+    await userEvent.click(confirmButton);
+
+    await waitFor(() => {
+      expect(mockDispatch).toHaveBeenCalledWith(expect.objectContaining({ payload: 'task-1' }));
+
+      expect(mockDispatch).toHaveBeenCalledWith(
+        expect.objectContaining({ payload: expect.objectContaining({ _id: 'task-1' }) }),
+      );
+    });
+  });
 });
