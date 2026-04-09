@@ -1,16 +1,25 @@
 # TaskMaster Frontend
 
-## Demo Account
+Frontend for **TaskMaster** — a production-like task management application with real-world authentication flows, state management, and user-centric testing.
+Built to simulate a real SaaS product, including JWT auth, notifications, analytics, and integration-tested user flows.
 
-You can log in using this demo account:
+![Coverage](https://img.shields.io/badge/coverage-85%25-brightgreen)
+![Tests](https://img.shields.io/badge/tests-Jest%20%2B%20RTL-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-Yes-blue)
+
+## Live Demo
+
+You can try the application using a demo account:
 
 - Email: demo@taskmaster.app
 - Password: Demo1234
 
 _No email verification required for this account._
-<a href="https://taskmaster.ink/" target="_blank">
-<img src="https://img.shields.io/badge/demo-online-brightgreen" alt="Demo">
-</a>
+<a href="https://taskmaster.ink/" target="_blank"> <img src="https://img.shields.io/badge/demo-online-brightgreen" alt="Demo"> </a>
+
+---
+
+## Preview
 
 _Login Page_
 ![Login](./src/assets/preview/Login.jpg)
@@ -26,9 +35,6 @@ _Statistics Page_
 
 _Notifications Page_
 ![Notifications](./src/assets/preview/Notifications.jpg)
-
-Frontend application for **TaskMaster** — a task management platform with deadlines, notifications, and user authentication.  
-Designed and implemented with a focus on real-world authentication flows, state management, and user experience.
 
 ## Links
 
@@ -57,6 +63,39 @@ Designed and implemented with a focus on real-world authentication flows, state 
 
 ---
 
+## Testing & Quality
+
+> Tests are written from a user perspective, focusing on behavior rather than implementation details.
+
+- Unit and component testing with **Jest** and **React Testing Library**
+- Integration testing focused on **real user flows**
+- Tests simulate real user behavior (clicks, typing, navigation)
+
+### User Flow Testing
+
+Covered end-to-end-like scenarios:
+
+- Authentication flow (login → redirect → protected routes)
+- Task management (create → update → complete → delete)
+- Notifications (fetch → mark as read → delete)
+
+### Test Coverage
+
+```bash
+Statements   : 85.63%
+Branches     : 76.10%
+Functions    : 84.03%
+Lines        : 85.10%
+```
+
+### Highlights
+
+- Integration tests cover **critical business flows**
+- Acts as lightweight **end-to-end testing without full E2E setup**
+- High coverage across UI, pages, and validation logic
+
+---
+
 ## Architecture Notes
 
 - All components, pages, and services have been migrated to TypeScript.
@@ -65,7 +104,6 @@ Designed and implemented with a focus on real-world authentication flows, state 
 - Centralized UI feedback system (loaders, error modals, success toasts)
 - JWT authentication with automatic token refresh
 - UI state separated from business data in Redux
-- Drag & drop integrated with Redux for state persistence
 - ESLint + Prettier ensure consistent and clean code
 
 ---
@@ -89,7 +127,7 @@ npm run build # production build
 - By default, the frontend uses the deployed backend: `https://taskmaster-backend-e940.onrender.com/api`
 - To use a local backend:
   - run it on `http://localhost:9000`
-  - update `src/services/api.js`
+  - update `src/services/api.ts`
 
 ## Pages
 
@@ -105,7 +143,7 @@ npm run build # production build
 
 ## API Services
 
-Frontend communicates with TaskMaster-Backend through Axios services:
+Frontend communicates with the backend via Axios services.
 
 ### AuthService
 
@@ -121,45 +159,27 @@ Frontend communicates with TaskMaster-Backend through Axios services:
 
 - getAllTasks() — get all tasks
 - createTask({ task, status, category, deadline, remainingTime }) — create a new task
-- completeTask(id) - complete the task
+- completeTask(id) — complete the task
 - deleteTasks(id) — delete a task
 - updateStatus(id, status) — update task status
-- updateCategory(id, category) - update task category
-- reorderTasks(orderedIds) - persist new task order after drag & drop
+- updateCategory(id, category) — update task category
+- reorderTasks(orderedIds) — persist new task order after drag & drop
 
 ### NotificationService
 
 - getUserNotifications() — get user notifications
 - markAsRead(id) — mark a notification as read
 - deleteNotification(id) — delete a notification
-- deleteReadNotifications() - delete read notifications
-- deleteAllNotifications() - delete all notifications
+- deleteReadNotifications() — delete read notifications
+- deleteAllNotifications() — delete all notifications
 
 ---
 
 ## Full Features Details
 
-### Authentication & Security
-
-- User registration and login with JWT authentication
-- **Email verification after registration**
-- **Password recovery with email verification**
-- JWT-based access and refresh tokens
-- Automatic token refresh via Axios interceptors
-- **Protected routes:** private pages are guarded via `ProtectPath` component; non-authenticated users are redirected to login
-
-### Tasks & Dashboard
-
-- Task management: create, update, complete, and delete tasks
-- Task sorting and filtering by category and keywords
-- Pagination for large task lists
-- Statistics page with completed tasks overview
-
-### Notifications
-
-- Task reminders, deadlines, and overdue alerts
-- **Notifications page with user messages**
-- Mark notifications as read or delete them
+- **Authentication & Security:** JWT (access + refresh), protected routes, email verification
+- **Task Management:** full CRUD, drag & drop ordering, filtering, sorting, pagination
+- **Notifications:** reminders, deadlines, and overdue alerts, read, delete
 
 ### UX & UI
 
