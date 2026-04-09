@@ -14,8 +14,8 @@ import {
   TaskInterface,
   CATEGORIES_OPTIONS,
   CategoryType,
-} from '../../../../../types/task';
-import DropdownPortal from '../DropdownPortal/DropdownPortal';
+} from '../../../../types/task';
+import DropdownPortal from '../TaskList/DropdownPortal/DropdownPortal';
 
 interface TaskProps {
   task: TaskInterface;

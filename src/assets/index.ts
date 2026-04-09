@@ -29,3 +29,9 @@ export { default as AngleDown } from './images/angle-down.svg';
 export { default as Return } from './images/return.svg';
 export { default as logoDark } from './images/logoDark.png';
 export { default as logoLight } from './images/logoLight.png';
+
+export { default as circleInfo } from './images/circle-info.svg';
+export { default as clockInfo } from './images/clock-info.svg';
+export { default as bellInfo } from './images/bell-info.svg';
+export { default as trashWhite } from './images/trashWhite.svg';
+export { default as check } from './images/check.svg';

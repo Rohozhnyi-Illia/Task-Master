@@ -104,8 +104,6 @@ describe('Add Modal integration tests', () => {
   });
 
   test('Task created successfully', async () => {
-    renderWithStore();
-
     (TaskService.createTask as jest.Mock).mockResolvedValue({
       success: true,
       data: {
@@ -124,13 +122,15 @@ describe('Add Modal integration tests', () => {
       },
     });
 
+    renderWithStore();
+
     const addButton = await screen.findByTestId('add-button');
     await userEvent.click(addButton);
     const addModal = await screen.findByTestId('add-modal');
 
     const textarea = within(addModal).getByPlaceholderText('Write text...');
-    await userEvent.type(textarea, 'Task 4');
-    expect(textarea).toHaveValue('Task 4');
+    await userEvent.type(textarea, 'task 4');
+    expect(textarea).toHaveValue('task 4');
 
     const remindTrigger = within(addModal).getAllByTestId('category-select-trigger')[0];
     await userEvent.click(remindTrigger);
@@ -221,5 +221,82 @@ describe('Add Modal integration tests', () => {
     const modal = await screen.findByTestId('modal-base');
     expect(modal).toBeInTheDocument();
     expect(modal).toHaveTextContent(/Internal server error/i);
+  });
+
+  test('Task field prevents typing more than 30 chars', async () => {
+    renderWithStore();
+    const addButton = await screen.findByTestId('add-button');
+    await userEvent.click(addButton);
+
+    const textarea = screen.getByPlaceholderText('Write text...');
+
+    await userEvent.type(textarea, 'a'.repeat(35));
+    expect(textarea).toHaveValue('a'.repeat(30));
+  });
+
+  test('Fields reset after successful task creation', async () => {
+    (TaskService.createTask as jest.Mock).mockResolvedValue({
+      success: true,
+      data: {
+        category: 'Critical',
+        createdAt: '2026-03-09T16:01:28.906Z',
+        deadline: '2026-04-03T00:00:00.000Z',
+        order: 3,
+        remainingTime: 48,
+        status: 'Active',
+        task: 'Task 4',
+        timeTracker: true,
+        updatedAt: '2026-03-22T15:54:04.834Z',
+        user: '69abaf3e8fffd11d0b572a8c',
+        __v: 0,
+        _id: 'task-4',
+      },
+    });
+
+    renderWithStore();
+
+    const addButton = await screen.findByTestId('add-button');
+    await userEvent.click(addButton);
+    const addModal = await screen.findByTestId('add-modal');
+
+    const textarea = within(addModal).getByPlaceholderText('Write text...');
+    await userEvent.type(textarea, 'Task 4');
+    expect(textarea).toHaveValue('Task 4');
+
+    const remindTrigger = within(addModal).getAllByTestId('category-select-trigger')[0];
+    await userEvent.click(remindTrigger);
+
+    const remindOption = await within(addModal).findByText('48');
+    await userEvent.click(remindOption);
+
+    const categoryTrigger = within(addModal).getAllByTestId('category-select-trigger')[1];
+    await userEvent.click(categoryTrigger);
+
+    const criticalOption = await within(addModal).findByText('Critical');
+    await userEvent.click(criticalOption);
+
+    const dayInput = screen.getByPlaceholderText('Day');
+    const monthInput = screen.getByPlaceholderText('Month');
+    const yearInput = screen.getByPlaceholderText('Year');
+
+    await userEvent.clear(dayInput);
+    await userEvent.type(dayInput, '15');
+
+    await userEvent.clear(monthInput);
+    await userEvent.type(monthInput, '08');
+
+    await userEvent.clear(yearInput);
+    await userEvent.type(yearInput, '2026');
+
+    expect(dayInput).toHaveValue(15);
+    expect(monthInput).toHaveValue(8);
+    expect(yearInput).toHaveValue(2026);
+
+    const createButton = within(addModal).getByTestId('add-button');
+    await userEvent.click(createButton);
+
+    await waitFor(() => {
+      expect(textarea).toHaveValue('');
+    });
   });
 });

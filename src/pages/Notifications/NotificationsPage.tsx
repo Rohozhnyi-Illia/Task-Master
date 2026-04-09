@@ -17,7 +17,7 @@ import { Notification, NotificationFilterType } from '../../types/notification';
 import { GreetingBadge } from '@components/index';
 
 const NotificationsPage = () => {
-  const [selected, setSelected] = useState<NotificationFilterType | undefined>(undefined);
+  const [selected, setSelected] = useState<NotificationFilterType>('');
   const name: string = useSelector((state: RootState) => state.auth.name);
   const notifications: Notification[] = useSelector((state: RootState) => state.notification);
   const dispatch = useDispatch();

@@ -17,7 +17,7 @@ import { RootState } from '@store/store';
 import { TaskInterface } from '../../types/task';
 
 const Application = () => {
-  const [selected, setSelected] = useState<FilterOption | undefined>(undefined);
+  const [selected, setSelected] = useState<FilterOption>('');
   const [keywordValue, setKeyWordValue] = useState<string>('');
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
   const [isDragAndDropOpen, setIsDragAndDropOpen] = useState<boolean>(false);
