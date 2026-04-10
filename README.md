@@ -57,6 +57,7 @@ _Notifications Page_
 - **Frontend:** React, TypeScript, Redux Toolkit, React Router, SCSS, Chart.js
 - **Backend:** Node.js, Express, JWT Authentication, REST API
 - **HTTP / API:** Axios with interceptors
+- **Testing:** Jest + React Testing Library
 - **Drag & Drop:** react-beautiful-dnd
 - **Validation:** Yup
 - **Code Quality:** ESLint, Prettier
@@ -128,6 +129,21 @@ npm run build # production build
 - To use a local backend:
   - run it on `http://localhost:9000`
   - update `src/services/api.ts`
+
+## Scripts
+
+```bash
+npm start             # start dev server
+npm run build         # build for production
+npm run analyze       # analyze bundle size
+npm run lint          # run ESLint
+npm run lint:fix      # fix lint issues
+npm run format        # format code with Prettier
+npm test              # run tests
+npm run test:coverage # generate coverage report
+```
+
+---
 
 ## Pages
 
